@@ -10,20 +10,20 @@ spec:
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: volsync
-  namespace: volsync
+  name: metallb
+  namespace: metallb-system
 spec:
   interval: 10m
   timeout: 5m
   chart:
     spec:
-      chart: volsync
+      chart: metallb
       version: '*'
       sourceRef:
         kind: HelmRepository
-        name: backube
+        name: metallb
       interval: 5m
-  releaseName: volsync
+  releaseName: metallb
   install:
     remediation:
       retries: 3
@@ -33,3 +33,18 @@ spec:
   values:
     frr:
       enabled: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: ippool
+  namespace: metallb-system
+spec:
+  dependsOn:
+    - name: metallb
+  interval: 5m
+  path: "./clusters/personal/metallb"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
