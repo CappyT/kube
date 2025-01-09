@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - volume-snapshot.yaml
+- csi.yaml
