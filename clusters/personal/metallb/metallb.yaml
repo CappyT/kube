@@ -5,7 +5,7 @@ metadata:
   namespace: metallb-system
 spec:
   interval: 24h
-  url: https://backube.github.io/helm-charts/
+  url: https://metallb.github.io/metallb
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
