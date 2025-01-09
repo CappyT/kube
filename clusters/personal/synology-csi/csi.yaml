@@ -55,3 +55,12 @@ spec:
           csi.storage.k8s.io/fstype: ext4
         reclaimPolicy: Retain
         volumeBindingMode: Immediate
+    volumeSnapshotClasses:
+      synology-snapshot:
+        deletionPolicy: Delete
+        isDefault: true
+        disabled: false
+        parameters:
+          description: "Kubernetes CSI"
+          is_locked: "false"
+      
