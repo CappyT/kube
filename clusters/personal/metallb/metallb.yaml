@@ -33,18 +33,3 @@ spec:
   values:
     frr:
       enabled: false
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: ippool
-  namespace: metallb-system
-spec:
-  dependsOn:
-    - name: metallb
-  interval: 5m
-  path: "./clusters/personal/metallb"
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
