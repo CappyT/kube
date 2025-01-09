@@ -47,7 +47,7 @@ spec:
         volumeBindingMode: Immediate
       block-retain:
         disabled: false
-        isDefault: true
+        isDefault: false
         parameters:
           dsm: '192.168.5.10'
           location: '/volume1'
