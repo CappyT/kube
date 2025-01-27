@@ -31,6 +31,8 @@ spec:
     remediation:
       retries: 3
   values:
+    monitoring:
+      podMonitorEnabled: true
     webhook:
       mutating:
         failurePolicy: Ignore
