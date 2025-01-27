@@ -33,6 +33,11 @@ spec:
   values:
     frr:
       enabled: false
+    speaker:
+      frr:
+        enabled: false
+      ignoreExcludeLB: true
+      tolerateMaster: false
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
