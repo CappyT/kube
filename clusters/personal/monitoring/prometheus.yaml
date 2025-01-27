@@ -31,6 +31,22 @@ spec:
     remediation:
       retries: 3
   values:
+    defaultRules:
+      rules:
+        kubeSchedulerAlerting: false
+        kubeSchedulerRecording: false
+        kubeControllerManager: false
+        kubeProxy: false
+  
+    kubeProxy:
+      enabled: false
+
+    kubeScheduler:
+      enabled: false
+
+    kubeControllerManager:
+      enabled: false
+
     grafana:
       persistence:
         enabled: true
