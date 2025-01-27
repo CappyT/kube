@@ -37,6 +37,14 @@ spec:
         kubeSchedulerRecording: false
         kubeControllerManager: false
         kubeProxy: false
+        etcd: false
+
+    nodeExporter:
+      operatingSystems:
+        darwin:
+          enabled: false
+        aix:
+          enabled: false
   
     kubeProxy:
       enabled: false
@@ -45,6 +53,9 @@ spec:
       enabled: false
 
     kubeControllerManager:
+      enabled: false
+
+    kubeEtcd:
       enabled: false
 
     grafana:
