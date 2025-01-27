@@ -31,8 +31,24 @@ spec:
     remediation:
       retries: 3
   values:
+    grafana:
+      persistence:
+        enabled: true
+        storageClassName: "block"
+        accessModes: ["ReadWriteOnce"]
+        size: 10Gi
+
     prometheus:
       prometheusSpec:
+        retention: 30d
+        storageSpec:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: block
+              accessModes: ["ReadWriteOnce"]
+              resources:
+                requests:
+                  storage: 30Gi
         scrapeConfigSelector:
           matchLabels: null
         ruleSelector:
