@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - prometheus.yaml
+- mkt-exporter.yaml
