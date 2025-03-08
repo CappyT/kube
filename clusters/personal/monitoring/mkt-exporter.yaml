@@ -44,8 +44,9 @@ spec:
     app: mktxp-exporter
   ports:
   - port: 49090
-    targetPort: 49090
+    targetPort: web
     name: web
+    protocol: TCP
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
