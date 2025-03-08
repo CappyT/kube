@@ -28,6 +28,7 @@ spec:
             mountPath: /mktxp_config
         ports:
         - containerPort: 49090
+          name: web
       volumes:
         - name: mktxp-credentials
           secret:
