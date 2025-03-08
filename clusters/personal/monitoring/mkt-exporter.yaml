@@ -39,6 +39,8 @@ kind: Service
 metadata:
   name: mktxp-exporter
   namespace: monitoring
+  labels:
+    app: mktxp-exporter
 spec:
   selector:
     app: mktxp-exporter
