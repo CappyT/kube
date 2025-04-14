@@ -1,0 +1,56 @@
+ghcr.io/cappyt/zte-exporter:latestapiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zte-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: zte-exporter
+  template:
+    metadata:
+      labels:
+        app: zte-exporter
+    spec:
+      containers:
+      - name: zte-exporter
+        image: ghcr.io/cappyt/zte-exporter:latest
+        envFrom:
+          secretKeyRef:
+            name: zte-credentials
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8000
+          name: web
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zte-exporter
+  namespace: monitoring
+  labels:
+    app: zte-exporter
+spec:
+  selector:
+    app: zte-exporter
+  ports:
+  - port: 8000
+    targetPort: web
+    name: web
+    protocol: TCP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: zte-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: zte-exporter
+  endpoints:
+  - port: web
+    interval: 30s

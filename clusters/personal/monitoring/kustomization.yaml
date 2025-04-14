@@ -4,3 +4,4 @@ resources:
 - namespace.yaml
 - prometheus.yaml
 - mkt-exporter.yaml
+- zte-exporter.yaml
