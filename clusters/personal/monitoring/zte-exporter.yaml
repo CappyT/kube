@@ -16,7 +16,7 @@ spec:
       - name: zte-exporter
         image: ghcr.io/cappyt/zte-exporter:latest
         envFrom:
-          - secretKeyRef:
+          - secretRef:
               name: zte-credentials
         resources:
           limits:
