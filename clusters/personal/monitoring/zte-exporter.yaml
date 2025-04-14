@@ -15,6 +15,7 @@ spec:
       containers:
       - name: zte-exporter
         image: ghcr.io/cappyt/zte-exporter:latest
+        imagePullPolicy: Always
         envFrom:
           - secretRef:
               name: zte-credentials
