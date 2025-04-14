@@ -1,4 +1,4 @@
-ghcr.io/cappyt/zte-exporter:latestapiVersion: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zte-exporter
@@ -16,8 +16,8 @@ spec:
       - name: zte-exporter
         image: ghcr.io/cappyt/zte-exporter:latest
         envFrom:
-          secretKeyRef:
-            name: zte-credentials
+          - secretKeyRef:
+              name: zte-credentials
         resources:
           limits:
             memory: "512Mi"
