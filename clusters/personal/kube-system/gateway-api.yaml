@@ -4,7 +4,7 @@ metadata:
   name: gateway-api-repo
   namespace: kube-system
 spec:
-  interval: 1m0s
+  interval: 24h
   ref:
     tag: v1.2.1
   url: https://github.com/kubernetes-sigs/gateway-api
@@ -15,8 +15,8 @@ metadata:
   name: gateway-api-crd
   namespace: kube-system
 spec:
-  interval: 1m
-  path: ./config/crd/standard
+  interval: 10m
+  path: ./config/crd/experimental
   prune: true
   sourceRef:
     kind: GitRepository
