@@ -16,7 +16,7 @@ metadata:
   namespace: kube-system
 spec:
   interval: 10m
-  path: ./config/crd/stable
+  path: ./config/crd/standard
   prune: true
   sourceRef:
     kind: GitRepository
