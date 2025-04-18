@@ -34,6 +34,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: gateway-api-repo
-  kustomizeConfig:
-    resources:
-        - gateway.networking.k8s.io_tlsroutes.yaml
+  components:
+    - gateway.networking.k8s.io_tlsroutes.yaml
