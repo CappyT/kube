@@ -1,0 +1,93 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  interval: 24h
+  url: https://metallb.github.io/metallb
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metallb
+  namespace: metallb-system
+spec:
+  interval: 10m
+  timeout: 5m
+  chart:
+    spec:
+      chart: metallb
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: metallb
+      interval: 5m
+  releaseName: metallb
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    frr:
+      enabled: false
+    speaker:
+      frr:
+        enabled: false
+      ignoreExcludeLB: true
+      tolerateMaster: false
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: bedag
+  namespace: metallb-system
+spec:
+  interval: 24h
+  url: https://bedag.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ippool
+  namespace: metallb-system
+spec:
+  interval: 10m
+  timeout: 5m
+  dependsOn:
+    - name: metallb
+  chart:
+    spec:
+      chart: raw
+      version: '*'
+      sourceRef:
+        kind: HelmRepository
+        name: bedag
+      interval: 5m
+  releaseName: metallb-ippool
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    resources:
+      - apiVersion: metallb.io/v1beta1
+        kind: IPAddressPool
+        metadata:
+          name: private-pool
+          namespace: metallb-system
+        spec:
+          addresses:
+          - 10.122.1.50-10.122.1.250
+      - apiVersion: metallb.io/v1beta1
+        kind: L2Advertisement
+        metadata:
+          name: ip-advertisement
+          namespace: metallb-system
+        spec:
+          ipAddressPools:
+          - private-pool
