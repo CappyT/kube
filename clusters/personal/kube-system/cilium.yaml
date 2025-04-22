@@ -26,7 +26,7 @@ spec:
   releaseName: cilium
   values:
     bpf:
-      masquerade: true
+      masquerade: false
     cgroup:
       autoMount:
         enabled: false
