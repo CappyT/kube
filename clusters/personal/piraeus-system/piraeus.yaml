@@ -1,0 +1,36 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: piraeus-operator-repo
+  namespace: piraeus-datastore
+spec:
+  interval: 24h
+  ref:
+    tag: v2.8.0
+  url: https://github.com/piraeusdatastore/piraeus-operator
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: piraeus-operator
+  namespace: piraeus-datastore
+spec:
+  interval: 1m
+  path: ./config/default
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: piraeus-operator-repo
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: piraeus-monitoring
+  namespace: piraeus-datastore
+spec:
+  interval: 1m
+  path: ./config/extras/monitoring
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: piraeus-operator-repo
