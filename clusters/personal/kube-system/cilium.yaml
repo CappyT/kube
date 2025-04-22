@@ -57,7 +57,7 @@ spec:
         enabled: true
         serviceMonitor:
           enabled: true
-      replicas: 1
+      replicas: 2
     prometheus:
       enabled: true
       serviceMonitor:
