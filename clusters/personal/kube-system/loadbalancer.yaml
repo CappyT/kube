@@ -1,0 +1,22 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2-announcement-policy
+spec:
+  interfaces:
+    - ^enp.*
+    - ^eth.*
+  loadBalancerIPs: true
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: private-pool
+spec:
+  blocks:
+    - start: 10.122.1.50
+      stop: 10.122.1.150
+  disabled: false

@@ -3,3 +3,5 @@ kind: Kustomization
 resources:
 - gateway-api.yaml
 - tlsroute.yaml
+- cilium.yaml
+- loadbalancer.yaml
