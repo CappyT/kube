@@ -2,8 +2,10 @@ apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
   name: talos-loader-override
-  namespace: piraeus-datastore
+  namespace: piraeus-system
 spec:
+  nodeSelector:
+    local-disk/storage: "yes"
   podTemplate:
     spec:
       initContainers:
