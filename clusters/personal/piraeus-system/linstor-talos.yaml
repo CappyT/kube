@@ -2,7 +2,6 @@ apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
   name: talos-loader-override
-  namespace: piraeus-datastore
 spec:
   storagePools:
     - name: ssd_pool
@@ -11,7 +10,7 @@ spec:
         volumeGroup: linstor_ssd_lvm_pool
       properties:
         - name: StorDriver/LvcreateOptions
-          value: --chunksize 1M --stripes 2 --stripesize 256k
+          value: --stripes 2 --stripesize 256k
       source:
         hostDevices:
           - /dev/sda
