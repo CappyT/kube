@@ -2,8 +2,20 @@ apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
   name: talos-loader-override
-  namespace: piraeus-system
+  namespace: piraeus-datastore
 spec:
+  storagePools:
+    - name: ssd_pool
+      lvmThinPool:
+        thinPool: thin
+        volumeGroup: linstor_ssd_lvm_pool
+      properties:
+        - name: StorDriver/LvcreateOptions
+          value: --chunksize 1M --stripes 2 --stripesize 256k
+      source:
+        hostDevices:
+          - /dev/sda
+          - /dev/sdb
   nodeSelector:
     local-disk/storage: "yes"
   podTemplate:
