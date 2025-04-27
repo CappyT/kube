@@ -8,6 +8,9 @@ spec:
       lvmThinPool:
         thinPool: thin
         volumeGroup: linstor_ssd_lvm_pool
+      properties:
+        - name: StorDriver/LvcreateOptions
+          value: "-i2 -I512"
       source:
         hostDevices:
           - /dev/sda
