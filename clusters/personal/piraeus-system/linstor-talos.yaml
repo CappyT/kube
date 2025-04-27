@@ -8,9 +8,6 @@ spec:
       lvmThinPool:
         thinPool: thin
         volumeGroup: linstor_ssd_lvm_pool
-      properties:
-        - name: StorDriver/LvcreateOptions
-          value: --stripes 2 --stripesize 256k
       source:
         hostDevices:
           - /dev/sda
