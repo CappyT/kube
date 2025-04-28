@@ -56,8 +56,9 @@ spec:
       endpoints:
         - 10.122.0.24
       service:
-        selector:
-          component: etcd
+        enabled: true
+        port: 2381
+        targetPort: 2381
 
     kubeScheduler:
       endpoints:
