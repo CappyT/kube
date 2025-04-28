@@ -20,3 +20,15 @@ spec:
     - start: 10.122.1.50
       stop: 10.122.1.150
   disabled: false
+---
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: "public-pool"
+spec:
+  blocks:
+  - start: 185.242.181.178
+    stop: 185.242.181.182
+  serviceSelector:
+    matchLabels:
+      type: public
