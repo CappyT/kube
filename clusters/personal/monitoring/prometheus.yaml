@@ -36,11 +36,7 @@ spec:
         enabled: true
     defaultRules:
       rules:
-        kubeSchedulerAlerting: false
-        kubeSchedulerRecording: false
-        kubeControllerManager: false
         kubeProxy: false
-        etcd: false
 
     nodeExporter:
       operatingSystems:
@@ -51,15 +47,21 @@ spec:
   
     kubeProxy:
       enabled: false
-
-    kubeScheduler:
-      enabled: false
-
+    
     kubeControllerManager:
-      enabled: false
+      endpoints:
+        - 10.122.0.24
 
     kubeEtcd:
-      enabled: false
+      endpoints:
+        - 10.122.0.24
+      service:
+        selector:
+          component: etcd
+
+    kubeScheduler:
+      endpoints:
+        - 10.122.0.24
 
     grafana:
       defaultDashboardsTimezone: Europe/Rome
