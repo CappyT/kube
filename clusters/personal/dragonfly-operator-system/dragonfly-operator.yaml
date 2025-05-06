@@ -33,7 +33,6 @@ spec:
     - kustomize:
         patches:
           - target:
-              version: apps/v1
               kind: Deployment
               name: dragonfly-operator
               namespace: dragonfly-operator-system
