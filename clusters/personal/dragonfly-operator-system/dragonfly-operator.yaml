@@ -40,4 +40,4 @@ spec:
             patch: |
               - op: replace
                 path: /spec/template/containers/1/args
-                value: ['--health-probe-bind-address=:8081', '--metrics-bind-address=127.0.0.1:8080', '--leader-elect']
+                value: ['--health-probe-bind-address=:8081', '--metrics-bind-address=0.0.0.0:8080', '--leader-elect']
