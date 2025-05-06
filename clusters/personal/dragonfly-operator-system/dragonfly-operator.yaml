@@ -26,8 +26,3 @@ spec:
     name: dragonfly-operator
     namespace: dragonfly-operator-system
   releaseName: dragonfly-operator
-  values:
-    grafanaDashboard:
-      enabled: true
-    serviceMonitor:
-      enabled: true
