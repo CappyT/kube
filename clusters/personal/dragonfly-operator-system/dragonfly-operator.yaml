@@ -9,7 +9,7 @@ spec:
   layerSelector:
     mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
     operation: copy
-  url: oci://ghcr.io/dragonflydb/dragonfly-operator/helmo
+  url: oci://ghcr.io/dragonflydb/dragonfly-operator/helm
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
