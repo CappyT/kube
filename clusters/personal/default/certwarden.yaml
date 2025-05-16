@@ -33,14 +33,7 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /app/data
-        - name: config
-          mountPath: /app/data/app/config.yaml
-          subPath: config.yaml
-          readOnly: false
       volumes:
-      - name: config
-        secret:
-          secretName: certwarden-config
       - name: data
         persistentVolumeClaim:
           claimName: data-legoch-0
@@ -76,21 +69,4 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: block
----
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: certwarden-config
-  namespace: default
-spec:
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: infisical
-  target:
-    name: certwarden-config
-  data:
-    - secretKey: config.yaml
-      remoteRef:
-        key: /default/certwarden/config.yaml
-        decodingStrategy: Base64
+  storageClassName: blocks
