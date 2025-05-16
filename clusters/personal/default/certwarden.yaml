@@ -39,7 +39,7 @@ spec:
       volumes:
       - name: config
         secret:
-          name: certwarden-config
+          secretName: certwarden-config
       - name: data
         persistentVolumeClaim:
           claimName: data-legoch-0
