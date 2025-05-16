@@ -1,0 +1,245 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: paperless-secret-key
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: paperless-secret-key
+  data:
+    - secretKey: secret_key
+      remoteRef:
+        key: /default/paperless/paperless-secret-key
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paperless
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless
+  template:
+    metadata:
+      labels:
+        app: paperless
+    spec:
+      containers:
+        - name: paperless
+          image: ghcr.io/paperless-ngx/paperless-ngx:2.14.5
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            - name: PAPERLESS_REDIS
+              value: redis://paperless-dragonfly.default.svc.cluster.local:6379
+            - name: PAPERLESS_DBENGINE
+              value: postgresql
+            - name: PAPERLESS_DBHOST
+              value: paperless-cluster-rw.default.svc.cluster.local
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-cluster-app
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-cluster-app
+                  key: password
+            - name: PAPERLESS_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-cluster-app
+                  key: dbname
+            - name: PAPERLESS_DBPORT
+              value: '5432'
+            - name: PAPERLESS_TIKA_ENABLED
+              value: '1'
+            - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
+              value: http://paperless-gotemberg.default.svc.cluster.local:3000
+            - name: PAPERLESS_TIKA_ENDPOINT
+              value: http://tika-paperless.default.svc.cluster.local:9998
+            - name: PAPERLESS_OCR_LANGUAGES
+              value: fas
+            - name: PAPERLESS_URL
+              value: https://paperless.cappyt.sh
+            - name: PAPERLESS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-secret-key
+                  key: secret_key
+            - name: PAPERLESS_TIME_ZONE
+              value: Europe/Rome
+            - name: PAPERLESS_OCR_LANGUAGE
+              value: ita
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: '1'
+              memory: 1Gi
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/paperless/data
+              subPath: data
+            - name: data
+              mountPath: /usr/src/paperless/media
+              subPath: media
+            - name: data
+              mountPath: /usr/src/paperless/export
+              subPath: export
+            - name: data
+              mountPath: /usr/src/paperless/consume
+              subPath: consume
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-paperless-0
+  serviceName: paperless-web
+  updateStrategy:
+    type: RollingUpdate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless-web
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app: paperless
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-paperless-0
+spec:
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: block
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika-paperless
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tika-paperless
+  template:
+    metadata:
+      labels:
+        app: tika-paperless
+    spec:
+      containers:
+      - name: tika-paperless
+        image: apache/tika:3.0.0.0-full
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+        ports:
+        - containerPort: 9998
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tika-paperless
+  namespace: default
+spec:
+  selector:
+    app: tika-paperless
+  ports:
+  - port: 9998
+    targetPort: 9998
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-gotenberg
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paperless-gotenberg
+  template:
+    metadata:
+      labels:
+        app: paperless-gotenberg
+    spec:
+      containers:
+      - name: paperless-gotenberg
+        image: docker.io/gotenberg/gotenberg:8.15.3
+        imagePullPolicy: IfNotPresent
+        args:
+          - "gotenberg"
+          - "--chromium-disable-javascript=true"
+          - "--chromium-allow-list=file:///tmp/.*"
+        resources:
+          limits:
+            cpu: 350m
+            memory: 500Mi
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: paperless-gotenberg
+  namespace: default
+spec:
+  selector:
+    app: paperless-gotenberg
+  ports:
+  - port: 3000
+    targetPort: 3000
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: paperless-cluster
+  namespace: default
+spec:
+  imagePullPolicy: Always
+  instances: 1
+  storage:
+    size: 15Gi
+    storageClass: block
+  monitoring:
+    disableDefaultQueries: false
+    enablePodMonitor: true
+---
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: paperless-dragonfly
+  namespace: default
+spec:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 500Mi
+    limits:
+      cpu: 600m
+      memory: 750Mi
