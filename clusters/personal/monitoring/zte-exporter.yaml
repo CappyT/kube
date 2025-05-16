@@ -55,3 +55,22 @@ spec:
   endpoints:
   - port: web
     interval: 30s
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: zte-credentials
+  namespace: monitoring
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: zte-credentials
+  data:
+    - secretKey: ZTE_HOSTNAME
+      remoteRef:
+        key: /monitoring/zte-exporter/zte-hostname
+    - secretKey: ZTE_PASSWORD
+      remoteRef:
+        key: /monitoring/zte-exporter/zte-password
