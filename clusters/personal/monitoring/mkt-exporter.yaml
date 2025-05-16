@@ -62,3 +62,24 @@ spec:
   endpoints:
   - port: web
     interval: 30s
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: mktxp-credentials
+  namespace: monitoring
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: mktxp-credentials
+  data:
+    - secretKey: _mktxp.conf
+      remoteRef:
+        key: /monitoring/mikrotik-exporter/_mktxp.conf
+        decodingStrategy: Base64
+    - secretKey: mktxp.conf
+      remoteRef:
+        key: /monitoring/mikrotik-exporter/mktxp.conf
+        decodingStrategy: Base64
