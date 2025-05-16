@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: certwarden
+spec:
+  selector:
+    matchLabels:
+      app: certwarden
+  serviceName: certwarden
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: certwarden
+    spec:
+      containers:
+      - name: certwarden
+        image: ghcr.io/gregtwallace/certwarden:v0.25.1
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 30Mi
+          limits:
+            cpu: 200m
+            memory: 70Mi
+        ports:
+        - containerPort: 80
+          name: http
+        - containerPort: 443
+          name: https
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+        - name: config
+          mountPath: /app/data/app/config.yaml
+          subPath: config.yaml
+      volumes:
+      - name: config
+        secret:
+          name: certwarden-config
+      - name: data
+        persistentVolumeClaim:
+          claimName: data-legoch-0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: certwarden
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+spec:
+  type: LoadBalancer
+  selector:
+    app: certwarden
+  ports:
+  - port: 80
+    targetPort: http
+    name: http
+  - port: 443
+    targetPort: https
+    name: https
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-legoch-0
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: block
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: certwarden-config
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: certwarden-config
+  data:
+    - secretKey: config.yaml
+      remoteRef:
+        key: /default/certwarden/config.yaml
+        decodingStrategy: Base64
