@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-tunnel
+  namespace: default
+spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cloudflared
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+      - name: cf-tunnel
+        image: cloudflare/cloudflared:2025.4.0
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: NO_AUTOUPDATE
+            value: "true"
+          - name: TUNNEL_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: cloudflared-token
+        args:
+          - "tunnel"
+          - "run"
+        resources:
+          limits:
+            memory: "30Mi"
+            cpu: "50m"
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudflared-token
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: cloudflared-token
+  data:
+    - secretKey: token
+      remoteRef:
+        key: /default/cloudflare/cloudflared-token
