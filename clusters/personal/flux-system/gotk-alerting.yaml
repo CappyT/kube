@@ -29,3 +29,19 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: telegram-token
+  namespace: flux-system
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: telegram-token
+  data:
+    - secretKey: token
+      remoteRef:
+        key: /flux-system/telegram-token
