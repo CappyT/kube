@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: cf-tunnel
-        image: cloudflare/cloudflared:2025.4.0
+        image: cloudflare/cloudflared:2025.5.0
         imagePullPolicy: IfNotPresent
         env:
           - name: NO_AUTOUPDATE
