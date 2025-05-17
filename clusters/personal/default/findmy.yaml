@@ -117,3 +117,4 @@ spec:
     - secretKey: config.ini
       remoteRef:
         key: /default/findmy/config.ini
+        decodingStrategy: Base64
