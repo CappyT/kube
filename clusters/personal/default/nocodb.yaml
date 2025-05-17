@@ -18,7 +18,7 @@ spec:
       - name: nocodb
         image: nocodb/nocodb:0.263.3
         env:
-          - name: DATABASE_URL
+          - name: NC_DB
             valueFrom:
               secretKeyRef:
                 key: db-url
