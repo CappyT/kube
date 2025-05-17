@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nocodb
+spec:
+  selector:
+    matchLabels:
+      app: nocodb
+  serviceName: nocodb
+  replicas: 0
+  template:
+    metadata:
+      labels:
+        app: nocodb
+    spec:
+      containers:
+      - name: nocodb
+        image: nocodb/nocodb:0.263.3
+        env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: jdbc-uri
+                name: nocodb-cluster-app
+                optional: false
+          - name: NC_AUTH_JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: jwt-secret
+                name: nocodb-secret
+          - name: NC_GOOGLE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: google-client-id
+                name: nocodb-secret
+          - name: NC_GOOGLE_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: google-client-secret
+                name: nocodb-secret
+        ports:
+        - containerPort: 8080
+          name: web
+        volumeMounts:
+        - name: data
+          mountPath: /usr/app/data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: block
+      resources:
+        requests:
+          storage: 10Gi
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: nocodb-cluster
+  namespace: default
+spec:
+  imagePullPolicy: Always
+  instances: 1
+  storage:
+    size: 15Gi
+    storageClass: block
+  monitoring:
+    disableDefaultQueries: false
+    enablePodMonitor: true
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: nocodb-secret
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: nocodb-secret
+  data:
+    - secretKey: jwt-secret
+      remoteRef:
+        key: /default/nocodb/jwt-secret
+    - secretKey: google-client-id
+      remoteRef:
+        key: /default/nocodb/google-client-id
+    - secretKey: google-client-secret
+      remoteRef:
+        key: /default/nocodb/google-client-secret
