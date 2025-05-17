@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: findmy
+  namespace: default
+spec:
+  replicas: 1
+  serviceName: findmy
+  selector:
+    matchLabels:
+      app: findmy
+  template:
+    metadata:
+      labels:
+        app: findmy
+    spec:
+      volumes:
+        - name: config
+          secret:
+            secretName: findmy-config
+        - name: anisette
+          persistentVolumeClaim:
+            claimName: anisette-findmy-0
+        - name: mh
+          persistentVolumeClaim:
+            claimName: mh-findmy-0
+      containers:
+        - name: macless-haystack
+          image: christld/macless-haystack:latest
+          ports:
+            - name: endpoint
+              containerPort: 6176
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 70Mi
+          volumeMounts:
+            - name: mh
+              mountPath: /app/endpoint/data
+            - name: config
+              mountPath: /app/endpoint/data/config.ini
+              subPath: config.ini
+        - name: anisette
+          image: dadoum/anisette-v3-server
+          ports:
+            - name: anisette
+              containerPort: 6969
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 70Mi
+          volumeMounts:
+            - name: anisette
+              mountPath: /root/.config/anisette-v3/
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: findmy-service
+  namespace: default
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+spec:
+  ports:
+    - protocol: TCP
+      port: 6176
+      targetPort: endpoint
+  selector:
+    app: findmy
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: anisette-findmy-0
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: block
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mh-findmy-0
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: block
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: findmy-config
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: findmy-config
+  data:
+    - secretKey: config.ini
+      remoteRef:
+        key: /default/findmy/config.ini
