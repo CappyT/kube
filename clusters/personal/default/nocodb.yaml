@@ -21,8 +21,8 @@ spec:
           - name: DATABASE_URL
             valueFrom:
               secretKeyRef:
-                key: jdbc-uri
-                name: nocodb-cluster-app
+                key: db-url
+                name: nocodb-secret
                 optional: false
           - name: NC_AUTH_JWT_SECRET
             valueFrom:
@@ -85,6 +85,9 @@ spec:
     - secretKey: jwt-secret
       remoteRef:
         key: /default/nocodb/jwt-secret
+    - secretKey: db-url
+      remoteRef:
+        key: /default/nocodb/db-url
     - secretKey: google-client-id
       remoteRef:
         key: /default/nocodb/google-client-id
