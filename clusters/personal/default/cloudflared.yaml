@@ -30,6 +30,10 @@ spec:
                 name: cloudflared-token
         args:
           - "tunnel"
+          - "--protocol"
+          - "http2"
+          - "--loglevel"
+          - "debug"
           - "run"
         resources:
           limits:
