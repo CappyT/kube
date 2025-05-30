@@ -11,10 +11,9 @@ spec:
     solvers:
     - dns01:
         cloudflare:
-          apiTokenSecretRef:
+          apiKeySecretRef:
             name: cloudflare-token
             key: token
-            namespace: cert-manager
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -29,10 +28,9 @@ spec:
     solvers:
     - dns01:
         cloudflare:
-          apiTokenSecretRef:
+          apiKeySecretRef:
             name: cloudflare-token
             key: token
-            namespace: cert-manager
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
