@@ -13,6 +13,17 @@ metadata:
   name: kube-prometheus
   namespace: monitoring
 spec:
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: kube-prometheus-grafana
+              namespace: monitoring
+            patch: |
+              - op: replace
+                path: /spec/strategy
+                value: Recreate
   interval: 10m
   timeout: 5m
   chart:
