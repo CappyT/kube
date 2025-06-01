@@ -22,7 +22,7 @@ spec:
               namespace: monitoring
             patch: |
               - op: replace
-                path: /spec/strategy
+                path: /spec/strategy/type
                 value: Recreate
   interval: 10m
   timeout: 5m
