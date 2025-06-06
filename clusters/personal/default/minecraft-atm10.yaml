@@ -70,7 +70,7 @@ spec:
             -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32 -XX:MaxTenuringThreshold=1
             -XX:G1SATBBufferEnqueueingThresholdPercent=30 -XX:G1ConcMarkStepDurationMillis=5
             -XX:G1ConcRefinementServiceIntervalMillis=150 -XX:G1ConcRSHotCardLimit=16
-        image: itzg/minecraft-server:java17-graalvm
+        image: itzg/minecraft-server:java21-graalvm
         imagePullPolicy: IfNotPresent
         name: server
         ports:
