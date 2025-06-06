@@ -27,8 +27,8 @@ metadata:
   name: "public-pool"
 spec:
   blocks:
-  - start: 185.242.181.178
-    stop: 185.242.181.182
+  - start: 185.242.182.145
+    stop: 185.242.182.150
   serviceSelector:
     matchLabels:
       type: public
