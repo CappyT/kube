@@ -63,4 +63,17 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: block
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: data-gitea
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-replica

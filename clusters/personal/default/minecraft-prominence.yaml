@@ -160,3 +160,17 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: block
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minecraft-data-prominence-2-prominence-2-server
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 40Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-single

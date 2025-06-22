@@ -175,3 +175,17 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: block
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minecraft-data-better-mc-server
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 40Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-single

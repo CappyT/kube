@@ -167,3 +167,17 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: block
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minecraft-data-atm10-atm10-server
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 40Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-single
