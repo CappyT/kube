@@ -21,7 +21,7 @@ spec:
       volumes:
         - name: minecraft-data
           persistentVolumeClaim:
-            claimName: minecraft-data-better-mc-server-0
+            claimName: minecraft-data-better-mc-server
       containers:
         - name: server
           image: itzg/minecraft-server:java17-graalvm
@@ -161,20 +161,6 @@ spec:
     app: minecraft
     modpack: bettermc
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: minecraft-data-better-mc-server-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 40Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

@@ -20,10 +20,10 @@ spec:
             secretName: findmy-config
         - name: anisette
           persistentVolumeClaim:
-            claimName: anisette-findmy-0
+            claimName: anisette-findmy
         - name: mh
           persistentVolumeClaim:
-            claimName: mh-findmy-0
+            claimName: mh-findmy
       containers:
         - name: macless-haystack
           image: christld/macless-haystack:latest
@@ -73,34 +73,6 @@ spec:
   selector:
     app: findmy
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: anisette-findmy-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 2Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mh-findmy-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 2Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret

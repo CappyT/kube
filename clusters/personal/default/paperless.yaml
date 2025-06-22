@@ -102,7 +102,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: data-paperless-0
+            claimName: data-paperless
   serviceName: paperless-web
   updateStrategy:
     type: RollingUpdate
@@ -120,20 +120,6 @@ spec:
   selector:
     app: paperless
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: data-paperless-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 10Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: apps/v1
 kind: Deployment

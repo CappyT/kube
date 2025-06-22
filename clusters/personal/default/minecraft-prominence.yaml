@@ -22,7 +22,7 @@ spec:
       volumes:
         - name: minecraft-data-prominence-2
           persistentVolumeClaim:
-            claimName: minecraft-data-prominence-2-prominence-2-server-0
+            claimName: minecraft-data-prominence-2-prominence-2-server
       containers:
       - env:
         - name: TYPE
@@ -146,20 +146,6 @@ spec:
     app: minecraft
     modpack: prominence-2
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: minecraft-data-prominence-2-prominence-2-server-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 40Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

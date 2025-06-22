@@ -36,7 +36,7 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: data-legoch-0
+          claimName: data-legoch
 ---
 apiVersion: v1
 kind: Service
@@ -56,20 +56,6 @@ spec:
   - port: 443
     targetPort: https
     name: https
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: data-legoch-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 2Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

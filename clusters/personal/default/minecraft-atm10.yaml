@@ -22,7 +22,7 @@ spec:
       volumes:
         - name: minecraft-data-atm10
           persistentVolumeClaim:
-            claimName: minecraft-data-atm10-atm10-server-0
+            claimName: minecraft-data-atm10-atm10-server
       containers:
       - env:
         - name: TYPE
@@ -153,20 +153,6 @@ spec:
     app: minecraft
     modpack: atm10
   type: LoadBalancer
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: minecraft-data-atm10-atm10-server-0
-  namespace: default
-spec:
-  resources:
-    requests:
-      storage: 40Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: block
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
