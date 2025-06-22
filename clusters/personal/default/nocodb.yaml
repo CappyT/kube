@@ -17,7 +17,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: nocodb-data
+            claimName: data-nocodb
       containers:
       - name: nocodb
         image: nocodb/nocodb:0.263.3
