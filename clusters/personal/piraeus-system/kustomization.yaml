@@ -5,3 +5,4 @@ resources:
 - linstor-talos.yaml
 - linstor-cluster.yaml
 - storageclass.yaml
+- snapshot-controller.yaml
