@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 24h
   ref:
-    tag: v2.8.1
+    tag: v2.9.0
   url: https://github.com/piraeusdatastore/piraeus-operator
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
