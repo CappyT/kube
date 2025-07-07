@@ -29,7 +29,7 @@ spec:
                 key: token
                 name: cloudflared-token
           - name: CLOUDFLARED_QUIC_INITIAL_PACKET_SIZE
-            value: 1230
+            value: "1230"
         args:
           - "tunnel"
           - "--protocol"
