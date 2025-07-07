@@ -16,9 +16,11 @@ spec:
       labels:
         app: cloudflared
     spec:
+      imagePullSecrets:
+        - name: cappyt
       containers:
       - name: cf-tunnel
-        image: ghcr.io/nobles5e/cloudflared/cloudflared:master-eeb7c02
+        image: git.cappyt.sh/cappyt/cloudflared:latest
         imagePullPolicy: IfNotPresent
         env:
           - name: NO_AUTOUPDATE
