@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: cf-tunnel
-        image: cloudflare/cloudflared:2025.5.0
+        image: ghcr.io/nobles5e/cloudflared/cloudflared:master-eeb7c02
         imagePullPolicy: IfNotPresent
         env:
           - name: NO_AUTOUPDATE
@@ -28,6 +28,8 @@ spec:
               secretKeyRef:
                 key: token
                 name: cloudflared-token
+          - name: CLOUDFLARED_QUIC_INITIAL_PACKET_SIZE
+            value: 1230
         args:
           - "tunnel"
           - "--protocol"
