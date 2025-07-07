@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: edencraft
+  namespace: edennetwork
+spec:
+  selector:
+    matchLabels:
+      app: edencraft
+  serviceName: edencraft
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: edencraft
+    spec:
+      volumes:
+        - name: edennetwork
+          secret:
+            secretName: edentunnel-edencraft
+            optional: false
+        - name: edencraft-data
+          persistentVolumeClaim:
+            claimName: edencraft-data
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: mysql-data
+      imagePullSecrets:
+        - name: cappyt
+      containers:
+      - name: sql
+        image: mysql:8
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: mysql-edencraft
+        volumeMounts:
+          - name: mysql-data
+            mountPath: /var/lib/mysql
+      - name: edentunnel
+        image: git.cappyt.sh/cappyt/edentunnel:latest
+        args: ["server", "-v", "-l", "127.0.0.1:25565", "0.0.0.0:8080"]
+        ports:
+          - name: http
+            protocol: TCP
+            containerPort: 8080
+        readinessProbe:
+          httpGet:
+            port: 8080
+      - name: edencraft
+        image: itzg/minecraft-server:java8
+        env:
+        - name: TYPE
+          value: CUSTOM
+        - name: CUSTOM_SERVER
+          value: /data/minecraft_server.jar
+        - name: INIT_MEMORY
+          value: 12G
+        - name: MAX_MEMORY
+          value: 12G
+        - name: JVM_OPTS
+          value: -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+AlwaysPreTouch -XX:+UseLargePagesInMetaspace -Dsun.zip.disableMemoryMapping=true -Dlog4j2.formatMsgNoLookups=true
+        ports:
+        - containerPort: 25565
+          name: minecraft
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 10
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 25565
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: "5"
+            memory: 14Gi
+          requests:
+            cpu: "4"
+            memory: 12Gi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /data
+          name: edencraft-data
+        - name: edennetwork
+          mountPath: /data/edennetwork.key
+          subPath: edennetwork.key
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: edentunnel-edencraft
+  namespace: edennetwork
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: edentunnel-edencraft
+  data:
+    - secretKey: edennetwork.key
+      remoteRef:
+        key: /edennetwork/edencraft/edentunnel
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: mysql-edencraft
+  namespace: edennetwork
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: mysql-edencraft
+  data:
+    - secretKey: password
+      remoteRef:
+        key: /edennetwork/edencraft/mysql
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: edencraft-data
+  namespace: edennetwork
+spec:
+  storageClassName: local-single
+  resources:
+    requests:
+      storage: 30Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-data
+  namespace: edennetwork
+spec:
+  storageClassName: local-single
+  resources:
+    requests:
+      storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edencraft
+  namespace: edennetwork
+spec:
+  selector:
+    app: edencraft
+  ports:
+  - port: 8080
+    targetPort: http
