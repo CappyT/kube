@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflare-ddns
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: cloudflare-ddns
+  template:
+    metadata:
+      labels:
+        app: cloudflare-ddns
+    spec:
+      containers:
+      - name: cloudflare-ddns
+        image: favonia/cloudflare-ddns:1.15.1
+        env:
+          - name: CLOUDFLARE_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-ddns-secret
+                key: token
+          - name: DOMAINS
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-ddns-secret
+                key: domains
+          - name: SHOUTRRR
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-ddns-secret
+                key: shoutrrr
+          - name: PROXIED
+            value: "false"
+          - name: RECORD_COMMENT
+            value: "DDNS for Cloudflare"
+          - name: IP6_PROVIDER
+            value: none
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudflare-ddns
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: cloudflare-ddns-secret
+  data:
+    - secretKey: token
+      remoteRef:
+        key: /default/cloudflare-ddns/token
+    - secretKey: domains
+      remoteRef:
+        key: /default/cloudflare-ddns/domains
+    - secretKey: shoutrrr
+      remoteRef:
+        key: /default/cloudflare-ddns/shoutrrr
