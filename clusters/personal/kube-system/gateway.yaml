@@ -1,0 +1,91 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: public-gateway
+  namespace: kube-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  infrastructure:
+    labels:
+      type: public
+    annotations:
+      io.cilium/lb-ipam-ips: "185.242.182.145"
+  gatewayClassName: cilium
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: 'cappyt.sh'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: cappyt-sh-cert
+          kind: Secret
+  - name: https-wildcard
+    protocol: HTTPS
+    port: 443
+    hostname: '*.cappyt.sh'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: wildcard-cappyt-sh-cert
+          kind: Secret
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: private-gateway
+  namespace: kube-system
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  infrastructure:
+    labels:
+      type: public
+    annotations:
+      io.cilium/lb-ipam-ips: "10.122.1.100"
+  gatewayClassName: cilium
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: 'cappyt.sh'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: cappyt-sh-cert
+          kind: Secret
+  - name: https-wildcard
+    protocol: HTTPS
+    port: 443
+    hostname: '*.cappyt.sh'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: wildcard-cappyt-sh-cert
+          kind: Secret
