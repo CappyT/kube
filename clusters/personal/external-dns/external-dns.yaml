@@ -25,6 +25,8 @@ spec:
       interval: 5m
   releaseName: external-dns
   values:
+    serviceMonitor:
+      enabled: true
     provider:
       name: cloudflare
     env:
