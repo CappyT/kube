@@ -5,13 +5,25 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": ["^clusters/.*/.*\.yaml$"],
+      "fileMatch": ["^clusters/.*/.*\\.yaml$"],
       "matchStrings": [
-        "chart: .*\n *version: (?<currentValue>.*)",
-        "ref:\n *tag: (?<currentValue>.*)"
+        "kind: HelmRelease\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  releaseName: .*\n  targetNamespace: .*\n  interval: .*\n  chart:\n    spec:\n      chart: .*\n      version: (?<currentValue>.*)\n      sourceRef:\n        kind: HelmRepository\n        name: .*\n        namespace: .*"
       ],
-      "depNameTemplate": "helm-chart",
       "datasourceTemplate": "helm"
+    },
+    {
+      "fileMatch": ["^clusters/.*/.*\\.yaml$"],
+      "matchStrings": [
+        "kind: GitRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  interval: .*\n  ref:\n    tag: (?<currentValue>.*)\n  url: (?<packageName>.*)"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "fileMatch": ["^clusters/.*/.*\\.yaml$"],
+      "matchStrings": [
+        "kind: OCIRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  interval: .*\n  layerSelector:\n    mediaType: .*\n    operation: .*\n  url: (?<packageName>.*)\n  ref:\n    tag: (?<currentValue>.*)"
+      ],
+      "datasourceTemplate": "oci"
     }
   ]
 }
