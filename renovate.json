@@ -15,6 +15,7 @@
   },
   "packageRules": [
     {
+      "enabled": true,
       "matchPackageNames": ["mysql"],
       "matchUpdateTypes": ["minor", "patch"]
     }
