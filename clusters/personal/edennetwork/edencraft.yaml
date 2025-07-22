@@ -29,7 +29,8 @@ spec:
         - name: cappyt
       containers:
       - name: sql
-        image: mysql:8
+        # renovate: updateTypes=["minor", "patch"]
+        image: mysql:8.4.5
         env:
           - name: MYSQL_ROOT_PASSWORD
             valueFrom:
