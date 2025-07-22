@@ -4,15 +4,6 @@
     "config:base"
   ],
   "flux": {
-    "fileMatch": [
-      "^clusters/.*/.*\\.yaml$"
-    ]
-  },
-  "packageRules": [
-    {
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["kube-prometheus-stack"],
-      "registryUrls": ["https://prometheus-community.github.io/helm-charts"]
-    }
-  ]
+    "enabled": true
+  }
 }
