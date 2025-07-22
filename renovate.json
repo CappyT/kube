@@ -25,5 +25,12 @@
       ],
       "datasourceTemplate": "oci"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["external-secrets"],
+      "registryUrls": ["https://charts.external-secrets.io"]
+    }
   ]
 }
