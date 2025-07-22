@@ -6,6 +6,12 @@
   "kubernetes": {
     "managerFilePatterns": [
       "/clusters/.*/.*\\.yaml$/"
+    ],
+    "packageRules": [
+      {
+        "matchPackageNames": ["mysql"],
+        "matchUpdateTypes": ["minor", "patch", "pin", "digest"]
+      }
     ]
   },
   "flux": {
