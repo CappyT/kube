@@ -7,7 +7,7 @@
     {
       "fileMatch": ["^clusters/.*/.*\\.yaml$"],
       "matchStrings": [
-        "kind: HelmRelease\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  releaseName: .*\n  targetNamespace: .*\n  interval: .*\n  chart:\n    spec:\n      chart: (?<packageName>.*)\n      version: (?<currentValue>.*)\n      sourceRef:\n        kind: HelmRepository\n        name: .*\n        namespace: .*"
+        "chart: (?<packageName>.*)\n      version: (?<currentValue>.*)"
       ],
       "datasourceTemplate": "helm"
     },
