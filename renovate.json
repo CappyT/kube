@@ -7,21 +7,21 @@
     {
       "fileMatch": ["^clusters/.*/.*\\.yaml$"],
       "matchStrings": [
-        "kind: HelmRelease\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  releaseName: .*\n  targetNamespace: .*\n  interval: .*\n  chart:\n    spec:\n      chart: .*\n      version: (?<currentValue>.*)\n      sourceRef:\n        kind: HelmRepository\n        name: .*\n        namespace: .*"
+        "kind: HelmRelease\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  releaseName: .*\n  targetNamespace: .*\n  interval: .*\n  chart:\n    spec:\n      chart: (?<packageName>.*)\n      version: (?<currentValue>.*)\n      sourceRef:\n        kind: HelmRepository\n        name: .*\n        namespace: .*"
       ],
       "datasourceTemplate": "helm"
     },
     {
       "fileMatch": ["^clusters/.*/.*\\.yaml$"],
       "matchStrings": [
-        "kind: GitRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  interval: .*\n  ref:\n    tag: (?<currentValue>.*)\n  url: (?<packageName>.*)"
+        "kind: GitRepository\nmetadata:\n  name: .*\n  namespace: .*\nspec:\n  interval: .*\n  ref:\n    tag: (?<currentValue>.*)\n  url: https://github.com/(?<depName>.*)"
       ],
       "datasourceTemplate": "github-releases"
     },
     {
       "fileMatch": ["^clusters/.*/.*\\.yaml$"],
       "matchStrings": [
-        "kind: OCIRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  interval: .*\n  layerSelector:\n    mediaType: .*\n    operation: .*\n  url: (?<packageName>.*)\n  ref:\n    tag: (?<currentValue>.*)"
+        "kind: OCIRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  interval: .*\n  layerSelector:\n    mediaType: .*\n    operation: .*\n  url: oci://ghcr.io/(?<packageName>.*)\n  ref:\n    tag: (?<currentValue>.*)"
       ],
       "datasourceTemplate": "oci"
     }
