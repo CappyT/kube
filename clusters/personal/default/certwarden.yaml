@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: certwarden
-        image: ghcr.io/gregtwallace/certwarden:v0.25.1
+        image: ghcr.io/gregtwallace/certwarden:v0.27.0
         imagePullPolicy: IfNotPresent
         resources:
           requests:
