@@ -2,5 +2,16 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^clusters/.*/.*\.yaml$"],
+      "matchStrings": [
+        "chart: .*\n *version: (?<currentValue>.*)",
+        "ref:\n *tag: (?<currentValue>.*)"
+      ],
+      "depNameTemplate": "helm-chart",
+      "datasourceTemplate": "helm"
+    }
   ]
 }
