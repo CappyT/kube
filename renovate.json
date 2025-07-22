@@ -8,26 +8,9 @@
       "clusters/.*/.*\\.yaml$"
     ]
   },
-  "regexManagers": [
-    {
-      "description": "Update Flux HelmRelease chart versions",
-      "fileMatch": [
-        "clusters/.*/.*\\.yaml$"
-      ],
-      "matchStrings": [
-        "apiVersion: helm\\.toolkit\\.fluxcd\\.io/v2beta[12]\nkind: HelmRelease\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  chart:\n    spec:\n      chart: .*\n      version: (?<currentValue>.*)\n      sourceRef:"
-      ],
-      "datasourceTemplate": "helm"
-    },
-    {
-      "description": "Update Flux GitRepository tags",
-      "fileMatch": [
-        "clusters/.*/.*\\.yaml$"
-      ],
-      "matchStrings": [
-        "apiVersion: source\\.toolkit\\.fluxcd\\.io/v1beta[12]\nkind: GitRepository\nmetadata:\n  name: (?<depName>.*)\n  namespace: .*\nspec:\n  url: .*\n  ref:\n    tag: (?<currentValue>.*)"
-      ],
-      "datasourceTemplate": "github-releases"
-    }
-  ]
+  "flux": {
+    "fileMatch": [
+      "clusters/.*/.*\\.yaml$"
+    ]
+  }
 }
