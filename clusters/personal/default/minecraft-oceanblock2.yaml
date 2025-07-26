@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: oceanblock2-server
+  namespace: default
+  labels:
+    app: minecraft
+    modpack: oceanblock2
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: minecraft
+      modpack: oceanblock2
+  template:
+    metadata:
+      labels:
+        app: minecraft
+        modpack: oceanblock2
+    spec:
+      volumes:
+        - name: minecraft-data-oceanblock2
+          persistentVolumeClaim:
+            claimName: minecraft-data-oceanblock2-oceanblock2-server
+      containers:
+        - name: server
+          image: itzg/minecraft-server:java21-graalvm
+          ports:
+            - name: minecraft
+              containerPort: 25565
+              protocol: TCP
+          env:
+            - name: TYPE
+              value: AUTO_CURSEFORGE
+            - name: EULA
+              value: 'true'
+            - name: CF_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: minecraft-cf-api
+            - name: CF_SLUG
+              value: ftb-oceanblock-2
+            - name: CF_FORCE_SYNCHRONIZE
+              value: 'true'
+            - name: INIT_MEMORY
+              value: 6G
+            - name: MAX_MEMORY
+              value: 6G
+            - name: MOTD
+              value: Juje koochoolo on a boat! Watch out!
+            - name: SNOOPER
+              value: 'false'
+            - name: PVP
+              value: 'false'
+            - name: ENABLE_WHITELIST
+              value: 'true'
+            - name: WHITELIST
+              value: CappyT,GodMother95
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rcon-pass
+                  name: minecraft-rcon
+            - name: JVM_OPTS
+              value: >-
+                -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
+                -XX:+AlwaysActAsServerClassMachine -XX:+AlwaysPreTouch
+                -XX:+DisableExplicitGC -XX:AllocatePrefetchStyle=3
+                -XX:NmethodSweepActivity=1 -XX:ReservedCodeCacheSize=400M
+                -XX:NonNMethodCodeHeapSize=12M -XX:ProfiledCodeHeapSize=194M
+                -XX:NonProfiledCodeHeapSize=194M -XX:-DontCompileHugeMethods
+                -XX:+PerfDisableSharedMem -XX:+UseFastUnorderedTimeStamps
+                -XX:+UseCriticalJavaThreadPriority -XX:+EagerJVMCI
+                -Dgraal.TuneInlinerExploration=1 -XX:+UseG1GC
+                -XX:MaxGCPauseMillis=130 -XX:+UnlockExperimentalVMOptions
+                -XX:+DisableExplicitGC -XX:+AlwaysPreTouch
+                -XX:G1NewSizePercent=28 -XX:G1HeapRegionSize=16M
+                -XX:G1ReservePercent=20 -XX:G1MixedGCCountTarget=3
+                -XX:InitiatingHeapOccupancyPercent=10
+                -XX:G1MixedGCLiveThresholdPercent=90
+                -XX:G1RSetUpdatingPauseTimePercent=0 -XX:SurvivorRatio=32
+                -XX:MaxTenuringThreshold=1
+                -XX:G1SATBBufferEnqueueingThresholdPercent=30
+                -XX:G1ConcMarkStepDurationMillis=5
+                -XX:G1ConcRefinementServiceIntervalMillis=150
+                -XX:G1ConcRSHotCardLimit=16
+          resources:
+            limits:
+              cpu: '5'
+              memory: 8Gi
+            requests:
+              cpu: '4'
+              memory: 6Gi
+          volumeMounts:
+            - name: minecraft-data-oceanblock2
+              mountPath: /data
+          readinessProbe:
+            tcpSocket:
+              port: 25565
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          stdin: true
+          tty: true
+        - name: rcon
+          image: itzg/rcon:latest
+          ports:
+            - name: rcon
+              containerPort: 4326
+              protocol: TCP
+            - name: rcon-ws
+              containerPort: 4327
+              protocol: TCP
+          env:
+            - name: RWA_USERNAME
+              value: CappyT
+            - name: RWA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rcon-pass
+                  name: minecraft-rcon
+            - name: RWA_RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: rcon-pass
+                  name: minecraft-rcon
+  serviceName: oceanblock2
+  updateStrategy:
+    type: RollingUpdate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+  labels:
+    app: minecraft
+    modpack: oceanblock2
+  name: oceanblock2
+  namespace: default
+spec:
+  ports:
+  - name: minecraft
+    port: 25565
+    protocol: TCP
+    targetPort: minecraft
+  - name: rcon
+    port: 4326
+    protocol: TCP
+    targetPort: rcon
+  - name: rcon-ws
+    port: 4327
+    protocol: TCP
+    targetPort: rcon-ws
+  selector:
+    app: minecraft
+    modpack: oceanblock2
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minecraft-data-oceanblock2-oceanblock2-server
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 40Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-single
