@@ -20,7 +20,7 @@ spec:
             claimName: data-nocodb
       containers:
       - name: nocodb
-        image: nocodb/nocodb:0.264.0
+        image: nocodb/nocodb:0.264.1
         env:
           - name: NC_DISABLE_TELE
             value: 'true'
