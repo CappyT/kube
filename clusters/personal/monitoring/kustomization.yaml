@@ -5,3 +5,4 @@ resources:
 - prometheus.yaml
 - mkt-exporter.yaml
 - zte-exporter.yaml
+- loki.yaml
