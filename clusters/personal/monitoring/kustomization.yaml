@@ -6,3 +6,4 @@ resources:
 - mkt-exporter.yaml
 - zte-exporter.yaml
 - loki.yaml
+- alloy.yaml
