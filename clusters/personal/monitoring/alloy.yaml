@@ -38,6 +38,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alloy-configmap
+  namespace: monitoring
 data:
   config.alloy: |
     logging {
