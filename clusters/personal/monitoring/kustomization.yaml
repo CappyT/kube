@@ -7,3 +7,4 @@ resources:
 - zte-exporter.yaml
 - loki.yaml
 - alloy.yaml
+- smartctl-exporter
