@@ -74,29 +74,36 @@ spec:
     name: immich
     namespace: default
   releaseName: immich
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: immich-server
+              namespace: default
+            patch: |
+              - op: replace
+                path: /spec/template/spec/containers/0/env/3
+                value: |
+                  name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: immich-cluster-app
+                      key: password
   values:
     env:
       REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
       DB_HOSTNAME: "immich-cluster-rw"
       DB_USERNAME: "app"
       DB_DATABASE_NAME: "app"
-      DB_PASSWORD: "{{ .Values.postgresql.global.postgresql.auth.existingSecret }}"
       IMMICH_MACHINE_LEARNING_URL: ''
-
-    postgresql:
-      global:
-        postgresql:
-          auth:
-            existingSecret:
-              name: immich-cluster-app
-              key: password
 
     image:
       tag: v1.119.0
 
     immich:
       metrics:
-        enabled: true
+        enabled: false
       persistence:
         library:
           existingClaim: nfs-pvc-immich
