@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-immich
+spec:
+  capacity:
+    storage: 2000Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: files.cappyt.sh
+    path: "/volume1/Kubernetes/Immich"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-pvc-immich
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 300Gi 
+  storageClassName: ""
+  volumeName: nfs-pv-immich
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: immich
+  namespace: default
+spec:
+  interval: 24h
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: 0.9.3
+  url: oci://ghcr.io/immich-app/immich-charts/immich
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-cluster
+  namespace: default
+spec:
+  imagePullPolicy: Always
+  instances: 3
+  storage:
+    size: 15Gi
+    storageClass: local-single
+  monitoring:
+    disableDefaultQueries: false
+    enablePodMonitor: true
+  backup:
+    target: prefer-standby
+    volumeSnapshot:
+      online: true
+      snapshotOwnerReference: none
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: default
+spec:
+  interval: 10m
+  timeout: 5m
+  chartRef:
+    kind: OCIRepository
+    name: immich
+    namespace: default
+  releaseName: immich
+  values:
+    env:
+      REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
+      DB_HOSTNAME: "immich-cluster-rw"
+      DB_USERNAME: "app"
+      DB_DATABASE_NAME: "app"
+      DB_PASSWORD: "{{ .Values.postgresql.global.postgresql.auth.existingSecret }}"
+      IMMICH_MACHINE_LEARNING_URL: ''
+
+    postgresql:
+      global:
+        postgresql:
+          auth:
+            existingSecret:
+              name: immich-cluster-app
+              key: password
+
+    image:
+      tag: v1.119.0
+
+    immich:
+      metrics:
+        enabled: true
+      persistence:
+        library:
+          existingClaim: nfs-pvc-immich
+      configuration:
+        trash:
+          enabled: false
+          days: 30
+
+    redis:
+      enabled: true
+
+    machine-learning:
+      enabled: false
