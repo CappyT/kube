@@ -33,9 +33,10 @@ metadata:
   name: immich-cluster
   namespace: default
 spec:
-  postgresql:
-    shared_preload_libraries:
-      - "vchord.so"
+  bootstrap:
+    initdb:
+      postInitSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
   imagePullPolicy: Always
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:14-0.4.3
   instances: 3
