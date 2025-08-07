@@ -27,20 +27,6 @@ spec:
   storageClassName: ""
   volumeName: nfs-pv-immich
 ---
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: immich
-  namespace: default
-spec:
-  interval: 24h
-  layerSelector:
-    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
-    operation: copy
-  ref:
-    tag: 0.9.3
-  url: oci://ghcr.io/immich-app/immich-charts/immich
----
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
@@ -61,59 +47,147 @@ spec:
       online: true
       snapshotOwnerReference: none
 ---
-apiVersion: helm.toolkit.fluxcd.io/v2
-kind: HelmRelease
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: immich
   namespace: default
 spec:
-  interval: 10m
-  timeout: 5m
-  chartRef:
-    kind: OCIRepository
-    name: immich
-    namespace: default
-  releaseName: immich
-  postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              name: immich-server
-              namespace: default
-            patch: |
-              - op: replace
-                path: /spec/template/spec/containers/0/env/3
-                value: |
-                  name: DB_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: immich-cluster-app
-                      key: password
-  values:
-    env:
-      REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
-      DB_HOSTNAME: "immich-cluster-rw"
-      DB_USERNAME: "app"
-      DB_DATABASE_NAME: "app"
-      IMMICH_MACHINE_LEARNING_URL: ''
-
-    image:
-      tag: v1.119.0
-
-    immich:
-      metrics:
-        enabled: false
-      persistence:
-        library:
-          existingClaim: nfs-pvc-immich
-      configuration:
-        trash:
-          enabled: false
-          days: 30
-
-    redis:
-      enabled: true
-
-    machine-learning:
+  selector:
+    matchLabels:
+      app: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: immich-config
+          defaultMode: 420
+      - name: library
+        persistentVolumeClaim:
+          claimName: nfs-pvc-immich
+      containers:
+      - name: immich
+        image: ghcr.io/immich-app/immich-server:v1.119.0
+        ports:
+        - name: http
+          containerPort: 2283
+          protocol: TCP
+        - name: metrics-api
+          containerPort: 8081
+          protocol: TCP
+        - name: metrics-ms
+          containerPort: 8082
+          protocol: TCP
+        env:
+          - name: DB_DATABASE_NAME
+            valueFrom:
+              secretKeyRef:
+                key: dbname
+                name: immich-cluster-app
+          - name: DB_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                key: host
+                name: immich-cluster-app
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: password
+                name: immich-cluster-app
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: immich-cluster-app
+          - name: IMMICH_CONFIG_FILE
+            value: /config/immich-config.yaml
+#          - name: IMMICH_MACHINE_LEARNING_URL
+          - name: IMMICH_TELEMETRY_INCLUDE
+            value: all
+          - name: REDIS_HOSTNAME
+            value: immich-dragonfly
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
+          limits:
+            cpu: 500m
+            memory: 2Gi
+        volumeMounts:
+          - name: config
+            mountPath: /config
+          - name: library
+            mountPath: /usr/src/app/upload
+        livenessProbe:
+          httpGet:
+            path: /api/server/ping
+            port: http
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/server/ping
+            port: http
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api/server/ping
+            port: http
+            scheme: HTTP
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 30
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: immich-config
+  namespace: default
+data:
+  immich-config.yaml: |
+    trash:
       enabled: false
+      days: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich
+  namespace: default
+spec:
+  selector:
+    app: immich
+  ports:
+  - port: 2283
+    targetPort: http
+  - port: 8081
+    targetPort: metrics-api
+  - port: 8082
+    targetPort: metrics-ms
+---
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: immich-dragonfly
+  namespace: default
+spec:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 500Mi
+    limits:
+      cpu: 600m
+      memory: 750Mi
