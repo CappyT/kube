@@ -33,6 +33,9 @@ metadata:
   name: immich-cluster
   namespace: default
 spec:
+  postgresql:
+    shared_preload_libraries:
+      - "vchord.so"
   bootstrap:
     initdb:
       postInitSQL:
