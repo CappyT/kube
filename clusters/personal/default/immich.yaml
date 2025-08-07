@@ -110,6 +110,8 @@ spec:
             value: all
           - name: REDIS_HOSTNAME
             value: immich-dragonfly
+          - name: IMMICH_PORT
+            value: "2283"
         resources:
           requests:
             cpu: 100m
