@@ -41,7 +41,7 @@ spec:
       postInitSQL:
         - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
   imagePullPolicy: Always
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:14-0.4.3
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.4.2
   instances: 3
   storage:
     size: 15Gi
