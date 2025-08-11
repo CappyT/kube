@@ -227,6 +227,7 @@ apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
   name: immich-dns
+  namespace: default
 spec:
   endpoints:
   - dnsName: immich.cappyt.sh
