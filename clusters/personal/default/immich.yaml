@@ -222,3 +222,18 @@ spec:
   - backendRefs:
     - name: immich
       port: 2283
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: immich-dns
+spec:
+  endpoints:
+  - dnsName: immich.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
