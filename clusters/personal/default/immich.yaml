@@ -40,6 +40,8 @@ spec:
     initdb:
       postInitSQL:
         - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS cube CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
   imagePullPolicy: Always
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.4.2
   instances: 3
@@ -79,7 +81,7 @@ spec:
           claimName: nfs-pvc-immich
       containers:
       - name: immich
-        image: ghcr.io/immich-app/immich-server:v1.119.0
+        image: ghcr.io/immich-app/immich-server:v1.137.3
         ports:
         - name: http
           containerPort: 2283
