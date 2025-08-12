@@ -60,6 +60,30 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: immich-ml
+spec:
+  selector:
+    matchLabels:
+      app: immich-ml
+  template:
+    metadata:
+      labels:
+        app: immich-ml
+    spec:
+      containers:
+      - name: immich-ml
+        image: ghcr.io/immich-app/immich-machine-learning:v1.137.3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: <Port>
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: immich
   namespace: default
 spec:
@@ -79,6 +103,10 @@ spec:
       - name: library
         persistentVolumeClaim:
           claimName: nfs-pvc-immich
+      - name: dri-device
+        hostPath:
+          path: /dev/dri
+          type: Directory
       containers:
       - name: immich
         image: ghcr.io/immich-app/immich-server:v1.137.3
@@ -113,10 +141,6 @@ spec:
               secretKeyRef:
                 key: user
                 name: immich-cluster-app
-          - name: IMMICH_CONFIG_FILE
-            value: /config/immich-config.yaml
-          - name: IMMICH_MACHINE_LEARNING_URL
-            value: "http://192.168.5.68:3003"
           - name: IMMICH_TELEMETRY_INCLUDE
             value: all
           - name: REDIS_HOSTNAME
@@ -135,6 +159,8 @@ spec:
             mountPath: /config
           - name: library
             mountPath: /usr/src/app/upload
+          - name: dri-device
+            mountPath: /dev/dri
         livenessProbe:
           httpGet:
             path: /api/server/ping
@@ -162,17 +188,6 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           failureThreshold: 30
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: immich-config
-  namespace: default
-data:
-  immich-config.yaml: |
-    trash:
-      enabled: true
-      days: 30
 ---
 apiVersion: v1
 kind: Service
