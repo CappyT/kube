@@ -115,7 +115,8 @@ spec:
                 name: immich-cluster-app
           - name: IMMICH_CONFIG_FILE
             value: /config/immich-config.yaml
-#          - name: IMMICH_MACHINE_LEARNING_URL
+          - name: IMMICH_MACHINE_LEARNING_URL
+            value: "http://192.168.5.68:3003"
           - name: IMMICH_TELEMETRY_INCLUDE
             value: all
           - name: REDIS_HOSTNAME
@@ -170,7 +171,7 @@ metadata:
 data:
   immich-config.yaml: |
     trash:
-      enabled: false
+      enabled: true
       days: 30
 ---
 apiVersion: v1
