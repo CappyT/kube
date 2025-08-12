@@ -86,7 +86,7 @@ spec:
             - python
             - -m
             - immich_ml
-            - DEVICE=ROCM
+            - DEVICE=CPU
         env:
           - name: IMMICH_PORT
             value: "3003"
