@@ -82,6 +82,14 @@ spec:
       containers:
       - name: immich-ml
         image: ghcr.io/immich-app/immich-machine-learning:v1.137.3
+        args:
+            - python
+            - -m
+            - immich_ml
+            - DEVICE=ROCM
+        env:
+          - name: IMMICH_PORT
+            value: "3003"
         volumeMounts:
           - mountPath: /cache
             name: model-cache
@@ -179,7 +187,7 @@ spec:
                 key: user
                 name: immich-cluster-app
           - name: IMMICH_MACHINE_LEARNING_URL
-            value: "http://immich-ml.default.svc.cluster.local"
+            value: "http://immich-ml.default.svc.cluster.local:3003"
           - name: IMMICH_TELEMETRY_INCLUDE
             value: all
           - name: REDIS_HOSTNAME
