@@ -61,6 +61,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: immich-ml
+  namespace: default
 spec:
   selector:
     matchLabels:
@@ -70,16 +71,43 @@ spec:
       labels:
         app: immich-ml
     spec:
+      volumes:
+      - name: dri-device
+        hostPath:
+          path: /dev/dri
+          type: Directory
+      - name: model-cache
+        persistentVolumeClaim:
+          claimName: immich-model-cache
       containers:
       - name: immich-ml
         image: ghcr.io/immich-app/immich-machine-learning:v1.137.3
+        volumeMounts:
+          - mountPath: /cache
+            name: model-cache
+          - mountPath: /dev/dri
+            name: dri-device
         resources:
           limits:
+            memory: "2Gi"
+            cpu: "2000m"
+          requests:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "100m"
         ports:
-        - containerPort: <Port>
-
+        - containerPort: 3003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: immich-ml
+  namespace: default
+spec:
+  selector:
+    app: immich-ml
+  ports:
+  - port: 3003
+    targetPort: 3003
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -141,6 +169,8 @@ spec:
               secretKeyRef:
                 key: user
                 name: immich-cluster-app
+          - name: IMMICH_MACHINE_LEARNING_URL
+            value: "http://immich-ml.default.svc.cluster.local"
           - name: IMMICH_TELEMETRY_INCLUDE
             value: all
           - name: REDIS_HOSTNAME
