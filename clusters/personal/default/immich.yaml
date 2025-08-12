@@ -146,6 +146,10 @@ spec:
       - name: library
         persistentVolumeClaim:
           claimName: nfs-pvc-immich
+      - name: dri-device
+        hostPath:
+          path: /dev/dri
+          type: Directory
       containers:
       - name: immich
         image: ghcr.io/immich-app/immich-server:v1.137.3
@@ -198,6 +202,8 @@ spec:
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
+          - mountPath: /dev/dri
+            name: dri-device
         livenessProbe:
           httpGet:
             path: /api/server/ping
