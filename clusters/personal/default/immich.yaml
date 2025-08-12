@@ -113,6 +113,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: immich-model-cache
+  namespace: default
 spec:
   resources:
     requests:
