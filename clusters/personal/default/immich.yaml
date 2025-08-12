@@ -72,10 +72,6 @@ spec:
         app: immich-ml
     spec:
       volumes:
-      - name: dri-device
-        hostPath:
-          path: /dev/dri
-          type: Directory
       - name: model-cache
         persistentVolumeClaim:
           claimName: immich-model-cache
@@ -93,8 +89,6 @@ spec:
         volumeMounts:
           - mountPath: /cache
             name: model-cache
-          - mountPath: /dev/dri
-            name: dri-device
         resources:
           limits:
             memory: "2Gi"
