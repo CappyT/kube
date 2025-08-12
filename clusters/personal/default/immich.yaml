@@ -71,6 +71,8 @@ spec:
       labels:
         app: immich-ml
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: node02
       volumes:
       - name: model-cache
         persistentVolumeClaim:
@@ -138,14 +140,12 @@ spec:
       labels:
         app: immich
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: node03
       volumes:
       - name: library
         persistentVolumeClaim:
           claimName: nfs-pvc-immich
-      - name: dri-device
-        hostPath:
-          path: /dev/dri
-          type: Directory
       containers:
       - name: immich
         image: ghcr.io/immich-app/immich-server:v1.137.3
@@ -198,8 +198,6 @@ spec:
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
-          - name: dri-device
-            mountPath: /dev/dri
         livenessProbe:
           httpGet:
             path: /api/server/ping
