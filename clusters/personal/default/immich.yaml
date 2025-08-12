@@ -109,6 +109,18 @@ spec:
   - port: 3003
     targetPort: 3003
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: immich-model-cache
+spec:
+  resources:
+    requests:
+      storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-single
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -124,10 +136,6 @@ spec:
         app: immich
     spec:
       volumes:
-      - name: config
-        configMap:
-          name: immich-config
-          defaultMode: 420
       - name: library
         persistentVolumeClaim:
           claimName: nfs-pvc-immich
@@ -185,8 +193,6 @@ spec:
             cpu: 500m
             memory: 2Gi
         volumeMounts:
-          - name: config
-            mountPath: /config
           - name: library
             mountPath: /usr/src/app/upload
           - name: dri-device
