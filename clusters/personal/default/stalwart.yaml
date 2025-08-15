@@ -44,6 +44,8 @@ spec:
         - containerPort: 465
         - containerPort: 143
         - containerPort: 993
+        - containerPort: 995
+        - containerPort: 110
         - containerPort: 4190
         volumeMounts:
         - name: stalwart-volume
@@ -78,27 +80,44 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: http
-    port: 8080
-    targetPort: 8080
   - name: https
     port: 443
     targetPort: 443
   - name: smtp
     port: 25
     targetPort: 25
-  - name: submission
-    port: 587
-    targetPort: 587
   - name: smtps
     port: 465
     targetPort: 465
-  - name: imap
-    port: 143
-    targetPort: 143
   - name: imaps
     port: 993
     targetPort: 993
+  - name: pop3s
+    port: 995
+    targetPort: 995
+  selector:
+    app: stalwart
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stalwart-private
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: submission
+    port: 587
+    targetPort: 587
+  - name: imap
+    port: 143
+    targetPort: 143
+  - name: pop3
+    port: 110
+    targetPort: 110
   - name: sieve
     port: 4190
     targetPort: 4190
