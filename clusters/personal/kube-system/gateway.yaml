@@ -53,8 +53,6 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   infrastructure:
-    labels:
-      type: public
     annotations:
       io.cilium/lb-ipam-ips: "10.122.1.100"
   gatewayClassName: cilium
