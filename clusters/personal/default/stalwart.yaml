@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stalwart-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stalwart
+  template:
+    metadata:
+      labels:
+        app: stalwart
+    spec:
+      containers:
+      - name: stalwart
+        image: "stalwartlabs/stalwart:v0.13"
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /healthz/live
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10        
+        ports:
+        - containerPort: 8080
+        - containerPort: 443
+        - containerPort: 25
+        - containerPort: 587
+        - containerPort: 465
+        - containerPort: 143
+        - containerPort: 993
+        - containerPort: 4190
+        volumeMounts:
+        - name: stalwart-volume
+          mountPath: /opt/stalwart
+      volumes:
+      - name: stalwart-volume
+        persistentVolumeClaim:
+          claimName: stalwart-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stalwart-pvc
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-replica
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stalwart
+  namespace: default
+  labels:
+      type: public
+  annotations:
+    io.cilium/lb-ipam-ips: "185.242.182.146"
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 443
+  - name: smtp
+    port: 25
+    targetPort: 25
+  - name: submission
+    port: 587
+    targetPort: 587
+  - name: smtps
+    port: 465
+    targetPort: 465
+  - name: imap
+    port: 143
+    targetPort: 143
+  - name: imaps
+    port: 993
+    targetPort: 993
+  - name: sieve
+    port: 4190
+    targetPort: 4190
+  selector:
+    app: stalwart
+
