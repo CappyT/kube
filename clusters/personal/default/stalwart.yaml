@@ -123,4 +123,19 @@ spec:
     targetPort: 4190
   selector:
     app: stalwart
-
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: immich-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: post.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.146
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
