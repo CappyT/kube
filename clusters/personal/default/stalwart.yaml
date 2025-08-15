@@ -80,6 +80,7 @@ metadata:
   annotations:
     io.cilium/lb-ipam-ips: "185.242.182.146"
 spec:
+  externalTrafficPolicy: Local
   type: LoadBalancer
   ports:
   - name: https
