@@ -185,7 +185,7 @@ spec:
                 key: user
                 name: immich-cluster-app
           - name: IMMICH_MACHINE_LEARNING_URL
-            value: "http://immich-ml.default.svc.cluster.local:3003"
+            value: "http://192.168.5.68:3003"
           - name: IMMICH_TELEMETRY_INCLUDE
             value: all
           - name: REDIS_HOSTNAME
