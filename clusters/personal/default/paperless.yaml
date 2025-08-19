@@ -176,7 +176,7 @@ spec:
     spec:
       containers:
       - name: paperless-gotenberg
-        image: docker.io/gotenberg/gotenberg:8.21
+        image: docker.io/gotenberg/gotenberg:8.22
         imagePullPolicy: IfNotPresent
         args:
           - "gotenberg"
