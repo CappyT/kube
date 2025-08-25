@@ -79,7 +79,7 @@ spec:
           claimName: immich-model-cache
       containers:
       - name: immich-ml
-        image: ghcr.io/immich-app/immich-machine-learning:v1.139.2
+        image: ghcr.io/immich-app/immich-machine-learning:v1.139.3
         args:
             - python
             - -m
