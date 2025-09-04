@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ladder
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ladder
+  template:
+    metadata:
+      labels:
+        app: ladder
+    spec:
+      containers:
+      - name: ladder
+        image: ghcr.io/everywall/ladder:v0.0.21
+        env:
+          - name: PORT
+            value: "8080"
+          - name: PREFORK
+            value: "false"
+          - name: USER_AGENT
+            value: "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+          - name: X_FORWARDED_FOR
+            value: ""
+          - name: USERPASS
+            value: ""
+          - name: LOG_URLS
+            value: "true"
+          - name: DISABLE_FORM 
+            value: "false"
+          - name: FORM_PATH
+            value: ""
+          - name: RULESET
+            value: "https://raw.githubusercontent.com/everywall/ladder/main/ruleset.yaml"
+          - name: EXPOSE_RULESET
+            value: "true"
+          - name: ALLOWED_DOMAINS
+            value: ""
+          - name: ALLOWED_DOMAINS_RULESET
+            value: "false"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: 128Mi
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ladder
+  namespace: default
+spec:
+  selector:
+    app: ladder
+  ports:
+  - port: 8080
+    targetPort: http
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ladder-route
+  namespace: default
+spec:
+  hostnames:
+    - ladder.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: ladder
+      port: 8080
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: ladder-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: ladder.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
