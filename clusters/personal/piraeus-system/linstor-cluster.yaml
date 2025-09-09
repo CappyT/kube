@@ -5,11 +5,3 @@ metadata:
 spec: 
   nodeSelector:
     local-disk/storage: "yes"
----
-apiVersion: piraeus.io/v1
-kind: LinstorCluster
-metadata:
-  name: linstor-new
-spec: 
-  nodeSelector:
-    node-type: nvme
