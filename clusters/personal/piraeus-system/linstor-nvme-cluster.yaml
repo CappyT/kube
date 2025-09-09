@@ -1,7 +1,15 @@
 apiVersion: piraeus.io/v1
+kind: LinstorCluster
+metadata:
+  name: linstor-nvme-cluster
+spec: 
+  nodeSelector:
+    node-type: nvme
+---
+apiVersion: piraeus.io/v1
 kind: LinstorSatelliteConfiguration
 metadata:
-  name: new-nodes-nvme-pool
+  name: nvme-pool
 spec:
   storagePools:
     - name: nvme_pool
