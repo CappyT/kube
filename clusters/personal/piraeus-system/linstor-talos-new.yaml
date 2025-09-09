@@ -1,0 +1,41 @@
+apiVersion: piraeus.io/v1
+kind: LinstorSatelliteConfiguration
+metadata:
+  name: new-nodes-nvme-pool
+spec:
+  storagePools:
+    - name: nvme_pool
+      lvmThinPool:
+        thinPool: thin
+        volumeGroup: linstor_nvme_lvm_pool
+      source:
+        hostDevices:
+          - /dev/disk/by-path/pci-0000:01:00.0-nvme-1
+  nodeSelector:
+    node-type: nvme
+  podTemplate:
+    spec:
+      initContainers:
+        - name: drbd-shutdown-guard
+          $patch: delete
+        - name: drbd-module-loader
+          $patch: delete
+      volumes:
+        - name: run-systemd-system
+          $patch: delete
+        - name: run-drbd-shutdown-guard
+          $patch: delete
+        - name: systemd-bus-socket
+          $patch: delete
+        - name: lib-modules
+          $patch: delete
+        - name: usr-src
+          $patch: delete
+        - name: etc-lvm-backup
+          hostPath:
+            path: /var/etc/lvm/backup
+            type: DirectoryOrCreate
+        - name: etc-lvm-archive
+          hostPath:
+            path: /var/etc/lvm/archive
+            type: DirectoryOrCreate
