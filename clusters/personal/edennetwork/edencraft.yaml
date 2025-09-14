@@ -130,7 +130,7 @@ metadata:
   name: edencraft-data
   namespace: edennetwork
 spec:
-  storageClassName: local-single
+  storageClassName: replica
   resources:
     requests:
       storage: 30Gi
@@ -144,7 +144,7 @@ metadata:
   name: mysql-data
   namespace: edennetwork
 spec:
-  storageClassName: local-single
+  storageClassName: replica
   resources:
     requests:
       storage: 1Gi

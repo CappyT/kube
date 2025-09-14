@@ -159,4 +159,4 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-single
+  storageClassName: replica

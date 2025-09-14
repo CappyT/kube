@@ -60,7 +60,7 @@ spec:
       replicas: 1
       persistence:
         enabled: true
-        storageClass: local-single
+        storageClass: replica
         size: 50Gi
     gateway:
       replicas: 0

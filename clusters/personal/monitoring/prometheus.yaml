@@ -84,7 +84,7 @@ spec:
           omni-kube-service-exposer.sidero.dev/port: '50080'
       persistence:
         enabled: true
-        storageClassName: "local-single"
+        storageClassName: "replica"
         accessModes: ["ReadWriteOnce"]
         size: 10Gi
 
@@ -94,7 +94,7 @@ spec:
         storageSpec:
           volumeClaimTemplate:
             spec:
-              storageClassName: local-single
+              storageClassName: single
               accessModes: ["ReadWriteOnce"]
               resources:
                 requests:

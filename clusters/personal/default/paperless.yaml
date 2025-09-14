@@ -228,7 +228,7 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-single
+  storageClassName: replica
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -240,7 +240,7 @@ spec:
   instances: 1
   storage:
     size: 15Gi
-    storageClass: local-single
+    storageClass: single
   monitoring:
     disableDefaultQueries: false
     enablePodMonitor: true
