@@ -68,7 +68,7 @@ spec:
       storage: 30Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-replica
+  storageClassName: replica
 ---
 apiVersion: v1
 kind: Service
