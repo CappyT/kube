@@ -43,7 +43,7 @@ spec:
         - CREATE EXTENSION IF NOT EXISTS cube CASCADE;
         - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
   imagePullPolicy: Always
-  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.4.2
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17-0.4.2
   instances: 3
   storage:
     size: 15Gi
@@ -71,8 +71,6 @@ spec:
       labels:
         app: immich-ml
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: node02
       volumes:
       - name: model-cache
         persistentVolumeClaim:
@@ -140,8 +138,6 @@ spec:
       labels:
         app: immich
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: node03
       volumes:
       - name: library
         persistentVolumeClaim:
