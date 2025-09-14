@@ -152,7 +152,7 @@ spec:
           type: Directory
       containers:
       - name: immich
-        image: ghcr.io/immich-app/immich-server:v1.141.1
+        image: ghcr.io/immich-app/immich-server:v1.142.0
         ports:
         - name: http
           containerPort: 2283
