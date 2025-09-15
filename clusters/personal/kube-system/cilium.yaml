@@ -25,6 +25,8 @@ spec:
       interval: 5m
   releaseName: cilium
   values:
+    extraConfig:
+      devices: tbr0,enp89s0.95
     bpf:
       masquerade: true
     cgroup:
