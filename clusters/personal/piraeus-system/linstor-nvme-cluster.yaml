@@ -15,6 +15,8 @@ spec:
     node-type: nvme
   podTemplate:
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
       initContainers:
         - name: drbd-shutdown-guard
           $patch: delete
@@ -39,3 +41,12 @@ spec:
           hostPath:
             path: /var/etc/lvm/archive
             type: DirectoryOrCreate
+---
+apiVersion: piraeus.io/v1
+kind: LinstorNodeConnection
+metadata:
+  name: dedicated
+spec:
+  paths:
+    - name: dedicated
+      interface: tbr0
