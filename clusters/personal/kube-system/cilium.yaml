@@ -26,7 +26,7 @@ spec:
   releaseName: cilium
   values:
     extraConfig:
-      devices: enp89s0.95
+      devices: enp89s0.95,eth0.95
     bpf:
       masquerade: true
     cgroup:
