@@ -11,6 +11,9 @@ spec:
       source:
         hostDevices:
           - /dev/disk/by-path/pci-0000:01:00.0-nvme-1
+  properties:
+    - name: "DrbdOptions/Net/data-plane-intf"
+      value: "tbr0"
   nodeSelector:
     node-type: nvme
   podTemplate:
