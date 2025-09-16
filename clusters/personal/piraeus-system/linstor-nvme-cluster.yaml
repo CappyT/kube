@@ -40,12 +40,3 @@ spec:
           hostPath:
             path: /var/etc/lvm/archive
             type: DirectoryOrCreate
----
-apiVersion: piraeus.io/v1
-kind: LinstorNodeConnection
-metadata:
-  name: dedicated
-spec:
-  paths:
-    - name: dedicated
-      interface: tbr0
