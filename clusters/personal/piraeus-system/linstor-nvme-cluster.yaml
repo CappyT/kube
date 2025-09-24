@@ -15,7 +15,6 @@ spec:
     node-type: nvme
   podTemplate:
     spec:
-      hostNetwork: true
       initContainers:
         - name: drbd-shutdown-guard
           $patch: delete
