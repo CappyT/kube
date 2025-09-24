@@ -25,8 +25,6 @@ spec:
       interval: 5m
   releaseName: cilium
   values:
-    extraConfig:
-      devices: enp89s0.95,ens18
     bpf:
       masquerade: true
     cgroup:
@@ -54,7 +52,6 @@ spec:
     kubeProxyReplacement: true
     l2announcements:
       enabled: true
-    nativeRoutingCIDR: 10.122.0.0/23
     operator:
       prometheus:
         enabled: true
