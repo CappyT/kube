@@ -33,6 +33,8 @@ spec:
       hostRoot: /sys/fs/cgroup
     cluster:
       name: personal-omni-personal
+    cni:
+      exclusive: false
     dashboards:
       enabled: true
     gatewayAPI:
