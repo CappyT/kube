@@ -4,7 +4,7 @@ metadata:
   name: single
 provisioner: linstor.csi.linbit.com
 parameters:
-  #allowRemoteVolumeAccess: "false"
+  allowRemoteVolumeAccess: "false"
   DrbdOptions/Disk/disk-flushes: 'no'
   DrbdOptions/Disk/md-flushes: 'no'
   DrbdOptions/Net/max-buffers: '10000'
