@@ -7,7 +7,15 @@ spec:
   certificateRotateStrategy: {}
   configuration:
     developerConfiguration:
-      featureGates: []
+      featureGates:
+        - LiveMigration
+        - NetworkBindingPlugins
+    smbios:
+      sku: "Vaffancloud"
+      version: "v0.1.0"
+      manufacturer: "CappyVirt"
+      product: "vaffvm"
+      family: "ccio"
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
   workloadUpdateStrategy: {}
