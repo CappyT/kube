@@ -26,7 +26,7 @@ spec:
             claimName: mh-findmy
       containers:
         - name: macless-haystack
-          image: christld/macless-haystack:latest
+          image: christld/macless-haystack:v2.7.0
           ports:
             - name: endpoint
               containerPort: 6176
