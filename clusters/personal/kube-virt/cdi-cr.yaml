@@ -6,23 +6,24 @@ metadata:
 spec:
   config:
     featureGates:
-    - HonorWaitForFirstConsumer
-    - WebhookPvcRendering
-    scratchSpaceStorageClass: single
+      - HonorWaitForFirstConsumer
+      - WebhookPvcRendering
     podResourceRequirements:
-      requests:
-        cpu: "100m"
-        memory: "60M"
       limits:
-        cpu: "750m"
-        memory: "2Gi"
+        cpu: 750m
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 60M
+    scratchSpaceStorageClass: single
+  customizeComponents: {}
   imagePullPolicy: IfNotPresent
   infra:
     nodeSelector:
       kubernetes.io/os: linux
     tolerations:
-    - key: CriticalAddonsOnly
-      operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
   workload:
     nodeSelector:
       kubernetes.io/os: linux
