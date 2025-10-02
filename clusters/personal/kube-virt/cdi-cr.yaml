@@ -16,7 +16,6 @@ spec:
         cpu: 100m
         memory: 60M
     scratchSpaceStorageClass: single
-  customizeComponents: {}
   imagePullPolicy: IfNotPresent
   infra:
     nodeSelector:
