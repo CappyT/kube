@@ -16,6 +16,7 @@ spec:
         memory: 60M
     scratchSpaceStorageClass: single
   imagePullPolicy: IfNotPresent
+  customizeComponents: {}
   infra:
     nodeSelector:
       kubernetes.io/os: linux
