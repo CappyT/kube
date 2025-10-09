@@ -4,9 +4,6 @@ metadata:
   name: cdi
 spec:
   config:
-    featureGates:
-      - HonorWaitForFirstConsumer
-      - WebhookPvcRendering
     podResourceRequirements:
       limits:
         cpu: 750m
@@ -15,14 +12,3 @@ spec:
         cpu: 100m
         memory: 60M
     scratchSpaceStorageClass: single
-  imagePullPolicy: IfNotPresent
-  customizeComponents: {}
-  infra:
-    nodeSelector:
-      kubernetes.io/os: linux
-    tolerations:
-      - key: CriticalAddonsOnly
-        operator: Exists
-  workload:
-    nodeSelector:
-      kubernetes.io/os: linux
