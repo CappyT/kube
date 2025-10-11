@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fmd-server
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: fmd-server
+  template:
+    metadata:
+      labels:
+        app: fmd-server
+    spec:
+      containers:
+      - name: fmd-server
+        image: registry.gitlab.com/fmd-foss/fmd-server:v0.12.0
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: 128Mi
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+          - mountPath: /var/lib/fmd-server/db/
+            name: fmd-data
+      volumes:
+        - name: fmd-data
+          persistentVolumeClaim:
+            claimName: fmd-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fmd-server
+  namespace: default
+spec:
+  selector:
+    app: fmd-server
+  ports:
+  - port: 8080
+    targetPort: http
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fmd-data
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 2Gi
+  volumeMode: Filesystem
+  storageClassName: replica
+  accessModes:
+    - ReadWriteOnce
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: fmd-server-route
+  namespace: default
+spec:
+  hostnames:
+    - fmd.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: fmd-server
+      port: 8080
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: fmd-server-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: fmd.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
