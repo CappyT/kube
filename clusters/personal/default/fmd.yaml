@@ -13,6 +13,9 @@ spec:
       labels:
         app: fmd-server
     spec:
+      securityContext:
+        fsGroupChangePolicy: Always
+        fsGroup: 1000
       containers:
       - name: fmd-server
         image: registry.gitlab.com/fmd-foss/fmd-server:v0.12.0
