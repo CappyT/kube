@@ -19,6 +19,12 @@ spec:
       containers:
       - name: fmd-server
         image: registry.gitlab.com/fmd-foss/fmd-server:v0.12.0
+        env:
+          - name: FMD_REGISTRATIONTOKEN
+            valueFrom:
+              secretKeyRef:
+                key: token
+                name: fmd-token
         resources:
           limits:
             memory: "128Mi"
@@ -94,3 +100,19 @@ spec:
     providerSpecific:
       - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
         value: "false"
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: fmd-token
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: fmd-token
+  data:
+    - secretKey: token
+      remoteRef:
+        key: /default/fmd/token
