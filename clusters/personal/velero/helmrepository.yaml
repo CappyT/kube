@@ -1,0 +1,19 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: vmware-tanzu
+  namespace: velero
+spec:
+  interval: 24h
+  url: https://vmware-tanzu.github.io/helm-charts
+  type: helm
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: otwld
+  namespace: velero
+spec:
+  interval: 24h
+  url: https://helm.otwld.com/
+  type: helm

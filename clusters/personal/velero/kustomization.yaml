@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: velero
+resources:
+  - namespace.yaml
+  - helmrepository.yaml
+  - external-secrets.yaml
+  - helmrelease.yaml
+  - velero-ui-helmrelease.yaml
+  - velero-ui-httproute.yaml
+  - velero-ui-dns.yaml

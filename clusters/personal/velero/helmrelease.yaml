@@ -1,0 +1,94 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: velero
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: velero
+      version: "11.1.1"
+      sourceRef:
+        kind: HelmRepository
+        name: vmware-tanzu
+        namespace: velero
+  values:
+    image:
+      repository: velero/velero
+      tag: v1.17.0
+      pullPolicy: IfNotPresent
+
+    # AWS plugin for S3-compatible storage (MinIO)
+    initContainers:
+    - name: velero-plugin-for-aws
+      image: velero/velero-plugin-for-aws:v1.13.0
+      volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+    # Velero configuration
+    configuration:
+      backupStorageLocation:
+      - name: default
+        provider: aws
+        bucket: velero-backups
+        config:
+          region: brescia
+          s3ForcePathStyle: "true"
+          s3Url: https://s3.cappyt.sh
+      volumeSnapshotLocation:
+      - name: default
+        provider: aws
+        config:
+          region: brescia
+
+    # Credentials from external secret
+    credentials:
+      useSecret: true
+      name: velero-minio-credentials
+
+    # Service account
+    serviceAccount:
+      server:
+        create: true
+        name: velero
+
+    # Enable node agent for file system backup (required for Piraeus volumes)
+    deployNodeAgent: true
+    nodeAgent:
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 1Gi
+        requests:
+          cpu: 500m
+          memory: 512Mi
+
+    # Resource limits for Velero server
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+
+    # Security context
+    securityContext:
+      runAsUser: 65534
+      runAsGroup: 65534
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+
+    # Node agent security context
+    nodeAgent:
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
