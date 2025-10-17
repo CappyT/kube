@@ -18,18 +18,18 @@ spec:
     env:
       - name: VELERO_NAMESPACE
         value: velero
-       - name: BASIC_AUTH_ENABLED
-         value: "true"
-       - name: BASIC_AUTH_USERNAME
-         valueFrom:
-           secretKeyRef:
-             name: velero-ui-auth
-             key: username
-       - name: BASIC_AUTH_PASSWORD
-         valueFrom:
-           secretKeyRef:
-             name: velero-ui-auth
-             key: password
+      - name: BASIC_AUTH_ENABLED
+        value: "true"
+      - name: BASIC_AUTH_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: velero-ui-auth
+            key: username
+      - name: BASIC_AUTH_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: velero-ui-auth
+            key: password
 
     # Service configuration
     service:
