@@ -64,6 +64,13 @@ spec:
         requests:
           cpu: 500m
           memory: 512Mi
+      containerSecurityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
 
     # Resource limits for Velero server
     resources:
@@ -82,13 +89,3 @@ spec:
       capabilities:
         drop:
         - ALL
-
-    # Node agent security context
-    nodeAgent:
-      containerSecurityContext:
-        runAsUser: 65534
-        runAsGroup: 65534
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-          - ALL
