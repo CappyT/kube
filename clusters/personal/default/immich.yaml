@@ -10,7 +10,7 @@ spec:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   nfs:
-    server: files.cappyt.sh
+    server: 192.168.5.10
     path: "/volume1/Kubernetes/Immich"
 ---
 apiVersion: v1
