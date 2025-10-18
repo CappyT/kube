@@ -30,16 +30,13 @@ spec:
           secretKeyRef:
             name: velero-ui-auth
             key: password
-
     # Service configuration
     service:
       type: ClusterIP
       port: 80
-
     # Ingress or Gateway API will handle external access
     ingress:
       enabled: false
-
     # Resource limits
     resources:
       limits:
@@ -48,7 +45,6 @@ spec:
       requests:
         cpu: 100m
         memory: 128Mi
-
     # Security context
     securityContext:
       runAsUser: 65534
@@ -56,4 +52,6 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
+    image:
+      tag: 0.10.1
