@@ -45,9 +45,9 @@ spec:
           provider: aws
           bucket: k8s-backups
           config:
-            region: brescia
+            region: minio
             s3ForcePathStyle: "true"
-
+            s3Url: https://s3.cappyt.sh
       volumeSnapshotLocation:
         - name: default
           provider: aws
