@@ -43,7 +43,7 @@ spec:
       backupStorageLocation:
         - name: default
           provider: aws
-          bucket: velero-backups
+          bucket: k8s-backups
           config:
             region: brescia
             s3ForcePathStyle: "true"
