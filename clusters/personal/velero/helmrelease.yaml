@@ -47,7 +47,7 @@ spec:
           config:
             region: brescia
             s3ForcePathStyle: "true"
-            s3Url: https://s3.cappyt.sh
+
       volumeSnapshotLocation:
         - name: default
           provider: aws
