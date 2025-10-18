@@ -33,7 +33,7 @@ spec:
     # Service configuration
     service:
       type: ClusterIP
-      port: 80
+      port: 3000
     # Ingress or Gateway API will handle external access
     ingress:
       enabled: false
