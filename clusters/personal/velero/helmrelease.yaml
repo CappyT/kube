@@ -35,11 +35,7 @@ spec:
         volumeMounts:
           - mountPath: /target
             name: plugins
-      - name: velero-plugin-for-csi
-        image: velero/velero-plugin-for-csi:v0.7.1
-        volumeMounts:
-          - mountPath: /target
-            name: plugins
+
 
     # Enable CSI features
     configuration:
