@@ -53,4 +53,6 @@ spec:
       capabilities:
         drop:
           - ALL
+    image:
+      tag: 0.10.1
 
