@@ -14,19 +14,36 @@ spec:
         name: vmware-tanzu
         namespace: velero
   values:
+    # Use a modern kubectl image
+    kubectl:
+      image:
+        repository: alpine/kubectl
+        tag: "1.34.1"
+
+    # Main velero image
     image:
       repository: velero/velero
       tag: v1.17.0
-      pullPolicy: IfNotPresent
-    # AWS plugin for S3-compatible storage (MinIO)
+
+    # Enable the node-agent for file system backups (for Piraeus)
+    deployNodeAgent: true
+
+    # Add velero-plugin-for-aws and velero-plugin-for-csi
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.13.0
         volumeMounts:
           - mountPath: /target
             name: plugins
-    # Velero configuration
+      - name: velero-plugin-for-csi
+        image: velero/velero-plugin-for-csi:v0.10.0
+        volumeMounts:
+          - mountPath: /target
+            name: plugins
+
+    # Enable CSI features
     configuration:
+      features: EnableCSI
       backupStorageLocation:
         - name: default
           provider: aws
@@ -40,49 +57,11 @@ spec:
           provider: aws
           config:
             region: brescia
-    # Credentials from external secret
+
+    # Use an external secret for credentials
     credentials:
       useSecret: true
       name: velero-minio-credentials
-    # Service account
-    serviceAccount:
-      server:
-        create: true
-        name: velero
-    # Enable node agent for file system backup (required for Piraeus volumes)
-    deployNodeAgent: true
-    nodeAgent:
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 1Gi
-        requests:
-          cpu: 500m
-          memory: 512Mi
-      containerSecurityContext:
-        runAsUser: 65534
-        runAsGroup: 65534
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-    # Resource limits for Velero server
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 1Gi
-      requests:
-        cpu: 500m
-        memory: 512Mi
-    # Security context
-    securityContext:
-      runAsUser: 65534
-      runAsGroup: 65534
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-          - ALL
-    upgradeCRDs:
-      image:
-        repository: alpine/kubectl
-        tag: "1.34.1"
+
+    # Don't automatically upgrade CRDs with the broken job
+    upgradeCRDs: false
