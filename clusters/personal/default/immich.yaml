@@ -63,6 +63,8 @@ metadata:
   name: immich-ml
   namespace: default
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: immich-ml
