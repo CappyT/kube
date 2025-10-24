@@ -38,6 +38,8 @@ spec:
           value: all-the-mods-10
         - name: CF_FORCE_SYNCHRONIZE
           value: 'true'
+        - name: CF_EXCLUDE_MODS
+          value: "colorwheel"
         - name: INIT_MEMORY
           value: 6G
         - name: MAX_MEMORY
