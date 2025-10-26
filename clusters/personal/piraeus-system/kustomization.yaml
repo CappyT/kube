@@ -7,3 +7,4 @@ resources:
 - storageclass.yaml
 - snapshot-controller.yaml
 - affinity-controller.yaml
+- snapshotclass.yaml
