@@ -1,0 +1,13 @@
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  objectStorage:
+    bucket: k8s-backups
+  config:
+    region: brescia
+    s3ForcePathStyle: "true"
+    s3Url: https://s3.cappyt.sh
