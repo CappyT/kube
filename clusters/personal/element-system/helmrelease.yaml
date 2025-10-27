@@ -26,12 +26,18 @@ spec:
 
     elementWeb:
       enabled: true
+      ingress:
+        host: chat.element.cappyt.sh
 
     elementAdmin:
       enabled: true
+      ingress:
+        host: admin.element.cappyt.sh
 
     matrixAuthenticationService:
       enabled: true
+      ingress:
+        host: account.element.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -63,6 +69,8 @@ spec:
 
     synapse:
       enabled: true
+      ingress:
+        host: matrix.element.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -97,6 +105,8 @@ spec:
 
     matrixRTC:
       enabled: true
+      ingress:
+        host: mrtc.element.cappyt.sh
       livekitAuth:
         keysYaml:
           secret: element-livekit-secrets
