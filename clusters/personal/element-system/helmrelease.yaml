@@ -45,7 +45,7 @@ spec:
         database: element_auth
         sslMode: require
         password:
-          secret: element-cluster.element
+          secret: element-cluster-app
           secretKey: password
       encryptionSecret:
         secret: element-mas-secrets
@@ -78,7 +78,7 @@ spec:
         database: element_synapse
         sslMode: require
         password:
-          secret: element-cluster.element
+          secret: element-cluster-app
           secretKey: password
       signingKey:
         secret: element-synapse-secrets
