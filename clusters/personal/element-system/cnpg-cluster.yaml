@@ -10,6 +10,8 @@ spec:
     size: 50Gi
     storageClass: single
   postgresql:
+    pg_hba:
+      - local all all scram-sha-256
 
   bootstrap:
     initdb:
