@@ -38,15 +38,6 @@ spec:
       enabled: true
       ingress:
         host: account.element.cappyt.sh
-      postgres:
-        host: element-cluster-rw.element-system.svc.cluster.local
-        port: 5432
-        user: element
-        database: element_auth
-        sslMode: require
-        password:
-          secret: element-cluster-app
-          secretKey: password
       encryptionSecret:
         secret: element-mas-secrets
         secretKey: encryption
@@ -71,15 +62,6 @@ spec:
       enabled: true
       ingress:
         host: matrix.element.cappyt.sh
-      postgres:
-        host: element-cluster-rw.element-system.svc.cluster.local
-        port: 5432
-        user: element
-        database: element_synapse
-        sslMode: require
-        password:
-          secret: element-cluster-app
-          secretKey: password
       signingKey:
         secret: element-synapse-secrets
         secretKey: signingKey
@@ -117,15 +99,6 @@ spec:
 
     postgres:
       enabled: false
-      resources:
-        requests:
-          memory: 512Mi
-          cpu: 250m
-        limits:
-          memory: 2Gi
-          cpu: 1000m
-      serviceMonitors:
-        enabled: true
 
   install:
     remediation:

@@ -4,19 +4,10 @@ metadata:
   name: element-cluster
   namespace: element-system
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:17
   instances: 3
   storage:
     size: 50Gi
     storageClass: single
-  postgresql:
-    pg_hba:
-      - hostssl postgres streaming_replica all cert map=cnpg_streaming_replica
-      - hostssl replication streaming_replica all cert map=cnpg_streaming_replica
-      - hostssl all cnpg_pooler_pgbouncer all cert map=cnpg_pooler_pgbouncer
-      - local all all scram-sha-256
-      - host all all all scram-sha-256
-
   bootstrap:
     initdb:
       database: element
@@ -24,20 +15,3 @@ spec:
       postInitSQL:
         - CREATE DATABASE element_auth;
         - CREATE DATABASE element_synapse;
-  superuserSecret:
-    name: element-postgresql-secret
-  monitoring:
-    disableDefaultQueries: false
-    enablePodMonitor: true
-  backup:
-    target: prefer-standby
-    volumeSnapshot:
-      online: true
-      snapshotOwnerReference: none
-  resources:
-    requests:
-      memory: 512Mi
-      cpu: 250m
-    limits:
-      memory: 2Gi
-      cpu: 1000m
