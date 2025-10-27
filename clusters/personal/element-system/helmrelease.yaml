@@ -1,0 +1,168 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: element-server-suite
+  namespace: element-system
+spec:
+  interval: 10m
+  timeout: 20m
+  chart:
+    spec:
+      chart: matrix-stack
+      version: "25.10.2"
+      sourceRef:
+        kind: HelmRepository
+        name: element-server-suite
+        namespace: element-system
+  values:
+    # Server configuration
+    serverName: element.cappyt.sh
+
+    # Disable ingress, we'll use Gateway API
+    elementWeb:
+      ingress:
+        enabled: false
+    elementAdmin:
+      ingress:
+        enabled: false
+    matrixAuthenticationService:
+      ingress:
+        enabled: false
+    synapse:
+      ingress:
+        enabled: false
+    matrixRTC:
+      ingress:
+        enabled: false
+    wellKnownDelegation:
+      ingress:
+        enabled: false
+
+    # Disable built-in PostgreSQL, use external CNPG
+    postgres:
+      enabled: false
+
+    # External PostgreSQL configuration
+    matrixAuthenticationService:
+      postgres:
+        host: element-cluster-rw.element-system.svc.cluster.local
+        port: 5432
+        user: element
+        database: element_auth
+        sslMode: require
+        password:
+          secret: element-cluster.element
+          secretKey: password
+    synapse:
+      postgres:
+        host: element-cluster-rw.element-system.svc.cluster.local
+        port: 5432
+        user: element
+        database: element_synapse
+        sslMode: require
+        password:
+          secret: element-cluster.element
+          secretKey: password
+
+    # External secrets configuration
+    synapse:
+      signingKey:
+        secret: element-synapse-secrets
+        secretKey: signingKey
+      registrationSharedSecret:
+        secret: element-synapse-secrets
+        secretKey: registrationSharedSecret
+      macaroon:
+        secret: element-synapse-secrets
+        secretKey: macaroon
+
+    matrixAuthenticationService:
+      encryptionSecret:
+        secret: element-mas-secrets
+        secretKey: encryption
+      synapseSharedSecret:
+        secret: element-mas-secrets
+        secretKey: synapseSharedSecret
+      privateKeys:
+        rsa:
+          secret: element-mas-secrets
+          secretKey: rsa
+        ecdsaPrime256v1:
+          secret: element-mas-secrets
+          secretKey: ecdsaPrime256v1
+        ecdsaSecp256k1:
+          secret: element-mas-secrets
+          secretKey: ecdsaSecp256k1
+        ecdsaSecp384r1:
+          secret: element-mas-secrets
+          secretKey: ecdsaSecp384r1
+
+    matrixRTC:
+      livekitAuth:
+        keysYaml:
+          secret: element-livekit-secrets
+          secretKey: keys
+        secret:
+          secret: element-livekit-secrets
+          secretKey: secret
+
+    # Certificate configuration
+    certManager:
+      clusterIssuer: letsencrypt-prod
+
+    # Storage configuration - only for Synapse media
+    synapse:
+      media:
+        storage:
+          storageClassName: replica
+          size: 100Gi
+
+    # Hostnames for components
+    elementWeb:
+      ingress:
+        host: chat.element.cappyt.sh
+    elementAdmin:
+      ingress:
+        host: admin.element.cappyt.sh
+    matrixAuthenticationService:
+      ingress:
+        host: account.element.cappyt.sh
+    synapse:
+      ingress:
+        host: matrix.element.cappyt.sh
+    matrixRTC:
+      ingress:
+        host: mrtc.element.cappyt.sh
+
+    # Resource limits
+    synapse:
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 500m
+        limits:
+          memory: 4Gi
+          cpu: 2000m
+    postgres:
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 250m
+        limits:
+          memory: 2Gi
+          cpu: 1000m
+
+    # Monitoring
+    synapse:
+      serviceMonitors:
+        enabled: true
+    postgres:
+      serviceMonitors:
+        enabled: true
+
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3

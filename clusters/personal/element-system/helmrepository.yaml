@@ -1,0 +1,9 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: element-server-suite
+  namespace: element-system
+spec:
+  interval: 24h
+  url: oci://ghcr.io/element-hq/ess-helm
+  type: oci

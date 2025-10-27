@@ -1,0 +1,100 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: element-web
+  namespace: element-system
+spec:
+  hostnames:
+  - chat.element.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: element-server-suite-element-web
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: element-admin
+  namespace: element-system
+spec:
+  hostnames:
+  - admin.element.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: element-server-suite-element-admin
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: matrix-auth
+  namespace: element-system
+spec:
+  hostnames:
+  - account.element.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: element-server-suite-matrix-authentication-service
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: synapse
+  namespace: element-system
+spec:
+  hostnames:
+  - matrix.element.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: element-server-suite-synapse
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: matrix-rtc
+  namespace: element-system
+spec:
+  hostnames:
+  - mrtc.element.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: element-server-suite-matrix-rtc
+      port: 80

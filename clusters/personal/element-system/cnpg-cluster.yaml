@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: element-cluster
+  namespace: element-system
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:17
+  instances: 3
+  storage:
+    size: 50Gi
+    storageClass: single
+  postgresql:
+    parameters:
+      shared_preload_libraries: "pg_stat_statements"
+  bootstrap:
+    initdb:
+      database: element
+      owner: element
+      postInitSQL:
+        - CREATE DATABASE element_auth;
+        - CREATE DATABASE element_synapse;
+  superuserSecret:
+    name: element-postgresql-secret
+  monitoring:
+    disableDefaultQueries: false
+    enablePodMonitor: true
+  backup:
+    target: prefer-standby
+    volumeSnapshot:
+      online: true
+      snapshotOwnerReference: none
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 250m
+    limits:
+      memory: 2Gi
+      cpu: 1000m

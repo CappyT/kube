@@ -1,0 +1,55 @@
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: element-dns
+  namespace: element-system
+spec:
+  endpoints:
+  - dnsName: element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
+  - dnsName: chat.element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
+  - dnsName: admin.element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
+  - dnsName: account.element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
+  - dnsName: matrix.element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
+  - dnsName: mrtc.element.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+    - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      value: "false"
