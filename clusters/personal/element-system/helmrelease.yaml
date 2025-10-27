@@ -18,32 +18,27 @@ spec:
     # Server configuration
     serverName: element.cappyt.sh
 
-    # Disable ingress, we'll use Gateway API
-    elementWeb:
-      ingress:
-        enabled: false
-    elementAdmin:
-      ingress:
-        enabled: false
-    matrixAuthenticationService:
-      ingress:
-        enabled: false
-    synapse:
-      ingress:
-        enabled: false
-    matrixRTC:
-      ingress:
-        enabled: false
     wellKnownDelegation:
       ingress:
         enabled: false
 
-    # Disable built-in PostgreSQL, use external CNPG
-    postgres:
-      enabled: false
+    certManager:
+      clusterIssuer: letsencrypt-prod
 
-    # External PostgreSQL configuration
+    elementWeb:
+      ingress:
+        enabled: false
+        host: chat.element.cappyt.sh
+
+    elementAdmin:
+      ingress:
+        enabled: false
+        host: admin.element.cappyt.sh
+
     matrixAuthenticationService:
+      ingress:
+        enabled: false
+        host: account.element.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -53,30 +48,6 @@ spec:
         password:
           secret: element-cluster.element
           secretKey: password
-    synapse:
-      postgres:
-        host: element-cluster-rw.element-system.svc.cluster.local
-        port: 5432
-        user: element
-        database: element_synapse
-        sslMode: require
-        password:
-          secret: element-cluster.element
-          secretKey: password
-
-    # External secrets configuration
-    synapse:
-      signingKey:
-        secret: element-synapse-secrets
-        secretKey: signingKey
-      registrationSharedSecret:
-        secret: element-synapse-secrets
-        secretKey: registrationSharedSecret
-      macaroon:
-        secret: element-synapse-secrets
-        secretKey: macaroon
-
-    matrixAuthenticationService:
       encryptionSecret:
         secret: element-mas-secrets
         secretKey: encryption
@@ -97,7 +68,46 @@ spec:
           secret: element-mas-secrets
           secretKey: ecdsaSecp384r1
 
+    synapse:
+      ingress:
+        enabled: false
+        host: matrix.element.cappyt.sh
+      postgres:
+        host: element-cluster-rw.element-system.svc.cluster.local
+        port: 5432
+        user: element
+        database: element_synapse
+        sslMode: require
+        password:
+          secret: element-cluster.element
+          secretKey: password
+      signingKey:
+        secret: element-synapse-secrets
+        secretKey: signingKey
+      registrationSharedSecret:
+        secret: element-synapse-secrets
+        secretKey: registrationSharedSecret
+      macaroon:
+        secret: element-synapse-secrets
+        secretKey: macaroon
+      media:
+        storage:
+          storageClassName: replica
+          size: 100Gi
+      resources:
+        requests:
+          memory: 1Gi
+          cpu: 500m
+        limits:
+          memory: 4Gi
+          cpu: 2000m
+      serviceMonitors:
+        enabled: true
+
     matrixRTC:
+      ingress:
+        enabled: false
+        host: mrtc.element.cappyt.sh
       livekitAuth:
         keysYaml:
           secret: element-livekit-secrets
@@ -106,44 +116,8 @@ spec:
           secret: element-livekit-secrets
           secretKey: secret
 
-    # Certificate configuration
-    certManager:
-      clusterIssuer: letsencrypt-prod
-
-    # Storage configuration - only for Synapse media
-    synapse:
-      media:
-        storage:
-          storageClassName: replica
-          size: 100Gi
-
-    # Hostnames for components
-    elementWeb:
-      ingress:
-        host: chat.element.cappyt.sh
-    elementAdmin:
-      ingress:
-        host: admin.element.cappyt.sh
-    matrixAuthenticationService:
-      ingress:
-        host: account.element.cappyt.sh
-    synapse:
-      ingress:
-        host: matrix.element.cappyt.sh
-    matrixRTC:
-      ingress:
-        host: mrtc.element.cappyt.sh
-
-    # Resource limits
-    synapse:
-      resources:
-        requests:
-          memory: 1Gi
-          cpu: 500m
-        limits:
-          memory: 4Gi
-          cpu: 2000m
     postgres:
+      enabled: false
       resources:
         requests:
           memory: 512Mi
@@ -151,12 +125,6 @@ spec:
         limits:
           memory: 2Gi
           cpu: 1000m
-
-    # Monitoring
-    synapse:
-      serviceMonitors:
-        enabled: true
-    postgres:
       serviceMonitors:
         enabled: true
 
