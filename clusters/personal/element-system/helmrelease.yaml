@@ -20,24 +20,20 @@ spec:
 
     wellKnownDelegation:
       ingress:
-        enabled: false
 
     certManager:
       clusterIssuer: letsencrypt-prod
 
     elementWeb:
       ingress:
-        enabled: false
         host: chat.element.cappyt.sh
 
     elementAdmin:
       ingress:
-        enabled: false
         host: admin.element.cappyt.sh
 
     matrixAuthenticationService:
       ingress:
-        enabled: false
         host: account.element.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
@@ -70,7 +66,6 @@ spec:
 
     synapse:
       ingress:
-        enabled: false
         host: matrix.element.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
@@ -106,7 +101,6 @@ spec:
 
     matrixRTC:
       ingress:
-        enabled: false
         host: mrtc.element.cappyt.sh
       livekitAuth:
         keysYaml:
