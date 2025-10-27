@@ -21,17 +21,17 @@ spec:
     certManager:
       clusterIssuer: letsencrypt-prod
 
+    wellKnownDelegation:
+      enabled: false
+
     elementWeb:
-      ingress:
-        enabled: false
+      enabled: true
 
     elementAdmin:
-      ingress:
-        enabled: false
+      enabled: true
 
     matrixAuthenticationService:
-      ingress:
-        enabled: false
+      enabled: true
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -62,8 +62,7 @@ spec:
           secretKey: ecdsaSecp384r1
 
     synapse:
-      ingress:
-        enabled: false
+      enabled: true
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -97,8 +96,7 @@ spec:
         enabled: true
 
     matrixRTC:
-      ingress:
-        enabled: false
+      enabled: true
       livekitAuth:
         keysYaml:
           secret: element-livekit-secrets
