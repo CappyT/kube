@@ -30,6 +30,32 @@ spec:
           secretKeyRef:
             name: velero-ui-auth
             key: password
+      - name: OAUTH_AUTH_ENABLED
+        value: "true"
+      - name: OAUTH_NAME
+        value: "Cappy's"
+      - name: OAUTH_AUTHORIZATION_URL
+        value: "https://auth.cappyt.sh/webman/sso/SSOOauth.cgi"
+      - name: OAUTH_USER_INFO_URL
+        value: "https://auth.cappyt.sh/webman/sso/SSOUserInfo.cgi"
+      - name: OAUTH_TOKEN_URL
+        value: "https://auth.cappyt.sh/webman/sso/SSOAccessToken.cgi"
+      - name: OAUTH_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: velero-ui-oauth
+            key: oauth-client-id
+      - name: OAUTH_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: velero-ui-oauth
+            key: oauth-client-secret
+      - name: OAUTH_OAUTH_SCOPE
+        value: "openid profile email"
+      - name: OAUTH_REDIRECT_URI
+        value: https://velero.cappyt.sh/login
+      - name: OAUTH_GROUP_CLAIM
+        value: groups
     # Service configuration
     service:
       type: ClusterIP
