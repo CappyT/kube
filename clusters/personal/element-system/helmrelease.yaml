@@ -18,23 +18,20 @@ spec:
     # Server configuration
     serverName: element.cappyt.sh
 
-    wellKnownDelegation:
-      ingress:
-
     certManager:
       clusterIssuer: letsencrypt-prod
 
     elementWeb:
       ingress:
-        host: chat.element.cappyt.sh
+        enabled: false
 
     elementAdmin:
       ingress:
-        host: admin.element.cappyt.sh
+        enabled: false
 
     matrixAuthenticationService:
       ingress:
-        host: account.element.cappyt.sh
+        enabled: false
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -66,7 +63,7 @@ spec:
 
     synapse:
       ingress:
-        host: matrix.element.cappyt.sh
+        enabled: false
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -101,7 +98,7 @@ spec:
 
     matrixRTC:
       ingress:
-        host: mrtc.element.cappyt.sh
+        enabled: false
       livekitAuth:
         keysYaml:
           secret: element-livekit-secrets
