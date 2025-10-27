@@ -5,4 +5,3 @@ resources:
 - cdi-operator.yaml
 - kubevirt-operator.yaml
 - kubevirt-cr.yaml
-- namespace.yaml
