@@ -94,10 +94,17 @@ spec:
   - matches:
     - path:
         type: PathPrefix
+        value: /sfu/get
+    backendRefs:
+    - name: element-server-suite-matrix-rtc-authorisation-service
+      port: 8080
+  - matches:
+    - path:
+        type: PathPrefix
         value: /
     backendRefs:
-    - name: element-server-suite-matrix-rtc
-      port: 80
+    - name: element-server-suite-matrix-rtc-sfu
+      port: 7880
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
