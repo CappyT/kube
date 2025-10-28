@@ -4,14 +4,38 @@ metadata:
   name: element-cluster
   namespace: element-system
 spec:
+  imagePullPolicy: Always
   instances: 3
   storage:
-    size: 50Gi
+    size: 30Gi
     storageClass: single
-  bootstrap:
-    initdb:
-      database: element
-      owner: element
-      postInitSQL:
-        - CREATE DATABASE element_auth;
-        - CREATE DATABASE element_synapse;
+  monitoring:
+    disableDefaultQueries: false
+    enablePodMonitor: true
+  backup:
+    target: prefer-standby
+    volumeSnapshot:
+      online: true
+      snapshotOwnerReference: none
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: element-synapse
+  namespace: element-system
+spec:
+  name: element-synapse
+  owner: app
+  cluster:
+    name: element-cluster
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: element-auth
+  namespace: element-system
+spec:
+  name: element-auth
+  owner: app
+  cluster:
+    name: element-cluster

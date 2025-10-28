@@ -5,7 +5,7 @@ metadata:
   namespace: element-system
 spec:
   endpoints:
-  - dnsName: element.cappyt.sh
+  - dnsName: matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:
@@ -13,7 +13,7 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "false"
-  - dnsName: chat.element.cappyt.sh
+  - dnsName: chat.matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:
@@ -21,7 +21,7 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "false"
-  - dnsName: admin.element.cappyt.sh
+  - dnsName: admin.matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:
@@ -29,7 +29,7 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "false"
-  - dnsName: account.element.cappyt.sh
+  - dnsName: id.matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:
@@ -37,7 +37,7 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "false"
-  - dnsName: matrix.element.cappyt.sh
+  - dnsName: syn.matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:
@@ -45,7 +45,7 @@ spec:
     providerSpecific:
     - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
       value: "false"
-  - dnsName: mrtc.element.cappyt.sh
+  - dnsName: mrtc.matrix.cappyt.sh
     recordTTL: 180
     recordType: A
     targets:

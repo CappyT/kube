@@ -16,10 +16,10 @@ spec:
         namespace: element-system
   values:
     # Server configuration
-    serverName: element.cappyt.sh
+    serverName: matrix.cappyt.sh
 
     certManager:
-      clusterIssuer: letsencrypt-prod
+      clusterIssuer: letsencrypt
 
     wellKnownDelegation:
       enabled: false
@@ -27,75 +27,51 @@ spec:
     elementWeb:
       enabled: true
       ingress:
-        host: chat.element.cappyt.sh
+        host: chat.matrix.cappyt.sh
 
     elementAdmin:
       enabled: true
       ingress:
-        host: admin.element.cappyt.sh
+        host: admin.matrix.cappyt.sh
 
     matrixAuthenticationService:
       enabled: true
       ingress:
-        host: account.element.cappyt.sh
-      encryptionSecret:
-        secret: element-mas-secrets
-        secretKey: encryption
-      synapseSharedSecret:
-        secret: element-mas-secrets
-        secretKey: synapseSharedSecret
-      privateKeys:
-        rsa:
-          secret: element-mas-secrets
-          secretKey: rsa
-        ecdsaPrime256v1:
-          secret: element-mas-secrets
-          secretKey: ecdsaPrime256v1
-        ecdsaSecp256k1:
-          secret: element-mas-secrets
-          secretKey: ecdsaSecp256k1
-        ecdsaSecp384r1:
-          secret: element-mas-secrets
-          secretKey: ecdsaSecp384r1
+        host: id.matrix.cappyt.sh
+      postgres:
+        host: element-cluster-rw.element-system.svc.cluster.local
+        port: 5432
+        user: app
+        database: element-auth
+        sslMode: require
+        password:
+          secret: element-cluster-app
+          secretKey: password
 
     synapse:
       enabled: true
       ingress:
-        host: matrix.element.cappyt.sh
-      signingKey:
-        secret: element-synapse-secrets
-        secretKey: signingKey
-      registrationSharedSecret:
-        secret: element-synapse-secrets
-        secretKey: registrationSharedSecret
-      macaroon:
-        secret: element-synapse-secrets
-        secretKey: macaroon
+        host: syn.matrix.cappyt.sh
+      postgres:
+        host: element-cluster-rw.element-system.svc.cluster.local
+        port: 5432
+        user: app
+        database: element-synapse
+        sslMode: require
+        password:
+          secret: element-cluster-app
+          secretKey: password
       media:
         storage:
           storageClassName: replica
           size: 100Gi
-      resources:
-        requests:
-          memory: 1Gi
-          cpu: 500m
-        limits:
-          memory: 4Gi
-          cpu: 2000m
       serviceMonitors:
         enabled: true
 
     matrixRTC:
       enabled: true
       ingress:
-        host: mrtc.element.cappyt.sh
-      livekitAuth:
-        keysYaml:
-          secret: element-livekit-secrets
-          secretKey: keys
-        secret:
-          secret: element-livekit-secrets
-          secretKey: secret
+        host: mrtc.matrix.cappyt.sh
 
     postgres:
       enabled: false

@@ -6,7 +6,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - chat.element.cappyt.sh
+  - chat.matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -26,7 +26,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - admin.element.cappyt.sh
+  - admin.matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -46,7 +46,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - account.element.cappyt.sh
+  - id.matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -66,7 +66,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - matrix.element.cappyt.sh
+  - syn.matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -86,7 +86,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - mrtc.element.cappyt.sh
+  - mrtc.matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
