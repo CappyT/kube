@@ -22,7 +22,7 @@ spec:
       clusterIssuer: letsencrypt
 
     wellKnownDelegation:
-      enabled: false
+      enabled: true
 
     elementWeb:
       enabled: true
