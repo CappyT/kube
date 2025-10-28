@@ -27,17 +27,17 @@ spec:
     elementWeb:
       enabled: true
       ingress:
-        host: chat.matrix.cappyt.sh
+        host: chat.cappyt.sh
 
     elementAdmin:
       enabled: true
       ingress:
-        host: admin.matrix.cappyt.sh
+        host: admin-matrix.cappyt.sh
 
     matrixAuthenticationService:
       enabled: true
       ingress:
-        host: id.matrix.cappyt.sh
+        host: matrixid.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -51,7 +51,7 @@ spec:
     synapse:
       enabled: true
       ingress:
-        host: syn.matrix.cappyt.sh
+        host: synapse.cappyt.sh
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -71,7 +71,7 @@ spec:
     matrixRTC:
       enabled: true
       ingress:
-        host: mrtc.matrix.cappyt.sh
+        host: mrtc.cappyt.sh
 
     postgres:
       enabled: false

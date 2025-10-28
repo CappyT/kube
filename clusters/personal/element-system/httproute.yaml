@@ -6,7 +6,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - chat.matrix.cappyt.sh
+  - chat.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -26,7 +26,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - admin.matrix.cappyt.sh
+  - admin-matrix.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -37,7 +37,7 @@ spec:
         value: /
     backendRefs:
     - name: element-server-suite-element-admin
-      port: 80
+      port: 8080
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -46,7 +46,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - id.matrix.cappyt.sh
+  - matrixid.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -57,7 +57,7 @@ spec:
         value: /
     backendRefs:
     - name: element-server-suite-matrix-authentication-service
-      port: 80
+      port: 8080
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -66,7 +66,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - syn.matrix.cappyt.sh
+  - synapse.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
@@ -77,7 +77,7 @@ spec:
         value: /
     backendRefs:
     - name: element-server-suite-synapse
-      port: 80
+      port: 8008
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -86,7 +86,7 @@ metadata:
   namespace: element-system
 spec:
   hostnames:
-  - mrtc.matrix.cappyt.sh
+  - mrtc.cappyt.sh
   parentRefs:
   - name: public-gateway
     namespace: kube-system
