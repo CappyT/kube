@@ -67,6 +67,19 @@ spec:
           size: 100Gi
       serviceMonitors:
         enabled: true
+      livenessProbe:
+        failureThreshold: 15
+        timeoutSeconds: 5
+      readinessProbe:
+        failureThreshold: 15
+        timeoutSeconds: 5
+      resources:
+        requests:
+          memory: 500Mi
+          cpu: 500m
+        limits:
+          memory: 4Gi
+          cpu: 2000m
 
     matrixRTC:
       enabled: true
