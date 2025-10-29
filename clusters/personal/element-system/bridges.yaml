@@ -59,6 +59,8 @@ spec:
     - secretKey: config.yaml
       remoteRef:
         key: /element/bridge/gmessages-config
+        decodingStrategy: Base64
     - secretKey: registration.yaml
       remoteRef:
         key: /element/bridge/gmessages-registration
+        decodingStrategy: Base64
