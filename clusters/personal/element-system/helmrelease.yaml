@@ -38,6 +38,14 @@ spec:
       enabled: true
       ingress:
         host: matrixid.cappyt.sh
+      additional:
+        auth.yaml:
+          config: |
+            account:
+              password_registration_enabled: true
+              registration_token_required: true
+              password_registration_email_required: false
+              password_change_allowed: true
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
