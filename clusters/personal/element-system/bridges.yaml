@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gmessages-bridge
+  namespace: element-system
+spec:
+  selector:
+    matchLabels:
+      app: gmessages-bridge
+  serviceName: gmessages-bridge
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gmessages-bridge
+    spec:
+      volumes:
+        - name: bridge-config
+          secret:
+            secretName: gmessages-bridge
+            optional: false
+            items:
+              - key: config.yaml
+                path: config.yaml
+      containers:
+      - name: gmessages-bridge
+        image: dock.mau.dev/mautrix/gmessages:v25.10
+        ports:
+        - containerPort: 29336
+          name: http
+        volumeMounts:
+        - name: bridge-config
+          mountPath: /data/config.yaml
+          subPath: config.yaml
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: gmessages-bridge
+  namespace: element-system
+spec:
+  name: gmessages-bridge
+  owner: app
+  cluster:
+    name: element-cluster
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: gmessages-bridge
+  namespace: element-system
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: gmessages-bridge
+  data:
+    - secretKey: config.yaml
+      remoteRef:
+        key: /element/bridge/gmessages-config
+    - secretKey: registration.yaml
+      remoteRef:
+        key: /element/bridge/gmessages-registration
