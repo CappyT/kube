@@ -54,6 +54,8 @@ spec:
     kubeProxyReplacement: true
     l2announcements:
       enabled: true
+    loadBalancer:
+      acceleration: best-effort
     operator:
       prometheus:
         enabled: true
