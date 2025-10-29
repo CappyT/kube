@@ -65,6 +65,9 @@ spec:
         storage:
           storageClassName: replica
           size: 100Gi
+      appservices:
+        - secret: gmessages-bridge
+          secretKey: registration.yaml
       serviceMonitors:
         enabled: true
       livenessProbe:
