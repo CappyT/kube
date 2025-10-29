@@ -19,9 +19,6 @@ spec:
           secret:
             secretName: gmessages-bridge
             optional: false
-            items:
-              - key: config.yaml
-                path: config.yaml
       containers:
       - name: gmessages-bridge
         image: dock.mau.dev/mautrix/gmessages:v25.10
