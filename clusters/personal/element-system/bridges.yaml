@@ -22,6 +22,10 @@ spec:
       containers:
       - name: gmessages-bridge
         image: dock.mau.dev/mautrix/gmessages:v25.10
+        command:
+          - "/usr/bin/mautrix-gmessages"
+          - "-c"
+          - "/data/config.yaml"
         ports:
         - containerPort: 29336
           name: http
