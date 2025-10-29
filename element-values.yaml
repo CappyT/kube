@@ -4163,7 +4163,7 @@ synapse:
   ## Configuration of the thresholds and frequencies of the livenessProbe
   livenessProbe:
     ## How many consecutive failures for the probe to be considered failed
-    failureThreshold: 8
+    failureThreshold: 15
 
     ## Number of seconds after the container has started before the probe starts
     initialDelaySeconds: 0
@@ -4175,11 +4175,11 @@ synapse:
     successThreshold: 1
 
     ## Number of seconds after which the probe times out
-    timeoutSeconds: 2
+    timeoutSeconds: 5
   ## Configuration of the thresholds and frequencies of the readinessProbe
   readinessProbe:
     ## How many consecutive failures for the probe to be considered failed
-    failureThreshold: 8
+    failureThreshold: 15
 
     ## Number of seconds after the container has started before the probe starts
     initialDelaySeconds: 0
@@ -4188,10 +4188,10 @@ synapse:
     periodSeconds: 2
 
     ## How many consecutive successes for the probe to be consider successful after having failed
-    successThreshold: 2
+    successThreshold: 1
 
     ## Number of seconds after which the probe times out
-    timeoutSeconds: 2
+    timeoutSeconds: 5
   ## Configuration of the thresholds and frequencies of the startupProbe
   startupProbe:
     ## How many consecutive failures for the probe to be considered failed
