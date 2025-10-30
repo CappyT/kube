@@ -41,12 +41,6 @@ spec:
       enableAlpn: true
       enableAppProtocol: true
       enabled: true
-    hubble:
-      enabled: true
-      relay:
-        enabled: false
-      ui:
-        enabled: true
     ipam:
       mode: kubernetes
     k8sServiceHost: localhost
