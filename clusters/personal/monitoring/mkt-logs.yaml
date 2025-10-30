@@ -33,7 +33,7 @@ data:
  
     loki.source.syslog "local" {
       listener {
-        address            = "0.0.0.0:1514"
+        address            = "0.0.0.0:31514"
         labels             = { component = "loki.source.syslog", protocol = "udp" }
         max_message_length = 0
         protocol           = "udp"
@@ -76,8 +76,8 @@ spec:
         key: config.alloy
       extraPorts:
         - name: "syslog-udp"
-          port: 1514
-          targetPort: 1514
+          port: 31514
+          targetPort: 31514 
           protocol: "UDP"
     serviceMonitor:
       enabled: false
