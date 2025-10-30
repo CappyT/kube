@@ -11,58 +11,32 @@ data:
         url = "http://loki-headless.monitoring.svc.cluster.local:3100/loki/api/v1/push"
       }
     }
-    // 2. Define the relabeling rules
-    loki.relabel "relabeler" {
-      // Send the relabeled logs to the Loki output defined above
-      forward_to = [loki.write.loki_output.receiver]
 
-      // --- Start of your relabel_configs ---
+    loki.relabel "relabeler" {
       rule {
         source_labels = ["__syslog_message_hostname"]
         target_label  = "routerboard"
       }
+
       rule {
         source_labels = ["__syslog_connection_hostname"]
         target_label  = "syslog_host"
       }
-      // --- End of your relabel_configs ---
+
+      forward_to = [loki.write.loki_output.receiver]
     }
-    // 3. Define the syslog inputs
-    // TCP listener for syslog
-    loki.source.syslog "tcp_receiver" {
+ 
+    loki.source.syslog "local" {
       listener {
-        protocol = "tcp"
         address  = "0.0.0.0:1514"
+        labels   = { component = "loki.source.syslog", protocol = "tcp" }
       }
-
-      // --- Start of your syslog config ---
-      idle_timeout           = "60s"
-      label_structured_data  = true
-      labels = {
-        "job" = "syslog",
-      }
-      // --- End of your syslog config ---
-
-      // Send received logs to the relabeler
-      forward_to = [loki.relabel.relabeler.receiver]
-    }
-
-    // UDP listener for syslog
-    loki.source.syslog "udp_receiver" {
       listener {
+        address  = "0.0.0.0:1514"
         protocol = "udp"
-        address  = "0.0.0.0:1514"
+        labels   = { component = "loki.source.syslog", protocol = "udp"}
       }
 
-      // --- Start of your syslog config ---
-      idle_timeout           = "60s"
-      label_structured_data  = true
-      labels = {
-        "job" = "syslog",
-      }
-      // --- End of your syslog config ---
-
-      // Send received logs to the relabeler
       forward_to = [loki.relabel.relabeler.receiver]
     }
 ---
