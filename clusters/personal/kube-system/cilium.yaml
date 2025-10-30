@@ -42,11 +42,11 @@ spec:
       enableAppProtocol: true
       enabled: true
     hubble:
-      enabled: false
+      enabled: true
       relay:
         enabled: false
       ui:
-        enabled: false
+        enabled: true
     ipam:
       mode: kubernetes
     k8sServiceHost: localhost
