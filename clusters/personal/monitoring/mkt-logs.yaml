@@ -83,6 +83,7 @@ spec:
       enabled: false
     controller:
       type: deployment
+      replicas: 1
     service:
       enabled: false
 ---
