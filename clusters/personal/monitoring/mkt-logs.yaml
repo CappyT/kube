@@ -33,8 +33,11 @@ data:
  
     loki.source.syslog "local" {
       listener {
-        address  = "0.0.0.0:1514"
-        labels   = { component = "loki.source.syslog", protocol = "tcp" }
+        address            = "0.0.0.0:1514"
+        labels             = { component = "loki.source.syslog", protocol = "udp" }
+        idle_timeout       = 0s
+        max_message_length = 0
+        protocol           = udp
       }
 
       forward_to = [loki.relabel.relabeler.receiver]
@@ -73,10 +76,10 @@ spec:
         name: mkt-logs-alloy
         key: config.alloy
       extraPorts:
-        - name: "syslog-tcp"
+        - name: "syslog-udp"
           port: 1514
           targetPort: 1514
-          protocol: "TCP"
+          protocol: "UDP"
     serviceMonitor:
       enabled: false
     controller:
@@ -90,11 +93,12 @@ metadata:
   name: mkt-logs-alloy
   namespace: monitoring
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app.kubernetes.io/instance: mkt-logs-alloy
   ports:
   - name: syslog-tcp
     port: 31514
+    nodePort: 31514
     targetPort: syslog-tcp
-    protocol: TCP
+    protocol: UDP
