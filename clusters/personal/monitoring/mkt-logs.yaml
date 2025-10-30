@@ -73,6 +73,8 @@ spec:
       enabled: false
     controller:
       type: deployment
+      extraLabels:
+        app: mkt-logs-alloy
     service:
       enabled: false
 ---
@@ -84,7 +86,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/instance: mkt-logs-alloy
+    app: mkt-logs-alloy
   ports:
   - name: syslog-tcp
     port: 31514
