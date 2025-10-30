@@ -46,6 +46,9 @@ spec:
               registration_token_required: true
               password_registration_email_required: false
               password_change_allowed: true
+        smtp.yaml:
+          configSecret: smtp-auth
+          configSecretKey: smtp.yaml
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
@@ -96,6 +99,9 @@ spec:
       enabled: true
       ingress:
         host: mrtc.cappyt.sh
+      sfu:
+        useStunToDiscoverPublicIP: false
+        manualIP: "185.242.183.144"
 
     postgres:
       enabled: false
