@@ -35,7 +35,6 @@ data:
       listener {
         address            = "0.0.0.0:1514"
         labels             = { component = "loki.source.syslog", protocol = "udp" }
-        idle_timeout       = 0s
         max_message_length = 0
         protocol           = udp
       }
