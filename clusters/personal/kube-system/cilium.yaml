@@ -49,6 +49,7 @@ spec:
     hubble:
       ui:
         enabled: true
+      eventQueueSize: 65536
     l2announcements:
       enabled: true
     operator:
