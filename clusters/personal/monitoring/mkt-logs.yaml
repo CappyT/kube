@@ -8,10 +8,9 @@ data:
     // 1. Define the final destination for logs (your Loki instance)
     loki.write "loki_output" {
       endpoint {
-        url = "http://loki:3100/loki/api/v1/push"
+        url = "http://loki-headless.monitoring.svc.cluster.local:3100/loki/api/v1/push"
       }
     }
-
     // 2. Define the relabeling rules
     loki.relabel "relabeler" {
       // Send the relabeled logs to the Loki output defined above
@@ -28,15 +27,12 @@ data:
       }
       // --- End of your relabel_configs ---
     }
-
-    // 3. Define the syslog inputs.
-    // Promtail's syslog receiver listens on BOTH TCP and UDP by default.
-    // In Alloy, you must define a separate component for each protocol.
-
+    // 3. Define the syslog inputs
     // TCP listener for syslog
     loki.source.syslog "tcp_receiver" {
-      receiver = "tcp" {
-        listen_address = "0.0.0.0:1514"
+      listener {
+        protocol = "tcp"
+        address  = "0.0.0.0:1514"
       }
 
       // --- Start of your syslog config ---
@@ -53,8 +49,9 @@ data:
 
     // UDP listener for syslog
     loki.source.syslog "udp_receiver" {
-      receiver = "udp" {
-        listen_address = "0.0.0.0:1514"
+      listener {
+        protocol = "udp"
+        address  = "0.0.0.0:1514"
       }
 
       // --- Start of your syslog config ---
