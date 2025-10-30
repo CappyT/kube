@@ -1,0 +1,116 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mkt-logs-alloy
+  namespace: monitoring
+data:
+  config.alloy: |
+    // 1. Define the final destination for logs (your Loki instance)
+    loki.write "loki_output" {
+      endpoint {
+        url = "http://loki:3100/loki/api/v1/push"
+      }
+    }
+
+    // 2. Define the relabeling rules
+    loki.relabel "relabeler" {
+      // Send the relabeled logs to the Loki output defined above
+      forward_to = [loki.write.loki_output.receiver]
+
+      // --- Start of your relabel_configs ---
+      rule {
+        source_labels = ["__syslog_message_hostname"]
+        target_label  = "routerboard"
+      }
+      rule {
+        source_labels = ["__syslog_connection_hostname"]
+        target_label  = "syslog_host"
+      }
+      // --- End of your relabel_configs ---
+    }
+
+    // 3. Define the syslog inputs.
+    // Promtail's syslog receiver listens on BOTH TCP and UDP by default.
+    // In Alloy, you must define a separate component for each protocol.
+
+    // TCP listener for syslog
+    loki.source.syslog "tcp_receiver" {
+      receiver = "tcp" {
+        listen_address = "0.0.0.0:1514"
+      }
+
+      // --- Start of your syslog config ---
+      idle_timeout           = "60s"
+      label_structured_data  = true
+      labels = {
+        "job" = "syslog",
+      }
+      // --- End of your syslog config ---
+
+      // Send received logs to the relabeler
+      forward_to = [loki.relabel.relabeler.receiver]
+    }
+
+    // UDP listener for syslog
+    loki.source.syslog "udp_receiver" {
+      receiver = "udp" {
+        listen_address = "0.0.0.0:1514"
+      }
+
+      // --- Start of your syslog config ---
+      idle_timeout           = "60s"
+      label_structured_data  = true
+      labels = {
+        "job" = "syslog",
+      }
+      // --- End of your syslog config ---
+
+      // Send received logs to the relabeler
+      forward_to = [loki.relabel.relabeler.receiver]
+    }
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mkt-logs-alloy
+  namespace: monitoring
+spec:
+  interval: 10m
+  timeout: 5m
+  chart:
+    spec:
+      chart: alloy
+      version: '1.4.0'
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+      interval: 5m
+  releaseName: mkt-logs-alloy
+  values:
+    crds:
+      create: false
+    rbac:
+      create: false
+    serviceAccount:
+      create: false
+    alloy:
+      configMap:
+        create: false
+        name: mkt-logs-alloy
+        key: config.alloy
+      extraPorts:
+        - name: "syslog-tcp"
+          port: 1514
+          targetPort: 1514
+          protocol: "TCP"
+        - name: "syslog-udp"
+          port: 1514
+          targetPort: 1514
+          protocol: "TCP"
+    serviceMonitor:
+      enabled: true
+    controller:
+      type: deployment
+    service:
+      type: NodePort
+      
