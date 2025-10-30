@@ -95,11 +95,13 @@ spec:
   selector:
     app.kubernetes.io/instance: mkt-logs-alloy
   ports:
-  - port: 31514
+  - name: syslog-tcp
+    port: 31514
     targetPort: syslog-tcp
     nodePort: 31514
     protocol: TCP
-  - port: 31514
+  - name: syslog-udp
+    port: 31514
     targetPort: syslog-udp
     nodePort: 31514
     protocol: UDP
