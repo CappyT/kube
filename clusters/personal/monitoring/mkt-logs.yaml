@@ -79,9 +79,29 @@ spec:
           targetPort: 1514
           protocol: "TCP"
     serviceMonitor:
-      enabled: true
+      enabled: false
     controller:
       type: deployment
     service:
-      type: NodePort
+      enabled: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mkt-logs-alloy
+  namespace: monitoring
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/instance: mkt-logs-alloy
+  ports:
+  - port: 31514
+    targetPort: syslog-tcp
+    nodePort: 31514
+    protocol: TCP
+  - port: 31514
+    targetPort: syslog-udp
+    nodePort: 31514
+    protocol: UDP
+
       
