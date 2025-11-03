@@ -80,6 +80,8 @@ spec:
       appservices:
         - secret: gmessages-bridge
           secretKey: registration.yaml
+        - secret: slack-bridge
+          secretKey: registration.yaml
       serviceMonitors:
         enabled: true
       livenessProbe:
