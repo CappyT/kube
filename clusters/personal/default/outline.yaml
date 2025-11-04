@@ -90,7 +90,7 @@ spec:
           - mountPath: /var/lib/outline/data
             name: outline-data
         ports:
-        - containerPort: 8080
+        - containerPort: 3000
           name: http
 ---
 apiVersion: v1
