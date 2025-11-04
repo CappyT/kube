@@ -50,6 +50,9 @@ spec:
         smtp.yaml:
           configSecret: smtp-auth
           configSecretKey: smtp.yaml
+        oidc.yaml:
+          configSecret: oidc-config
+          configSecretKey: oidc.yaml
       postgres:
         host: element-cluster-rw.element-system.svc.cluster.local
         port: 5432
