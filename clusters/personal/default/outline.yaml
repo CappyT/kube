@@ -60,11 +60,11 @@ spec:
           - name: OIDC_SCOPES
             value: "openid email"
           - name: SMTP_HOST
-            value: ""
+            value: mail.smtp2go.com
           - name: SMTP_PORT
-            value: ""
+            value: "465"
           - name: SMTP_SECURE
-            value: ""
+            value: "true"
           - name: SMTP_USERNAME
             valueFrom:
               secretKeyRef:
@@ -76,7 +76,7 @@ spec:
                 key: smtp-password
                 name: outline-secrets
           - name: SMTP_FROM_EMAIL
-            value: "noreply@cappyt.sh"
+            value: "Outline <noreply@cappyt.sh>"
           - name: ENABLE_UPDATES
             value: "false"
         resources:
