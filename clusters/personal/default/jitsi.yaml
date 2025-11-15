@@ -39,11 +39,7 @@ spec:
       xmpp:
         enabled: true
     jvb:
-      service:
-        type: NodePort
-
-      UDPPort: 30144
-      nodePort: 30144
+      useHostPort: true
 
       publicIPs:
         - 185.242.183.144
