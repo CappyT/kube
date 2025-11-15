@@ -37,7 +37,7 @@ spec:
       colibri:
         enabled: true
       xmpp:
-        enabled: false
+        enabled: true
     jvb:
       service:
         type: NodePort
