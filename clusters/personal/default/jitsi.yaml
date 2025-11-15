@@ -46,3 +46,49 @@ spec:
 
       publicIPs:
         - 185.242.183.144
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prosody-data-jitsi-prosody-0
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: replica
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: jitsi-route
+  namespace: default
+spec:
+  hostnames:
+    - meet.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: jitsi-jitsi-meet-web
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: jitsi-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: meet.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
