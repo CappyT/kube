@@ -41,7 +41,10 @@ spec:
     jvb:
       service:
         type: NodePort
-      
+
+      stunServers: 'stun:stun1.l.google.com:3478'
+
+      UDPPort: 30144
       nodePort: 30144
 
       publicIPs:
