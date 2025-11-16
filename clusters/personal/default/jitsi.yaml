@@ -39,10 +39,14 @@ spec:
       xmpp:
         enabled: true
     jvb:
-      useHostPort: true
+      service:
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: "185.242.182.147"
+        externalTrafficPolicy: Local
 
       publicIPs:
-        - 185.242.183.144
+        - 185.242.182.147
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
