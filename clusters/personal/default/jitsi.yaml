@@ -40,13 +40,13 @@ spec:
         enabled: true
     jvb:
       service:
-        type: LoadBalancer
-        annotations:
-          io.cilium/lb-ipam-ips: "185.242.182.147"
+        type: NodePort
         externalTrafficPolicy: Local
+      UDPPort: 31144
+      nodePort: 31144
 
       publicIPs:
-        - 185.242.182.147
+        - 185.242.183.144
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
