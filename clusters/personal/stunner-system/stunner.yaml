@@ -18,7 +18,7 @@ spec:
     spec:
       chart: stunner
       interval: 5m
-      version: 0.5.1
+      version: 0.21.0
       sourceRef:
         kind: HelmRepository
         name: stunner
