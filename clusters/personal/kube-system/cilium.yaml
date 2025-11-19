@@ -47,8 +47,6 @@ spec:
     k8sServicePort: 7445
     kubeProxyReplacement: true
     hubble:
-      ui:
-        enabled: true
       eventQueueSize: 65536
     l2announcements:
       enabled: true
