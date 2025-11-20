@@ -41,7 +41,7 @@ spec:
     jvb:
       service:
         type: NodePort
-        externalTrafficPolicy: Local
+        externalTrafficPolicy: Cluster
       UDPPort: 31144
       nodePort: 31144
 
