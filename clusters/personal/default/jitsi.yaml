@@ -39,9 +39,9 @@ spec:
       xmpp:
         enabled: true
     jvb:
+      useHostNetwork: true
       service:
-        type: NodePort
-        externalTrafficPolicy: Cluster
+        enabled: false
       UDPPort: 31144
       nodePort: 31144
 
