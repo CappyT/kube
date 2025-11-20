@@ -1,1 +1,5 @@
 clusters/personal/external-secrets/secret-token.yaml
+cleanup-pods.sh
+.gitignore
+FUTURE.md
+delete-snapshots.sh
