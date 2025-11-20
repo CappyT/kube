@@ -44,6 +44,9 @@ spec:
         enabled: false
       UDPPort: 31144
       nodePort: 31144
+      extraEnvs:
+        JVB_HEALTH_PORT: "30300"
+        JVB_HEALTH_CHECK_PORT: "30300"
 
       publicIPs:
         - 185.242.183.144
