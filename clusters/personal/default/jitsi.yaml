@@ -39,14 +39,13 @@ spec:
       xmpp:
         enabled: true
     jvb:
-      useHostNetwork: true
       service:
-        enabled: false
+        type: NodePort
+        externalTrafficPolicy: Local
       UDPPort: 31144
       nodePort: 31144
       extraEnvs:
-        JVB_HEALTH_PORT: "30300"
-        JVB_HEALTH_CHECK_PORT: "30300"
+        JVB_DISABLE_STUN: "true"
 
       publicIPs:
         - 185.242.183.144
