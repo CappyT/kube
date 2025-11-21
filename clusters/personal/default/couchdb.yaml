@@ -29,3 +29,8 @@ spec:
         uuid: 6235c411-dcba-4097-a360-356bd5943b14
       chttpd:
         require_valid_user: true
+    adminUsername: cappyt
+    persistentVolume:
+      enabled: true
+      size: 10Gi
+      storageClass: single
