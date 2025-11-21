@@ -23,3 +23,9 @@ spec:
         kind: HelmRepository
         name: couchdb
         namespace: default
+  values:
+    couchdbConfig:
+      couchdb:
+        uuid: 6235c411-dcba-4097-a360-356bd5943b14
+      chttpd:
+        require_valid_user: true
