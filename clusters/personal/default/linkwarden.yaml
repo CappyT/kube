@@ -16,6 +16,12 @@ spec:
     - secretKey: nextauth_secret
       remoteRef:
         key: /default/linkwarden/nextauth_secret
+    - secretKey: oidc-id
+      remoteRef:
+        key: /default/linkwarden/oidc-id
+    - secretKey: oidc-secret
+      remoteRef:
+        key: /default/linkwarden/oidc-secret
 ---
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
@@ -167,6 +173,28 @@ spec:
                   key: dbname
             - name: DATABASE_URL
               value: postgresql://$(DB_USER):$(DB_PASS)@$(DB_HOST):5432/$(DB_NAME)
+            - name: NEXT_PUBLIC_OLLAMA_ENDPOINT_URL
+              value: "http://192.168.5.68:11434"
+            - name: OLLAMA_MODEL
+              value: phi4-mini:latest
+            - name: NEXT_PUBLIC_DISABLE_REGISTRATION
+              value: "true"
+            - name: NEXT_PUBLIC_KEYCLOAK_ENABLED
+              value: "true"
+            - name: KEYCLOAK_CUSTOM_NAME
+              value: "Cappy's"
+            - name: KEYCLOAK_ISSUER
+              value: https://auth.cappyt.sh/webman/sso
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-secrets
+                  key: oidc-id
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: linkwarden-secrets
+                  key: oidc-secret
           ports:
             - containerPort: 3000
               name: http
