@@ -179,18 +179,18 @@ spec:
               value: phi4-mini:latest
             - name: NEXT_PUBLIC_DISABLE_REGISTRATION
               value: "true"
-            - name: NEXT_PUBLIC_KEYCLOAK_ENABLED
+            - name: NEXT_PUBLIC_AUTHENTIK_ENABLED
               value: "true"
-            - name: KEYCLOAK_CUSTOM_NAME
+            - name: AUTHENTIK_CUSTOM_NAME
               value: "Cappy's"
-            - name: KEYCLOAK_ISSUER
+            - name: AUTHENTIK_ISSUER
               value: https://auth.cappyt.sh/webman/sso
-            - name: KEYCLOAK_CLIENT_ID
+            - name: AUTHENTIK_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-secrets
                   key: oidc-id
-            - name: KEYCLOAK_CLIENT_SECRET
+            - name: AUTHENTIK_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: linkwarden-secrets
