@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
         - name: meilisearch
-          image: getmeili/meilisearch:v1.12.8
+          image: getmeili/meilisearch:v1.26.0
           imagePullPolicy: IfNotPresent
           env:
             - name: MEILI_MASTER_KEY
