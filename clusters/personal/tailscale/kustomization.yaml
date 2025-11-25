@@ -5,4 +5,4 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - external-secret.yaml
-#  - connector.yaml
+  - connector.yaml
