@@ -1,0 +1,17 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: subnet-router-exit-node
+  namespace: tailscale
+spec:
+  hostname: "k8s-cluster-gateway"
+  subnetRouter:
+    advertiseRoutes:
+      - "10.0.0.0/8" # Adjust this to your cluster's Pod/Service CIDRs or your home network if needed.
+      - "172.16.0.0/12"
+      - "192.168.0.0/16"
+      # - "0.0.0.0/0" # Uncomment to use as exit node via routes (older method)
+      # - "::/0"
+  exitNode: true # Use this for Exit Node functionality if supported by the operator version
+  tags:
+    - "tag:k8s"
