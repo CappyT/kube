@@ -15,6 +15,10 @@ metadata:
 spec:
   interval: 10m
   timeout: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
   chart:
     spec:
       chart: cilium
