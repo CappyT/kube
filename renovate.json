@@ -19,6 +19,12 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["mysql"],
       "allowedVersions": "^8"
+    },
+    {
+      "description": "Lock meilisearch to v1.12.8",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["getmeili/meilisearch"],
+      "allowedVersions": "^1.12.8"
     }
   ]
 }
