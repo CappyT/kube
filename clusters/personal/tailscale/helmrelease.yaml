@@ -16,10 +16,5 @@ spec:
       interval: 5m
   releaseName: tailscale-operator
   values:
-    oauth:
-      secret:
-        name: tailscale-oauth
-        clientIdKey: client_id
-        clientSecretKey: client_secret
-    operatorConfig:
-      hostname: "tailscale-operator"
+    ingressClass:
+      enabled: false
