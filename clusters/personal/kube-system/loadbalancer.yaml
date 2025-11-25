@@ -10,6 +10,9 @@ spec:
   nodeSelector:
     matchLabels:
       kubernetes.io/os: linux
+  serviceSelector:
+    matchExpressions:
+      - {key: type, operator: NotIn, values: [public]}
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumLoadBalancerIPPool
@@ -27,8 +30,8 @@ metadata:
   name: "public-pool"
 spec:
   blocks:
-  - start: 185.242.182.145
-    stop: 185.242.182.150
+  - start: 185.242.182.144
+    stop: 185.242.182.151
   serviceSelector:
     matchLabels:
       type: public

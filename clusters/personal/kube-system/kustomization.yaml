@@ -5,4 +5,5 @@ resources:
 - tlsroute.yaml
 - cilium.yaml
 - loadbalancer.yaml
+- bgp-peering.yaml
 - gateway.yaml

@@ -48,6 +48,8 @@ spec:
     kubeProxyReplacement: true
     hubble:
       eventQueueSize: 65536
+    bgpControlPlane:
+      enabled: true
     l2announcements:
       enabled: true
     operator:
