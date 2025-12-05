@@ -7,7 +7,6 @@ metadata:
     app: minecraft
     modpack: oceanblock2
 spec:
-  replicas: 0
   selector:
     matchLabels:
       app: minecraft

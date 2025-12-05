@@ -7,7 +7,6 @@ metadata:
   name: prominence-2-server
   namespace: default
 spec:
-  replicas: 0
   selector:
     matchLabels:
       app: minecraft
