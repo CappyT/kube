@@ -5,6 +5,8 @@ metadata:
   name: fmd-server
   namespace: default
 spec:
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: fmd-server
