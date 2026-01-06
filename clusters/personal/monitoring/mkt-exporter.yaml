@@ -14,7 +14,9 @@ spec:
     spec:
       containers:
       - name: mktxp-exporter
-        image: ghcr.io/akpw/mktxp:latest
+        image: ghcr.io/akpw/mktxp:1.2.16
+        command:
+          - /usr/local/bin/mktxp
         args:
           - --cfg-dir
           - /mktxp_config
