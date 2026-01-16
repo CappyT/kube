@@ -23,7 +23,7 @@ spec:
     # Main velero image
     image:
       repository: velero/velero
-      tag: v1.17.1
+      tag: v1.17.2
 
     # Enable the node-agent for file system backups (for Piraeus)
     deployNodeAgent: true
