@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gittozipbot
+  namespace: default
+  labels:
+    app: gittozipbot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gittozipbot
+  template:
+    metadata:
+      labels:
+        app: gittozipbot
+    spec:
+      imagePullSecrets:
+        - name: cappyt
+      containers:
+      - name: gittozipbot
+        image: git.cappyt.sh/cappyt/gittozipbot:v1.0.1
+        imagePullPolicy: Always
+        env:
+        - name: BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: gittozipbot-secret
+              key: token
+        - name: CONCURRENCY_LIMIT
+          value: "1"
+        - name: HOUR_LIMIT
+          value: "30"
+        - name: TEMP_DIR
+          value: "/scratch"
+        volumeMounts:
+        - mountPath: "/scratch"
+          name: scratch-volume
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+            ephemeral-storage: "500Mi"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+            ephemeral-storage: "1Gi"
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65532
+      volumes:
+      - name: scratch-volume
+        emptyDir:
+          sizeLimit: 1Gi
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: gittozipbot-secret
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: gittozipbot-secret
+  data:
+    - secretKey: token
+      remoteRef:
+        key: /default/gittozipbot/gittozipbot-secret
