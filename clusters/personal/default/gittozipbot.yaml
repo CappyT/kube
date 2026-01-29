@@ -20,7 +20,7 @@ spec:
         - name: cappyt
       containers:
       - name: gittozipbot
-        image: git.cappyt.sh/cappyt/gittozipbot:v1.0.1
+        image: git.cappyt.sh/cappyt/gittozipbot:v1.0.2
         imagePullPolicy: Always
         env:
         - name: BOT_TOKEN
