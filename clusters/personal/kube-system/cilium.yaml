@@ -29,8 +29,6 @@ spec:
       interval: 5m
   releaseName: cilium
   values:
-    bgp:
-      enabled: false
     bpf:
       masquerade: true
     cgroup:
