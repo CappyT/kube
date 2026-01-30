@@ -4,8 +4,8 @@ metadata:
   name: l2-announcement-policy
 spec:
   interfaces:
-    - ^enp.*
-    - ^eth.*
+    - ^enp.*\.95$
+    - ^eth.*\.95$
   loadBalancerIPs: true
   nodeSelector:
     matchLabels:

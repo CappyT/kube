@@ -3,12 +3,14 @@ apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: public-services
+  labels:
+    advertise: bgp
 spec:
-  advertisements:
-    - advertisementType: "Service"
-      service:
-        addresses:
-          - LoadBalancerIP
+    advertisements:
+    - advertisementType: Service
       selector:
         matchLabels:
           type: public
+      service:
+        addresses:
+        - LoadBalancerIP
