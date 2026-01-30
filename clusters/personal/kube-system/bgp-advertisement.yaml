@@ -1,10 +1,14 @@
+---
 apiVersion: cilium.io/v2
 kind: CiliumBGPAdvertisement
 metadata:
   name: public-services
 spec:
   advertisements:
-  - advertisementType: "Service"
-    selector:
-      matchLabels:
-        type: public
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchLabels:
+          type: public
