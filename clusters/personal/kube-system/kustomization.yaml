@@ -7,4 +7,5 @@ resources:
 - loadbalancer.yaml
 - bgp-advertisement.yaml
 - bgp-cluster-config.yaml
+- bgp-peer-config.yaml
 - gateway.yaml
