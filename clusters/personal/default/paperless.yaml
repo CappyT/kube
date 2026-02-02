@@ -63,7 +63,7 @@ spec:
             - name: PAPERLESS_TIKA_ENABLED
               value: '1'
             - name: PAPERLESS_TIKA_GOTENBERG_ENDPOINT
-              value: http://paperless-gotemberg.default.svc.cluster.local:3000
+              value: http://paperless-gotenberg.default.svc.cluster.local:3000
             - name: PAPERLESS_TIKA_ENDPOINT
               value: http://tika-paperless.default.svc.cluster.local:9998
             - name: PAPERLESS_OCR_LANGUAGES
