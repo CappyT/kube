@@ -14,30 +14,16 @@ spec:
         name: vmware-tanzu
         namespace: velero
   values:
-    # Use a modern kubectl image
-    kubectl:
-      image:
-        repository: alpine/kubectl
-        tag: "1.35.0"
-
-    # Main velero image
     image:
       repository: velero/velero
       tag: v1.17.2
-
-    # Enable the node-agent for file system backups (for Piraeus)
     deployNodeAgent: true
-
-    # Add velero-plugin-for-aws and velero-plugin-for-csi
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.13.2
         volumeMounts:
           - mountPath: /target
             name: plugins
-
-
-    # Enable CSI features
     configuration:
       features: EnableCSI
       volumeSnapshotLocation:
@@ -45,11 +31,7 @@ spec:
           provider: aws
           config:
             region: brescia
-
-    # Use an external secret for credentials
     credentials:
       useSecret: true
       name: velero-minio-credentials
-
-    # Don't automatically upgrade CRDs with the broken job
     upgradeCRDs: false
