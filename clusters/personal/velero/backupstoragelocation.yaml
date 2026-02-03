@@ -6,7 +6,7 @@ metadata:
 spec:
   provider: aws
   objectStorage:
-    bucket: k8s-backups
+    bucket: k8s-backup
   config:
     region: brescia
     s3ForcePathStyle: "true"
