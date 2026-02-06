@@ -16,9 +16,19 @@ spec:
       labels:
         app: ntfy-pod
     spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: ntfy 
           image: binwiederhier/ntfy:v2.16.0
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           args: ["serve"]
           env:
             - name: TZ
@@ -41,6 +51,8 @@ spec:
               value: "true"
             - name: NTFY_ENABLE_LOGIN
               value: "true"
+            - name: NTFY_LISTEN_HTTP
+              value: ":8080"
             - name: NTFY_CACHE_STARTUP_QUERIES
               value: |
                 pragma journal_mode = WAL;
@@ -49,7 +61,7 @@ spec:
                 pragma busy_timeout = 15000;
                 vacuum;
           ports: 
-            - containerPort: 80
+            - containerPort: 8080
               name: http-ntfy
           resources:
             limits:
@@ -94,8 +106,8 @@ spec:
   selector:
     app: ntfy
   ports:
-  - port: 80
-    targetPort: 80
+  - port: 8080
+    targetPort: 8080
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -111,7 +123,7 @@ spec:
   rules:
   - backendRefs:
     - name: ntfy
-      port: 80
+      port: 8080
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
