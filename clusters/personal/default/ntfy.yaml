@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntfy-deployment
+  namespace: default
+spec:
+  revisionHistoryLimit: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ntfy-pod
+  template:
+    metadata:
+      labels:
+        app: ntfy-pod
+    spec:
+      containers:
+        - name: ntfy 
+          image: binwiederhier/ntfy:v1.28.0
+          args: ["serve"]
+          env:
+            - name: TZ
+              value: Europe/Rome
+            - name: NTFY_DEBUG
+              value: "false"
+            - name: NTFY_LOG_LEVEL
+              value: INFO
+            - name: NTFY_BASE_URL
+              value: https://ntfy.cappyt.sh
+            - name: NTFY_ATTACHMENT_CACHE_DIR
+              value: /var/lib/ntfy/attachments
+            - name: NTFY_CACHE_FILE
+              value: /var/lib/ntfy/cache.db
+            - name: NTFY_AUTH_FILE
+              value: /var/lib/ntfy/auth.db
+            - name: NTFY_AUTH_DEFAULT_ACCESS
+              value: deny-all
+            - name: NTFY_BEHIND_PROXY
+              value: "true"
+            - name: NTFY_ENABLE_LOGIN
+              value: "true"
+          ports: 
+            - containerPort: 80
+              name: http-ntfy
+          resources:
+            limits:
+              memory: 300Mi
+              cpu:  200m
+            requests:
+              cpu: 150m
+              memory: 150Mi
+          volumeMounts:
+              # - mountPath: /etc/ntfy
+              #   subPath: server.yml
+              #   name: config-volume
+              - mountPath: /var/cache/ntfy
+                name: cache-volume
+      volumes:
+        # - name: config-volume
+        #   configMap:
+        #     name: server-config
+        - name: cache-volume
+          persistentVolumeClaim:
+            claimName: ntfy-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ntfy-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: replica
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ntfy
+  namespace: default
+spec:
+  selector:
+    app: ntfy
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: ntfy-route
+  namespace: default
+spec:
+  hostnames:
+    - ntfy.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: ntfy
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: ntfy-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: ntfy.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
