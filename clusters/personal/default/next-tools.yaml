@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: next-tools
-        image: ghcr.io/willjayyyy/next-tools:1.9.2
+        image: ghcr.io/willjayyyy/next-tools:1.9.4
         resources:
           limits:
             memory: "128Mi"
