@@ -10,11 +10,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: ntfy-pod
+      app: ntfy
   template:
     metadata:
       labels:
-        app: ntfy-pod
+        app: ntfy
     spec:
       securityContext:
         fsGroup: 1000
