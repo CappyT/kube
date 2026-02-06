@@ -51,6 +51,16 @@ spec:
               value: "true"
             - name: NTFY_ENABLE_LOGIN
               value: "true"
+            - name: NTFY_ENABLE_SIGNUP
+              value: "false"
+            - name: NTFY_VISITOR_REQUEST_LIMIT_BURST
+              value: "60"
+            - name: NTFY_VISITOR_REQUEST_LIMIT_REPLENISH
+              value: "1s"
+            - name: NTFY_VISITOR_EMAIL_LIMIT_BURST
+              value: "0"
+            - name: NTFY_VISITOR_EMAIL_LIMIT_REPLENISH
+              value: "1h"
             - name: NTFY_LISTEN_HTTP
               value: ":8080"
             - name: NTFY_CACHE_STARTUP_QUERIES
@@ -71,15 +81,9 @@ spec:
               cpu: 150m
               memory: 150Mi
           volumeMounts:
-              # - mountPath: /etc/ntfy
-              #   subPath: server.yml
-              #   name: config-volume
               - mountPath: /var/lib/ntfy
                 name: cache-volume
       volumes:
-        # - name: config-volume
-        #   configMap:
-        #     name: server-config
         - name: cache-volume
           persistentVolumeClaim:
             claimName: ntfy-pvc
