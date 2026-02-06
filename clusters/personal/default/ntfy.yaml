@@ -65,6 +65,10 @@ spec:
               value: "512k"
             - name: NTFY_VISITOR_ATTACHMENT_TOTAL_SIZE_LIMIT
               value: "10M"
+            - name: NTFY_VISITOR_ATTACHMENT_EXPIRY_DURATION
+              value: "1h"
+            - name: NTFY_CACHE_DURATION
+              value: "12h"
             - name: NTFY_LISTEN_HTTP
               value: ":8080"
             - name: NTFY_UPSTREAM_BASE_URL
