@@ -6,6 +6,8 @@ metadata:
 spec:
   revisionHistoryLimit: 1
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: ntfy-pod
@@ -39,6 +41,13 @@ spec:
               value: "true"
             - name: NTFY_ENABLE_LOGIN
               value: "true"
+            - name: NTFY_CACHE_STARTUP_QUERIES
+              value: |
+                pragma journal_mode = WAL;
+                pragma synchronous = normal;
+                pragma temp_store = memory;
+                pragma busy_timeout = 15000;
+                vacuum;
           ports: 
             - containerPort: 80
               name: http-ntfy
@@ -53,7 +62,7 @@ spec:
               # - mountPath: /etc/ntfy
               #   subPath: server.yml
               #   name: config-volume
-              - mountPath: /var/cache/ntfy
+              - mountPath: /var/lib/ntfy
                 name: cache-volume
       volumes:
         # - name: config-volume
