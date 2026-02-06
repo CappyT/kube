@@ -67,6 +67,8 @@ spec:
               value: "10M"
             - name: NTFY_LISTEN_HTTP
               value: ":8080"
+            - name: NTFY_UPSTREAM_BASE_URL
+              value: "https://ntfy.sh"
             - name: NTFY_CACHE_STARTUP_QUERIES
               value: |
                 pragma journal_mode = WAL;
