@@ -79,7 +79,7 @@ spec:
           claimName: immich-model-cache
       containers:
       - name: immich-ml
-        image: ghcr.io/immich-app/immich-machine-learning:v2.5.2
+        image: ghcr.io/immich-app/immich-machine-learning:v2.5.5
         args:
             - python
             - -m
@@ -150,7 +150,7 @@ spec:
           type: Directory
       containers:
       - name: immich
-        image: ghcr.io/immich-app/immich-server:v2.5.2
+        image: ghcr.io/immich-app/immich-server:v2.5.5
         ports:
         - name: http
           containerPort: 2283
