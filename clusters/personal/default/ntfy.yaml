@@ -61,6 +61,10 @@ spec:
               value: "0"
             - name: NTFY_VISITOR_EMAIL_LIMIT_REPLENISH
               value: "1h"
+            - name: NTFY_VISITOR_ATTACHMENT_SIZE_LIMIT
+              value: "512k"
+            - name: NTFY_VISITOR_ATTACHMENT_TOTAL_SIZE_LIMIT
+              value: "10M"
             - name: NTFY_LISTEN_HTTP
               value: ":8080"
             - name: NTFY_CACHE_STARTUP_QUERIES
