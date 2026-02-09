@@ -21,7 +21,7 @@ spec:
         fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: ntfy 
-          image: binwiederhier/ntfy:v2.16.0
+          image: binwiederhier/ntfy:v2.17.0
           securityContext:
             runAsUser: 1000
             runAsGroup: 1000
