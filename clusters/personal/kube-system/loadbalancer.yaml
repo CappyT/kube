@@ -8,8 +8,13 @@ spec:
     - ^eth.*\.95$
   loadBalancerIPs: true
   nodeSelector:
-    matchLabels:
-      kubernetes.io/os: linux
+    matchExpressions:
+      - key: node-role.kubernetes.io/control-plane
+        operator: DoesNotExist
+      - key: kubernetes.io/os
+        operator: In
+        values:
+          - linux
   serviceSelector:
     matchExpressions:
       - {key: type, operator: NotIn, values: [public]}
