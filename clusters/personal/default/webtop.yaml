@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webtop-svc
+  namespace: default
+spec:
+  ports:
+  - port: 3050
+    targetPort: 3050
+    protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: webtop-svc
+  namespace: default
+subsets:
+  - addresses:
+      - ip: 192.168.5.68
+    ports:
+      - port: 3050
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: webtop-httproute
+  namespace: default
+spec:
+  hostnames:
+    - mcfratm.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: webtop-svc
+      port: 3050
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: webtop-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: mcfratm.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
