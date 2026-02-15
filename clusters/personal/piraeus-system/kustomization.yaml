@@ -5,7 +5,6 @@ resources:
 - linstor-cluster.yaml
 - linstor-nvme-cluster.yaml
 - linstor-node-connection.yaml
-- linstor-satellite-configuration.yaml
 - storageclass.yaml
 - snapshot-controller.yaml
 - snapshotclass.yaml
