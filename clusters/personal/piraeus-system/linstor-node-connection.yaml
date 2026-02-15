@@ -1,0 +1,8 @@
+apiVersion: piraeus.io/v1
+kind: LinstorNodeConnection
+metadata:
+  name: dedicated-storage-10g
+spec:
+  paths:
+    - name: 10g-path
+      interface: storage
