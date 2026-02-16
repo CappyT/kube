@@ -30,6 +30,14 @@ spec:
         - --max-concurrent-k8s-connections=4
         - --default-item-operation-timeout=4h
         - --garbage-collection-frequency=1h
+      backupStorageLocation:
+      - name: default
+        provider: aws
+        bucket: k8s-backup
+        config:
+          region: brescia
+          s3ForcePathStyle: "true"
+          s3Url: https://s3.cappyt.sh
       volumeSnapshotLocation:
         - name: default
           provider: aws
