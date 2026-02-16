@@ -27,9 +27,9 @@ spec:
     configuration:
       features: EnableCSI
       extraArgs:
-        max-concurrent-k8s-connections: 4
-        default-item-operation-timeout: 4h
-        garbage-collection-frequency: 1h
+        - --max-concurrent-k8s-connections=4
+        - --default-item-operation-timeout=4h
+        - --garbage-collection-frequency=1h
       volumeSnapshotLocation:
         - name: default
           provider: aws
