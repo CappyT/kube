@@ -2,4 +2,16 @@ apiVersion: piraeus.io/v1
 kind: LinstorCluster
 metadata:
   name: linstor-cluster
-
+spec:
+  controller:
+    podTemplate:
+      spec:
+        containers:
+        - name: linstor-controller
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
