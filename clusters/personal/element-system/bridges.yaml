@@ -103,7 +103,7 @@ spec:
             optional: false
       containers:
       - name: slack-bridge
-        image: dock.mau.dev/mautrix/slack:v25.11
+        image: dock.mau.dev/mautrix/slack:v26.02
         command:
           - "/usr/bin/mautrix-slack"
           - "-c"
