@@ -8,4 +8,5 @@ resources:
   - velero-ui-helmrelease.yaml
   - velero-ui-httproute.yaml
   - velero-ui-dns.yaml
+  - velero-concurrency.yaml
   - backupstoragelocation.yaml

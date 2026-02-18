@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: velero-node-agent-config
+  namespace: velero
+data:
+  nodeAgentConfig: |
+    {
+      "loadConcurrency": {
+        "globalConfig": 1,
+        "perNodeConfig": []
+      }
+    }
