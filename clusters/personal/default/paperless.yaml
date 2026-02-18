@@ -235,6 +235,8 @@ kind: Cluster
 metadata:
   name: paperless-cluster
   namespace: default
+  labels:
+    velero.io/exclude-from-backup: true
 spec:
   imagePullPolicy: Always
   instances: 3
