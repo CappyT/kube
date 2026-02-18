@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-# LINSTOR MEDIC DASHBOARD v3.4 (Stable Restore)
+# LINSTOR MEDIC DASHBOARD v3.6 (Final Polish)
 # ==============================================================================
 # Un'interfaccia TUI avanzata per la gestione e riparazione del cluster.
 #
@@ -20,6 +20,7 @@ LINSTOR_DB="$TEMP_DIR/linstor_full.json"
 K8S_DB="$TEMP_DIR/k8s_pvs.txt"
 LAST_SCAN_FILE="$TEMP_DIR/last_scan_info"
 LIVE_PREVIEW_FLAG="$TEMP_DIR/live_preview_enabled"
+PREVIEW_SCRIPT="$TEMP_DIR/preview_helper.sh"
 
 # --- COLORI & STILE ---
 RED='\033[0;31m'
@@ -57,7 +58,6 @@ check_deps() {
 
 header() {
     clear
-    # Header ASCII Standard (Allineamento sicuro)
     echo -e "${PURPLE}"
     echo "  _     ___ _   _ ____  _____ ___  ____  "
     echo " | |   |_ _| \ | / ___||_   _/ _ \|  _ \ "
@@ -65,8 +65,72 @@ header() {
     echo " | |___ | || |\  |___) | | || |_| |  _ < "
     echo " |_____|___|_| \_|____/  |_| \___/|_| \_\\"
     echo -e "${NC}"
-    echo -e "  ${CYAN}CLUSTER MEDIC DASHBOARD v3.4${NC} :: Namespace: ${BOLD}$NAMESPACE${NC}"
+    echo -e "  ${CYAN}CLUSTER MEDIC DASHBOARD v3.6${NC} :: Namespace: ${BOLD}$NAMESPACE${NC}"
     echo " ─────────────────────────────────────────────────────────────────"
+}
+
+# ==============================================================================
+# PREVIEW HELPER (Lo script esterno che gestisce la grafica a lato)
+# ==============================================================================
+generate_preview_script() {
+cat << 'EOF' > "$PREVIEW_SCRIPT"
+#!/bin/bash
+# Script generato automaticamente per gestire la preview di FZF senza errori di quoting
+TITLE="$1"
+FLAG_FILE="$2"
+SCAN_FILE="$3"
+PROB="$4"
+RES="$5"
+NODE="$6"
+DETAILS="$7"
+
+# Ridefinizione colori (perché siamo in una sub-shell)
+BOLD="\033[1m"
+NC="\033[0m"
+CYAN="\033[0;36m"
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+BLUE="\033[0;34m"
+
+# Header Stats
+if [ -f "$SCAN_FILE" ]; then
+    IFS='|' read -r time k8s linstor issues < "$SCAN_FILE"
+    echo -e "${BLUE}STATS:${NC} K8s PVs: ${BOLD}$k8s${NC} | Linstor Res: ${BOLD}$linstor${NC} | Issues: ${RED}${BOLD}$issues${NC}"
+fi
+
+echo -e "${BOLD}$TITLE${NC}"
+echo -e "${CYAN}──────────────────────────────${NC}"
+echo -e "${BOLD}Problema:${NC} $PROB"
+echo -e "${BOLD}Risorsa:${NC}  $RES"
+echo -e "${BOLD}Nodo:${NC}     $NODE"
+echo ""
+
+# Live Check Logic
+if [ -f "$FLAG_FILE" ] && [ $(cat "$FLAG_FILE") -eq 1 ]; then
+    echo -ne "${BOLD}Status Live K8s:${NC} "
+    # Controllo silenzioso su K8s
+    if kubectl get pv "$RES" >/dev/null 2>&1; then
+        echo -e "${GREEN}✔ TROVATO${NC}"
+    else
+        echo -e "${RED}✖ NON TROVATO${NC}"
+    fi
+else
+    echo -e "${CYAN}(Live Check: CTRL-P)${NC}"
+fi
+
+echo ""
+# Split Description ### Action
+# Usiamo variabili per evitare problemi con caratteri speciali in awk
+ANALYSIS="${DETAILS%###*}"
+ACTION="${DETAILS#*###}"
+
+echo -e "${BOLD}[ 🔍 ANALISI ]${NC}"
+echo -e "$ANALYSIS"
+echo ""
+echo -e "${BOLD}[ 🛠️  AZIONE CONSIGLIATA ]${NC}"
+echo -e "$ACTION"
+EOF
+chmod +x "$PREVIEW_SCRIPT"
 }
 
 # ==============================================================================
@@ -76,9 +140,7 @@ header() {
 scan_cluster() {
     echo -ne "${BLUE}[SCAN] Mappatura Nodi e Pods...${NC}\r"
     
-    # 1. Rilevamento Dinamico Nodi e Pod Satellite
     declare -A POD_MAP
-    # Resetta array NODES
     NODES=()
     
     while read -r node pod; do
@@ -113,14 +175,11 @@ scan_cluster() {
         echo -ne "${CYAN}[SCAN] Analisi $NODE...           ${NC}\r"
         POD="${POD_MAP[$NODE]}"
         
-        # Estrai risorse note a Linstor per questo nodo
         cat "$LINSTOR_DB" | jq -r --arg N "$NODE" 'flatten | .[] | select(.node_name == $N) | .name' | sort > "$TEMP_DIR/${NODE}_linstor.txt"
         
-        # Estrai volumi fisici (LVM) dal nodo
         kubectl exec -n "$NAMESPACE" "$POD" -- lvs --noheadings -o lv_name 2>/dev/null < /dev/null \
             | grep "pvc-" | awk '{$1=$1;print}' | sed 's/_00000$//' | sort > "$TEMP_DIR/${NODE}_disk.txt"
 
-        # [RESTORE] Separatore originale v3.1 che funzionava bene
         SEP="###"
 
         # Check Orfani
@@ -138,7 +197,7 @@ scan_cluster() {
             if [ -z "$k8s_entry" ]; then
                 echo -e "${issue_type}\t$vol\t$NODE\t${desc}${SEP}Rimozione volume LVM." >> "$ISSUES_DB"
             else
-                echo -e "CRITICAL\t$vol\t$NODE\tDisallineamento: K8s usa questo volume, esiste su Disco, ma Linstor NON lo elenca.${SEP}Richiede debug Linstor (Restore DB)." >> "$ISSUES_DB"
+                echo -e "CRITICAL\t$vol\t$NODE\tDisallineamento: K8s usa questo volume, esiste su Disco, ma Linstor NON lo trova.${SEP}Richiede debug Linstor (Restore DB)." >> "$ISSUES_DB"
             fi
         done
 
@@ -149,12 +208,11 @@ scan_cluster() {
             if [ -z "$k8s_entry" ]; then
                 echo -e "ZOMBIE\t$vol\t$NODE\tVolume presente in Linstor e Disco, ma PVC non esiste in K8s.${SEP}Rimozione risorsa Linstor." >> "$ISSUES_DB"
             elif echo "$k8s_entry" | grep -q "TERMINATING"; then
-                echo -e "STUCK\t$vol\t$NODE\tK8s sta provando a cancellarlo ma è bloccato (PV Terminating).${SEP}Unlock DRBD & Force Delete." >> "$ISSUES_DB"
+                echo -e "STUCK\t$vol\t$NODE\tK8s sta provando a cancellarlo ma e bloccato (PV Terminating).${SEP}Unlock DRBD & Force Delete." >> "$ISSUES_DB"
             fi
         done
     done
     
-    # Salva statistiche per la dashboard
     cnt_k8s=$(wc -l < "$K8S_DB")
     cnt_linstor=$(jq -r 'flatten | .[].name' "$LINSTOR_DB" | sort -u | wc -l)
     cnt_issues=$(wc -l < "$ISSUES_DB")
@@ -184,7 +242,6 @@ perform_fix() {
 
     case "$type" in
         "ORPHAN"|"ORPHAN SNAP")
-            # Logica LVM Introspection
             local lvm_out=$(kubectl exec -n "$NAMESPACE" "$pod" -- lvs --noheadings -o vg_name,lv_name 2>/dev/null < /dev/null)
             local vg_name=$(echo "$lvm_out" | awk -v v="${vol}_00000" '$2 == v {print $1}' | head -n 1)
             local suffix="_00000"
@@ -194,7 +251,6 @@ perform_fix() {
                  suffix=""
             fi
             
-            # Fuzzy match
             if [ -z "$vg_name" ]; then
                  local fuzzy_match=$(echo "$lvm_out" | grep "$vol" | head -n 1)
                  if [ ! -z "$fuzzy_match" ]; then
@@ -223,6 +279,7 @@ perform_fix() {
                 echo -e "${YELLOW}> Esecuzione...${NC}"
             fi
 
+            # Silenziamo l'output per evitare messaggi brutti in bulk
             if eval "$cmd_str" < /dev/null > /dev/null 2>&1; then
                 if [ "$skip_confirm" -eq 0 ]; then echo -e "${GREEN}✔ Successo.${NC}"; fi
                 if [ "$skip_confirm" -eq 1 ]; then echo -e "${GREEN}Done${NC}"; fi
@@ -230,7 +287,6 @@ perform_fix() {
             else
                 if [ "$skip_confirm" -eq 0 ]; then echo -e "${YELLOW}! Busy. Unlock & Retry...${NC}"; fi
                 
-                # Unlock brutale
                 kubectl exec -n "$NAMESPACE" "$pod" -- fuser -mk "$full_path" >/dev/null 2>&1 < /dev/null
                 kubectl exec -n "$NAMESPACE" "$pod" -- drbdsetup down "$vol" >/dev/null 2>&1 < /dev/null
                 sleep 1
@@ -268,6 +324,8 @@ perform_fix() {
             
             if [ "$skip_confirm" -eq 0 ]; then echo -e "${YELLOW}> 2. Delete Resource...${NC}"; fi
             
+            # Qui è il trucco: catturiamo stderr e lo scartiamo se stiamo in bulk
+            # Se il comando fallisce (exit code != 0), procediamo al fallback
             if kubectl linstor resource delete "$node" "$vol" >/dev/null 2>&1 < /dev/null; then
                 if [ "$skip_confirm" -eq 0 ]; then echo -e "${GREEN}✔ Successo.${NC}"; fi
                 if [ "$skip_confirm" -eq 1 ]; then echo -e "${GREEN}Done${NC}"; fi
@@ -292,42 +350,8 @@ perform_fix() {
 
 fzf_preview_cmd() {
     local title="$1"
-    local stats_line=""
-    if [ -f "$LAST_SCAN_FILE" ]; then
-        IFS='|' read -r time k8s linstor issues < "$LAST_SCAN_FILE"
-        stats_line="echo -e '${BLUE}STATS:${NC} K8s PVs: ${BOLD}$k8s${NC} | Linstor Res: ${BOLD}$linstor${NC} | Issues: ${RED}${BOLD}$issues${NC}'"
-    fi
-
-    # [RESTORE] Torno a ### che funzionava in v3.1
-    echo "bash -c \"
-        echo -e '${BOLD}$title${NC}'
-        $stats_line
-        echo -e '${CYAN}──────────────────────────────${NC}'
-        echo -e '${BOLD}Problema:${NC} {1}'
-        echo -e '${BOLD}Risorsa:${NC}  {2}'
-        echo -e '${BOLD}Nodo:${NC}     {3}'
-        echo ''
-        
-        if [ \$(cat $LIVE_PREVIEW_FLAG) -eq 1 ]; then
-            echo -ne '${BOLD}Status Live K8s:${NC} '
-            if kubectl get pv {2} >/dev/null 2>&1; then
-                echo -e '${GREEN}✔ TROVATO${NC}'
-            else
-                echo -e '${RED}✖ NON TROVATO${NC}'
-            fi
-        else
-            echo -e '${CYAN}(Live Check: CTRL-P)${NC}'
-        fi
-        
-        echo ''
-        echo '{4}' | awk -F'###' '{ 
-             print \\\"${BOLD}[ 🔍 ANALISI ]${NC}\\\"; 
-             print \\\$1; 
-             print \\\"\\\"; 
-             print \\\"${BOLD}[ 🛠️  AZIONE CONSIGLIATA ]${NC}\\\"; 
-             print \\\$2 
-        }'
-    \""
+    # Chiamiamo lo script esterno per evitare quoting hell
+    echo "$PREVIEW_SCRIPT '$title' '$LIVE_PREVIEW_FLAG' '$LAST_SCAN_FILE' {1} {2} {3} \"{4}\""
 }
 
 TOGGLE_CMD="execute(bash -c \"val=\\\$(cat $LIVE_PREVIEW_FLAG); echo \$((1-val)) > $LIVE_PREVIEW_FLAG\")+refresh-preview"
@@ -474,6 +498,7 @@ ui_main_menu() {
 
 # --- AVVIO ---
 check_deps
+generate_preview_script
 if [ ! -f "$ISSUES_DB" ]; then
     scan_cluster
 fi
