@@ -3,6 +3,11 @@ kind: LinstorCluster
 metadata:
   name: linstor-cluster
 spec:
+  properties:
+    - name: DrbdOptions/Net/ping-timeout
+      value: "30"
+    - name: DrbdOptions/Net/connect-int
+      value: "10"
   controller:
     podTemplate:
       spec:
