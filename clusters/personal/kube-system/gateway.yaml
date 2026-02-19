@@ -43,6 +43,18 @@ spec:
       certificateRefs:
         - name: wildcard-cappyt-sh-cert
           kind: Secret
+  - name: https-ts-wildcard
+    protocol: HTTPS
+    port: 443
+    hostname: '*.thestashie.one'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: thestashie-one-cert
+          kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
