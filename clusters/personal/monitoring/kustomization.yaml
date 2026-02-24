@@ -4,7 +4,6 @@ resources:
 - namespace.yaml
 - grafana-secrets.yaml
 - prometheus.yaml
-- custom-dashboards.yaml
 - mkt-exporter.yaml
 - zte-exporter.yaml
 - loki.yaml
