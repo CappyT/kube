@@ -133,14 +133,19 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
-                scrapeConfigSelector:
-                  matchLabels: {}
-                ruleSelector:
-                  matchLabels: {}
-                podMonitorSelector:
-                  matchLabels: {}
-                probeSelector:
-                  matchLabels: {}
-                serviceMonitorSelector:
-                  matchLabels: {}
-        
+        scrapeConfigSelector: {}
+        scrapeConfigNamespaceSelector: {}
+        scrapeConfigSelectorNilUsesHelmValues: false
+        ruleSelector: {}
+        ruleNamespaceSelector: {}
+        ruleSelectorNilUsesHelmValues: false
+        podMonitorSelector: {}
+        podMonitorNamespaceSelector: {}
+        podMonitorSelectorNilUsesHelmValues: false
+        probeSelector: {}
+        probeNamespaceSelector: {}
+        probeSelectorNilUsesHelmValues: false
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: {}
+        serviceMonitorSelectorNilUsesHelmValues: false
+                
