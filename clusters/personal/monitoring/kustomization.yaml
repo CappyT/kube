@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
 - namespace.yaml
 - grafana-secrets.yaml
+- alertmanager-secrets.yaml
 - grafana-access.yaml
 - prometheus.yaml
 - mkt-exporter.yaml

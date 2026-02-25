@@ -138,6 +138,10 @@ spec:
         accessModes: ["ReadWriteOnce"]
         size: 10Gi
 
+    alertmanager:
+      alertmanagerSpec:
+        configSecret: alertmanager-kube-prometheus-alertmanager
+
     prometheus:
       prometheusSpec:
         retention: 30d
