@@ -87,6 +87,13 @@ spec:
           secretKey: registration.yaml
       serviceMonitors:
         enabled: true
+      config:
+        enable_metrics: true
+        listeners:
+          - port: 9001
+            type: metrics
+            bind_addresses:
+              - 0.0.0.0
       livenessProbe:
         failureThreshold: 15
         timeoutSeconds: 5
