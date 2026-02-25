@@ -133,13 +133,14 @@ spec:
               resources:
                 requests:
                   storage: 50Gi
-        scrapeConfigSelector:
-          matchLabels: null
-        ruleSelector:
-          matchLabels: null
-        podMonitorSelector:
-          matchLabels: null
-        probeSelector:
-          matchLabels: null
-        serviceMonitorSelector:
-          matchLabels: null
+                scrapeConfigSelector:
+                  matchLabels: {}
+                ruleSelector:
+                  matchLabels: {}
+                podMonitorSelector:
+                  matchLabels: {}
+                probeSelector:
+                  matchLabels: {}
+                serviceMonitorSelector:
+                  matchLabels: {}
+        
