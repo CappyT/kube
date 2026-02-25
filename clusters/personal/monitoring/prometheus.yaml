@@ -144,6 +144,8 @@ spec:
 
     prometheus:
       prometheusSpec:
+        evaluationInterval: 30s
+        scrapeInterval: 30s
         retention: 30d
         storageSpec:
           volumeClaimTemplate:
