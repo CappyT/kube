@@ -70,6 +70,8 @@ spec:
               value: https://auth.cappyt.sh/webman/sso/SSOAccessToken.cgi
             - name: OIDC_USERINFO_URL
               value: https://auth.cappyt.sh/webman/sso/SSOUserInfo.cgi
+            - name: OIDC_FORCE_HTTPS
+              value: "true"
           ports: 
             - containerPort: 8080
               name: http
