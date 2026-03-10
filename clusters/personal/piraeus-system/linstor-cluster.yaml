@@ -24,6 +24,8 @@ spec:
       value: "737280"
     - name: DrbdOptions/PeerDevice/c-min-rate
       value: "245760"
+    - name: DrbdOptions/PortRange
+      value: "7000-7999"
   controller:
     podTemplate:
       spec:
@@ -36,19 +38,3 @@ spec:
             limits:
               cpu: 1000m
               memory: 2Gi
-  csiController:
-    podTemplate:
-      spec:
-        containers:
-        - name: csi-provisioner
-          env:
-          - name: TIMEOUT
-            value: "10m"
-        - name: csi-snapshotter
-          env:
-          - name: TIMEOUT
-            value: "10m"
-        - name: csi-attacher
-          env:
-          - name: TIMEOUT
-            value: "10m"
