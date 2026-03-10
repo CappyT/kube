@@ -24,8 +24,8 @@ spec:
       value: "737280"
     - name: DrbdOptions/PeerDevice/c-min-rate
       value: "245760"
-    - name: DrbdOptions/PortRange
-      value: "7000-7999"
+    - name: TcpPortAutoRange
+      value: "7000-9999"
   controller:
     podTemplate:
       spec:
