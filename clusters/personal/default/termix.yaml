@@ -34,6 +34,7 @@ spec:
       labels:
         app: termix
     spec:
+      terminationGracePeriodSeconds: 15
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: "OnRootMismatch"
