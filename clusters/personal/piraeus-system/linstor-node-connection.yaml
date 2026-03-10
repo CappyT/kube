@@ -8,8 +8,6 @@ spec:
       interface: storage
     - name: 1g-control
       interface: default-ipv4
-  # Questo è il trucco magico: diciamo a LINSTOR che le connessioni dati (DRBD)
-  # devono usare il path '10g-data', ignorando tutto il resto.
-  props:
+  properties:
     - name: "Paths/10g-data/DrbdOptions/Net/use-rlink-checksums"
-      value: "no" #
+      value: "no" 
