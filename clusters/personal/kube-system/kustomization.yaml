@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
 - gateway-api.yaml
 - cilium.yaml
-- tlsroute.yaml
 - loadbalancer.yaml
 - bgp-advertisement.yaml
 - bgp-cluster-config.yaml
