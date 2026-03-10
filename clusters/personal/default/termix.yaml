@@ -1,0 +1,146 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: termix-secret
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: termix-secret
+  data:
+    - secretKey: oidc-id
+      remoteRef:
+        key: /default/termix/oidc-id
+    - secretKey: oidc-secret
+      remoteRef:
+        key: /default/termix/oidc-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: termix-deployment
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: termix
+  template:
+    metadata:
+      labels:
+        app: termix
+    spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: termix 
+          image: ghcr.io/lukegus/termix:release-1.11.2
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: PORT
+              value: "8080"
+            - name: DATA_DIR
+              value: /app/data
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: termix-secret
+                  key: oidc-id
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: termix-secret
+                  key: oidc-id
+            - name: OIDC_ISSUER_URL
+              value: https://auth.cappyt.sh/webman/sso
+            - name: OIDC_AUTHORIZATION_URL
+              value: https://auth.cappyt.sh/webman/sso/SSOOauth.cgi
+            - name: OIDC_TOKEN_URL
+              value: https://auth.cappyt.sh/webman/sso/SSOAccessToken.cgi
+            - name: OIDC_USERINFO_URL
+              value: https://auth.cappyt.sh/webman/sso/SSOUserInfo.cgi
+          ports: 
+            - containerPort: 8080
+              name: http
+          resources:
+            limits:
+              memory: 300Mi
+              cpu: 500m
+            requests:
+              cpu: 100m
+              memory: 150Mi
+          volumeMounts:
+              - mountPath: /app/data
+                name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: termix-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: termix-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: replica
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: termix
+  namespace: default
+spec:
+  selector:
+    app: termix
+  ports:
+  - port: 8080
+    targetPort: 8080
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: termix-route
+  namespace: default
+spec:
+  hostnames:
+    - ssh.cappyt.sh
+  parentRefs:
+  - name: public-gateway
+    namespace: kube-system
+  rules:
+  - backendRefs:
+    - name: termix
+      port: 8080
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: termix-dns
+  namespace: default
+spec:
+  endpoints:
+  - dnsName: ssh.cappyt.sh
+    recordTTL: 180
+    recordType: A
+    targets:
+    - 185.242.182.145
+    providerSpecific:
+      - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+        value: "false"
