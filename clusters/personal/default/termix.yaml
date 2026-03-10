@@ -61,7 +61,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: termix-secret
-                  key: oidc-id
+                  key: oidc-secret
             - name: OIDC_ISSUER_URL
               value: https://auth.cappyt.sh/webman/sso
             - name: OIDC_AUTHORIZATION_URL
