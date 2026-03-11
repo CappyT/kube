@@ -4,7 +4,6 @@ resources:
 - gateway-api.yaml
 - cilium.yaml
 - loadbalancer.yaml
-- tlsroute.yaml
 - bgp-advertisement.yaml
 - bgp-cluster-config.yaml
 - bgp-peer-config.yaml
