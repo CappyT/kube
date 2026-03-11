@@ -4,28 +4,39 @@ metadata:
   name: linstor-cluster
 spec:
   properties:
+    # --- TUNING RETE 10G ---
     - name: DrbdOptions/Net/ping-timeout
       value: "30"
     - name: DrbdOptions/Net/connect-int
       value: "10"
     - name: DrbdOptions/Net/max-buffers
-      value: "36864"
+      value: "100000"
     - name: DrbdOptions/Net/rcvbuf-size
       value: "10485760"
     - name: DrbdOptions/Net/sndbuf-size
       value: "10485760"
+    - name: DrbdOptions/Net/protocol
+      value: "B"
+    - name: DrbdOptions/Disk/disk-barrier
+      value: "no"
+    - name: DrbdOptions/Disk/disk-flushes
+      value: "no"
+    - name: DrbdOptions/Disk/md-flushes
+      value: "no"    
+    - name: DrbdOptions/Net/max-epoch-size
+      value: "8192"
+    - name: DrbdOptions/Disk/al-extents
+      value: "6433"
     - name: DrbdOptions/PeerDevice/c-fill-target
       value: "2048"
     - name: DrbdOptions/PeerDevice/c-plan-ahead
       value: "10"
     - name: DrbdOptions/PeerDevice/resync-rate
-      value: "245760"
+      value: "51200"
     - name: DrbdOptions/PeerDevice/c-max-rate
       value: "737280"
     - name: DrbdOptions/PeerDevice/c-min-rate
-      value: "245760"
-    - name: TcpPortAutoRange
-      value: "7000-9999"
+      value: "10240"
   controller:
     podTemplate:
       spec:
