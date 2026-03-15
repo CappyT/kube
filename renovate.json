@@ -24,7 +24,7 @@
       "description": "Lock meilisearch to v1.12.8",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["getmeili/meilisearch"],
-      "allowedVersions": "^v1.12"
+      "allowedVersions": "v1.12.x"
     }
   ]
 }
