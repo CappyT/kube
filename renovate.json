@@ -28,7 +28,7 @@
     },
     {
       "description": "Lock gateway-api to v1.4.1",
-      "matchPackageNames": ["https://github.com/kubernetes-sigs/gateway-api"],
+      "matchPackageNames": ["gateway-api-repo"],
       "allowedVersions": "v1.4.x"
     }
   ]
