@@ -25,6 +25,11 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["getmeili/meilisearch"],
       "allowedVersions": "v1.12.x"
+    },
+    {
+      "description": "Lock gateway-api to v1.4.1",
+      "matchPackageNames": ["https://github.com/kubernetes-sigs/gateway-api"],
+      "allowedVersions": "v1.4.x"
     }
   ]
 }
