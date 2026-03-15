@@ -37,8 +37,5 @@ spec:
       metricsClusterComplianceInfo: true
       metricsExposedSecretInfo: true
 
-    nodeCollector:
-      excludeNodes: "*"
-
     serviceMonitor:
       enabled: true
