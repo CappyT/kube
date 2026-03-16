@@ -107,6 +107,14 @@ spec:
             gnetId: 13679
             revision: 23
             datasource: Prometheus
+          k8sdashboard:
+            gnetId: 15661
+            revision: 2
+            datasource: Prometheus
+          pvoverview:
+            gnetId: 13646
+            revision: 2
+            datasource: Prometheus
 #          node-exporter:
 #            gnetId: 1860
 #            revision: 37
