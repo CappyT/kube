@@ -36,6 +36,10 @@ spec:
       metricsRbacAssessmentInfo: true
       metricsClusterComplianceInfo: true
       metricsExposedSecretInfo: true
+  
+    trivy:
+      ignoreUnfixed: true
+      severity: "HIGH,CRITICAL"
 
     serviceMonitor:
       enabled: true
