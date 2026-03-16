@@ -87,26 +87,7 @@ spec:
           label: grafana_dashboard
           labelValue: "1"
           searchNamespace: ALL
-      dashboardProviders:
-        dashboardproviders.yaml:
-          apiVersion: 1
-          providers:
-            - name: 'downloaded'
-              orgId: 1
-              folder: ''
-              type: file
-              disableDeletion: false
-              editable: true
-              options:
-                path: /var/lib/grafana/dashboards/downloaded
-            - name: 'custom'
-              orgId: 1
-              folder: ''
-              type: file
-              disableDeletion: false
-              editable: true
-              options:
-                path: /var/lib/grafana/dashboards/custom
+
       dashboardsConfigMaps:
         default: grafana-dashboards-custom
       dashboards:
