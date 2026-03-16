@@ -81,43 +81,7 @@ spec:
     grafana:
       defaultDashboardsTimezone: Europe/Rome
       envFromSecret: grafana-oidc-secrets
-      sidecar:
-        dashboards:
-          enabled: true
-          label: grafana_dashboard
-          labelValue: "1"
-          searchNamespace: ALL
 
-      dashboards:
-        downloaded:
-          cloudnativepg:
-            gnetId: 20417
-            revision: 4
-            datasource: Prometheus
-          globalperf:
-            gnetId: 21839
-            revision: 1
-            datasource: Prometheus
-          persistentoverview:
-            gnetId: 13646
-            revision: 2
-            datasource: Prometheus
-          mktexporter:
-            gnetId: 13679
-            revision: 23
-            datasource: Prometheus
-          k8sdashboard:
-            gnetId: 15661
-            revision: 2
-            datasource: Prometheus
-          pvoverview:
-            gnetId: 13646
-            revision: 2
-            datasource: Prometheus
-#          node-exporter:
-#            gnetId: 1860
-#            revision: 37
-#            datasource: Prometheus
       grafana.ini:
         server:
           root_url: https://grafana.cappyt.sh
