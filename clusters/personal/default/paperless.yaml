@@ -1,3 +1,4 @@
+---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
@@ -14,6 +15,24 @@ spec:
       remoteRef:
         key: /default/paperless/paperless-secret-key
 ---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: paperless-oidc-secret
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: paperless-oidc-secret
+  data:
+    - secretKey: client-id
+      remoteRef:
+        key: /default/paperless/oidc-id
+    - secretKey: client-secret
+      remoteRef:
+        key: /default/paperless/oidc-secret
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -79,6 +98,21 @@ spec:
               value: Europe/Rome
             - name: PAPERLESS_OCR_LANGUAGE
               value: ita
+            - name: OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-oidc-secret
+                  key: client-id
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-oidc-secret
+                  key: client-secret
+            - name: PAPERLESS_APPS
+              value: "allauth.socialaccount.providers.openid_connect"
+            - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
+              value: >-
+                {"openid_connect": {"SCOPE": ["openid", "profile", "email"], "OAUTH_PKCE_ENABLED": true, "APPS": [{"provider_id": "cappys", "name": "Cappy's", "client_id": "$(OIDC_CLIENT_ID)", "secret": "$(OIDC_CLIENT_SECRET)", "settings": {"server_url": "https://auth.cappyt.sh/webman/sso", "token_auth_method": "client_secret_post"}}]}}
           resources:
             limits:
               cpu: '1'
@@ -251,3 +285,4 @@ spec:
     volumeSnapshot:
       online: true
       snapshotOwnerReference: none
+---
