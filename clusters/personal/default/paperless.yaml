@@ -33,6 +33,7 @@ spec:
     - secretKey: client-secret
       remoteRef:
         key: /default/paperless/oidc-secret
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -111,7 +112,8 @@ spec:
             - name: PAPERLESS_APPS
               value: "allauth.socialaccount.providers.openid_connect"
             - name: PAPERLESS_SOCIALACCOUNT_PROVIDERS
-              value: '{"openid_connect": {"SCOPE": ["openid", "profile", "email"], "OAUTH_PKCE_ENABLED": true, "APPS": [{"provider_id": "cappys", "name": "Cappys", "client_id": "$(OIDC_CLIENT_ID)", "secret": "$(OIDC_CLIENT_SECRET)", "settings": {"server_url": "https://auth.cappyt.sh/webman/sso", "token_auth_method": "client_secret_post"}}]}}'
+              value: >-
+                {"openid_connect": {"SCOPE": ["openid", "profile", "email"], "OAUTH_PKCE_ENABLED": true, "APPS": [{"provider_id": "cappys", "name": "Cappy's", "client_id": "$(OIDC_CLIENT_ID)", "secret": "$(OIDC_CLIENT_SECRET)", "settings": {"server_url": "https://auth.cappyt.sh/webman/sso", "token_auth_method": "client_secret_post"}}]}}
           resources:
             limits:
               cpu: '1'
