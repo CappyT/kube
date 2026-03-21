@@ -98,6 +98,9 @@ spec:
   - name: pop3s
     port: 995
     targetPort: 995
+  - name: sieve
+    port: 4190
+    targetPort: 4190
   selector:
     app: stalwart
 ---
@@ -121,9 +124,6 @@ spec:
   - name: pop3
     port: 110
     targetPort: 110
-  - name: sieve
-    port: 4190
-    targetPort: 4190
   selector:
     app: stalwart
 ---
