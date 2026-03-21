@@ -206,7 +206,7 @@ spec:
             - name: ROUNDCUBEMAIL_SKIN
               value: "elastic"
             - name: ROUNDCUBEMAIL_PLUGINS
-              value: "archive,zipdownload,managesieve"
+              value: "archive,zipdownload,managesieve,markasjunk,attachment_reminder,vcard_attachments"
           volumeMounts:
             - name: sqlite-data
               mountPath: /var/roundcube/db
