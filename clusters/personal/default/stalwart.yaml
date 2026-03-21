@@ -212,6 +212,9 @@ spec:
               mountPath: /var/roundcube/db
         - name: managesieve-proxy
           image: alpine/socat:latest
+          securityContext:
+            runAsUser: 1000
+            runAsNonRoot: true
           command: 
             - "socat"
             - "TCP-LISTEN:4190,fork,reuseaddr"
