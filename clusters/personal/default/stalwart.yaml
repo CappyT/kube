@@ -210,6 +210,19 @@ spec:
           volumeMounts:
             - name: sqlite-data
               mountPath: /var/roundcube/db
+        - name: managesieve-proxy
+          image: alpine/socat:latest
+          command: 
+            - "socat"
+            - "TCP-LISTEN:4190,fork,reuseaddr"
+            - "TCP:stalwart:4190"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
       volumes:
         - name: sqlite-data
           persistentVolumeClaim:
