@@ -200,9 +200,9 @@ spec:
             - name: ROUNDCUBEMAIL_DEFAULT_PORT
               value: "993"
             - name: ROUNDCUBEMAIL_SMTP_SERVER
-              value: "tls://post.cappyt.sh"
+              value: "ssl://post.cappyt.sh"
             - name: ROUNDCUBEMAIL_SMTP_PORT
-              value: "587"
+              value: "465"
             - name: ROUNDCUBEMAIL_SKIN
               value: "elastic"
             - name: ROUNDCUBEMAIL_PLUGINS
