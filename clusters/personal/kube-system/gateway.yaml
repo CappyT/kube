@@ -12,6 +12,7 @@ spec:
     annotations:
       io.cilium/lb-ipam-ips: "185.242.182.145"
       lbipam.cilium.io/sharing-key: "main-ip"
+      lbipam.cilium.io/sharing-cross-namespace: "default"
   gatewayClassName: cilium
   listeners:
   - name: http
