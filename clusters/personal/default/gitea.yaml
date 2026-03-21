@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitea
+  name: gitea-ssh
   namespace: default
   annotations:
     io.cilium/lb-ipam-ips: "185.242.182.145"
