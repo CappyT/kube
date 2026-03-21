@@ -210,26 +210,16 @@ spec:
           volumeMounts:
             - name: sqlite-data
               mountPath: /var/roundcube/db
-        - name: managesieve-proxy
-          image: alpine/socat:latest
-          securityContext:
-            runAsUser: 1000
-            runAsNonRoot: true
-          command: 
-            - "socat"
-            - "TCP-LISTEN:4190,fork,reuseaddr"
-            - "TCP:stalwart:4190"
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              cpu: 50m
-              memory: 32Mi
+            - name: managesieve-config
+              mountPath: /var/roundcube/config/managesieve.inc.php
+              subPath: managesieve.inc.php
       volumes:
         - name: sqlite-data
           persistentVolumeClaim:
             claimName: roundcube-pvc
+        - name: managesieve-config
+          configMap:
+            name: roundcube-managesieve-config
 ---
 apiVersion: v1
 kind: Service
@@ -276,3 +266,21 @@ spec:
     providerSpecific:
       - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
         value: "false"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: roundcube-managesieve-config
+  namespace: default
+data:
+  managesieve.inc.php: |
+    <?php
+    // Costringiamo Roundcube a fare l'handshake TLS
+    $config['managesieve_host'] = 'tls://post.cappyt.sh';
+    $config['managesieve_port'] = 4190;
+    $config['managesieve_conn_options'] = array(
+      'ssl' => array(
+        'verify_peer'       => false,
+        'verify_peer_name'  => false,
+      ),
+    );
