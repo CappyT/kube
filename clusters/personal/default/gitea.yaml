@@ -62,6 +62,7 @@ spec:
   - port: 22
     targetPort: ssh
     name: ssh
+    protocol: TCP
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
