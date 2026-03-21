@@ -36,16 +36,29 @@ kind: Service
 metadata:
   name: gitea
   namespace: default
-  annotations:
-    metallb.universe.tf/address-pool: private-pool
 spec:
-  type: LoadBalancer
   selector:
     app: gitea
   ports:
   - port: 80
     targetPort: http
     name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea
+  namespace: default
+  annotations:
+    io.cilium/lb-ipam-ips: "185.242.182.145"
+    lbipam.cilium.io/sharing-key: "main-ip"
+  labels:
+    type: public
+spec:
+  type: LoadBalancer
+  selector:
+    app: gitea
+  ports:
   - port: 22
     targetPort: ssh
     name: ssh
