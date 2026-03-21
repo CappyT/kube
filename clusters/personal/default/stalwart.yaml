@@ -98,9 +98,6 @@ spec:
   - name: pop3s
     port: 995
     targetPort: 995
-  - name: sieve
-    port: 4190
-    targetPort: 4190
   selector:
     app: stalwart
 ---
@@ -124,6 +121,9 @@ spec:
   - name: pop3
     port: 110
     targetPort: 110
+  - name: sieve
+    port: 4190
+    targetPort: 4190
   selector:
     app: stalwart
 ---
@@ -275,8 +275,7 @@ metadata:
 data:
   managesieve.inc.php: |
     <?php
-    // Costringiamo Roundcube a fare l'handshake TLS
-    $config['managesieve_host'] = 'tls://post.cappyt.sh';
+    $config['managesieve_host'] = 'tls://stalwart-private';
     $config['managesieve_port'] = 4190;
     $config['managesieve_conn_options'] = array(
       'ssl' => array(
