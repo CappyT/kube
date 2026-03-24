@@ -173,7 +173,7 @@ spec:
     spec:
       containers:
       - name: tika-paperless
-        image: apache/tika:3.2.3.0-full
+        image: apache/tika:3.3.0.0-full
         imagePullPolicy: IfNotPresent
         resources:
           limits:
