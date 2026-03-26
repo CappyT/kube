@@ -135,7 +135,7 @@ spec:
     spec:
       containers:
         - name: linkwarden
-          image: ghcr.io/linkwarden/linkwarden:v2.13.5
+          image: ghcr.io/linkwarden/linkwarden:v2.14.0
           imagePullPolicy: Always
           env:
             - name: MEILISEARCH_HOST
