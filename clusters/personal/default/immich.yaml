@@ -73,6 +73,12 @@ spec:
       labels:
         app: immich-ml
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        runAsNonRoot: true
       volumes:
       - name: model-cache
         persistentVolumeClaim:
@@ -140,6 +146,12 @@ spec:
       labels:
         app: immich
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+        runAsNonRoot: true
       volumes:
       - name: library
         persistentVolumeClaim:
