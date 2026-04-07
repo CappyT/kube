@@ -60,6 +60,11 @@ spec:
       labels:
         app: linkwarden-meilisearch
     spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 1000
+        runAsNonRoot: true
       containers:
         - name: meilisearch
           image: getmeili/meilisearch:v1.12.8
@@ -133,6 +138,11 @@ spec:
       labels:
         app: linkwarden
     spec:
+      securityContext:
+        runAsUser: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        fsGroup: 1000
+        runAsNonRoot: true
       containers:
         - name: linkwarden
           image: ghcr.io/linkwarden/linkwarden:v2.14.0
