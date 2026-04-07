@@ -49,6 +49,11 @@ spec:
       labels:
         app: paperless
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: paperless
           image: ghcr.io/paperless-ngx/paperless-ngx:2.20.13
@@ -171,6 +176,9 @@ spec:
       labels:
         app: tika-paperless
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
       containers:
       - name: tika-paperless
         image: apache/tika:3.3.0.0-full
@@ -209,6 +217,9 @@ spec:
       labels:
         app: paperless-gotenberg
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
       containers:
       - name: paperless-gotenberg
         image: docker.io/gotenberg/gotenberg:8.30
@@ -242,6 +253,11 @@ metadata:
   name: paperless-dragonfly
   namespace: default
 spec:
+  containerSecurityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    privileged: false
+    runAsNonRoot: true
   replicas: 1
   resources:
     requests:
