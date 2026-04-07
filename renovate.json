@@ -36,25 +36,25 @@
       "description": "Extract version for termix (remove release- prefix)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/lukegus/termix"],
-      "extractVersion": "^release-(?<version>.*)$"
+      "versioning": "regex:^release-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     },
     {
-      "description": "Keep -apache-nonroot suffix for roundcubemail",
+      "description": "Parse version for roundcubemail (keep apache-nonroot)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["roundcube/roundcubemail"],
-      "allowedVersions": "/-apache-nonroot$/"
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-apache-nonroot$"
     },
     {
-      "description": "Keep -full suffix for apache tika",
+      "description": "Parse version for apache tika (keep -full)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["apache/tika"],
-      "allowedVersions": "/-full$/"
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-full$"
     },
     {
-      "description": "Extract version for vectorchord keeping PG17 base",
+      "description": "Parse version for vectorchord (keep PG17)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
-      "extractVersion": "^17-(?<version>.*)$"
+      "versioning": "regex:^17-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
     }
   ]
 }
