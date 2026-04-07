@@ -67,9 +67,6 @@ spec:
           volumeMounts:
             - name: anisette
               mountPath: /root/.config/anisette-v3/
-          securityContext:
-            runAsUser: 0
-            runAsGroup: 0
 ---
 apiVersion: v1
 kind: Service
