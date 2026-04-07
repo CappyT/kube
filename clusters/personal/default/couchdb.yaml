@@ -24,6 +24,11 @@ spec:
         name: couchdb
         namespace: default
   values:
+    createAdminSecret: false
+    extraSecretName: "couchdb-admin-secret"
+    adminUsernameKey: "adminUsername"
+    adminPasswordKey: "adminPassword"
+    cookieAuthSecretKey: "cookieAuthSecret"
     couchdbConfig:
       chttpd:
         bind_address: any
@@ -71,3 +76,25 @@ spec:
                           runAsGroup: 5984
                           runAsNonRoot: true
                           allowPrivilegeEscalation: false
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: couchdb-admin
+  namespace: default
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: infisical
+  target:
+    name: couchdb-admin-secret
+  data:
+    - secretKey: adminUsername
+      remoteRef:
+        key: /default/couchdb/admin-username
+    - secretKey: adminPassword
+      remoteRef:
+        key: /default/couchdb/admin-password
+    - secretKey: cookieAuthSecret
+      remoteRef:
+        key: /default/couchdb/cookie-auth-secret
