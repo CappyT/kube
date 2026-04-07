@@ -35,6 +35,9 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/gitea
+        - name: data
+          mountPath: /etc/gitea
+          subPath: gitea/conf
 ---
 apiVersion: v1
 kind: Service
