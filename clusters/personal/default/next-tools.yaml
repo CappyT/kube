@@ -13,6 +13,9 @@ spec:
       labels:
         app: next-tools
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
       containers:
       - name: next-tools
         image: ghcr.io/willjayyyy/next-tools:1.9.6
