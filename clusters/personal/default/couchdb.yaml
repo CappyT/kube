@@ -29,6 +29,7 @@ spec:
     adminUsernameKey: "adminUsername"
     adminPasswordKey: "adminPassword"
     cookieAuthSecretKey: "cookieAuthSecret"
+    erlangCookieKey: "erlangCookie"
     couchdbConfig:
       chttpd:
         bind_address: any
@@ -98,3 +99,6 @@ spec:
     - secretKey: cookieAuthSecret
       remoteRef:
         key: /default/couchdb/cookie-auth-secret
+    - secretKey: erlangCookie
+      remoteRef:
+        key: /default/couchdb/erlang-cookie
