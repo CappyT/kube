@@ -16,7 +16,9 @@ spec:
         app: fmd-server
     spec:
       securityContext:
-        fsGroupChangePolicy: Always
+        runAsUser: 1000
+        runAsNonRoot: true
+        fsGroupChangePolicy: OnRootMismatch
         fsGroup: 1000
       containers:
       - name: fmd-server
