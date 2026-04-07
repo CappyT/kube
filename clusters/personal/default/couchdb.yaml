@@ -47,3 +47,27 @@ spec:
       enabled: true
       size: 10Gi
       storageClass: single
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: StatefulSet
+              name: couchdb-obsidian-couchdb # Il nome generato dalla chart
+            patch: |
+              apiVersion: apps/v1
+              kind: StatefulSet
+              metadata:
+                name: couchdb-obsidian-couchdb
+              spec:
+                template:
+                  spec:
+                    securityContext:
+                      fsGroup: 5984
+                      fsGroupChangePolicy: OnRootMismatch
+                    containers:
+                      - name: couchdb
+                        securityContext:
+                          runAsUser: 5984
+                          runAsGroup: 5984
+                          runAsNonRoot: true
+                          allowPrivilegeEscalation: false
