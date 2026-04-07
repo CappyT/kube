@@ -32,6 +32,7 @@ spec:
       containers:
         - name: macless-haystack
           image: christld/macless-haystack:v2.7.2
+          command: ["python", "-u", "endpoint/mh_endpoint.py"]
           env:
             - name: GIT_CONFIG_COUNT
               value: "1"
