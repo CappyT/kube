@@ -31,6 +31,30 @@
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["kubernetes-sigs/gateway-api"],
       "enabled": false
+    },
+    {
+      "description": "Extract version for termix (remove release- prefix)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/lukegus/termix"],
+      "extractVersion": "^release-(?<version>.*)$"
+    },
+    {
+      "description": "Keep -apache-nonroot suffix for roundcubemail",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["roundcube/roundcubemail"],
+      "allowedVersions": "/-apache-nonroot$/"
+    },
+    {
+      "description": "Keep -full suffix for apache tika",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["apache/tika"],
+      "allowedVersions": "/-full$/"
+    },
+    {
+      "description": "Extract version for vectorchord keeping PG17 base",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
+      "extractVersion": "^17-(?<version>.*)$"
     }
   ]
 }
