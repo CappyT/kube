@@ -220,7 +220,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: paperless-gotenberg
-        image: docker.io/gotenberg/gotenberg:8.30
+        image: docker.io/gotenberg/gotenberg:8.31
         imagePullPolicy: IfNotPresent
         args:
           - "gotenberg"
