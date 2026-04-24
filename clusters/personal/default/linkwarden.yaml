@@ -145,7 +145,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: linkwarden
-          image: ghcr.io/linkwarden/linkwarden:v2.14.0
+          image: ghcr.io/linkwarden/linkwarden:v2.14.1
           imagePullPolicy: Always
           env:
             - name: MEILISEARCH_HOST
