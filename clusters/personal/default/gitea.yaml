@@ -25,7 +25,7 @@ spec:
             claimName: data-gitea
       containers:
       - name: gitea
-        image: gitea/gitea:1.26.0-rootless
+        image: gitea/gitea:1.26.1-rootless
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 2222
