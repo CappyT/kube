@@ -128,8 +128,15 @@ data:
     }
 
     // loki.source.kubernetes tails logs from Kubernetes containers using the Kubernetes API.
-    loki.source.kubernetes "pod_logs" {
-      targets    = discovery.relabel.pod_logs.output
+    // 1. local.file_match prende in pasto i tuoi target (con il magico __path__ che hai creato) 
+    // e scansiona i file fisici sul nodo
+    local.file_match "pod_logs" {
+      path_targets = discovery.relabel.pod_logs.output
+    }
+
+    // 2. loki.source.file legge fisicamente quei file dal disco, senza disturbare le API di K8s
+    loki.source.file "pod_logs" {
+      targets    = local.file_match.pod_logs.targets
       forward_to = [loki.process.pod_logs.receiver]
     }
 
