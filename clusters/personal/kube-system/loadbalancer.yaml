@@ -6,9 +6,6 @@ spec:
   interfaces:
     - ^enp.*\.95$
     - ^eth.*\.95$
-    # workers that have been migrated to a bridge for KubeVirt VMs carry the
-    # node IP (and thus the L2-announced private LB range) on br0 instead of enpXX.95
-    - ^br0$
   loadBalancerIPs: true
   nodeSelector:
     matchExpressions:
