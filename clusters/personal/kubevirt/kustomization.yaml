@@ -36,6 +36,13 @@ patches:
           pod-security.kubernetes.io/enforce: privileged
           pod-security.kubernetes.io/audit: privileged
           pod-security.kubernetes.io/warn: privileged
+  - patch: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: cdis.cdi.kubevirt.io
+        annotations:
+          kustomize.toolkit.fluxcd.io/ssa: Ignore
 images:
   - name: ghcr.io/k8snetworkplumbingwg/multus-cni
     newTag: v4.2.4-thick
