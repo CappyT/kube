@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cni-plugins-installer
+  namespace: kube-system
+  labels:
+    app: cni-plugins-installer
+spec:
+  selector:
+    matchLabels:
+      app: cni-plugins-installer
+  template:
+    metadata:
+      labels:
+        app: cni-plugins-installer
+    spec:
+      hostNetwork: true
+      priorityClassName: system-node-critical
+      tolerations:
+        - operator: Exists
+      initContainers:
+        - name: install-cni-plugins
+          image: docker.io/curlimages/curl:8.20.0
+          # renovate: datasource=github-releases depName=containernetworking/plugins
+          env:
+            - name: CNI_PLUGINS_VERSION
+              value: v1.9.1
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              VERSION="${CNI_PLUGINS_VERSION}"
+              cd /host-cni-bin
+              curl -fsSL "https://github.com/containernetworking/plugins/releases/download/${VERSION}/cni-plugins-linux-amd64-${VERSION}.tgz" \
+                | tar -xz ./bridge ./tuning ./host-local ./static ./loopback ./portmap ./firewall ./vlan ./macvlan
+          volumeMounts:
+            - name: cni-bin
+              mountPath: /host-cni-bin
+      containers:
+        - name: pause
+          image: registry.k8s.io/pause:3.10
+          resources:
+            requests:
+              cpu: 10m
+              memory: 8Mi
+            limits:
+              cpu: 10m
+              memory: 16Mi
+      volumes:
+        - name: cni-bin
+          hostPath:
+            path: /opt/cni/bin
+            type: DirectoryOrCreate

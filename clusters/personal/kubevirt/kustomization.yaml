@@ -1,0 +1,42 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # renovate: datasource=github-releases depName=kubevirt/kubevirt
+  - https://github.com/kubevirt/kubevirt/releases/download/v1.8.2/kubevirt-operator.yaml
+  - kubevirt-cr.yaml
+  # renovate: datasource=github-releases depName=kubevirt/containerized-data-importer
+  - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.65.0/cdi-operator.yaml
+  - cdi-cr.yaml
+  # renovate: datasource=github-releases depName=k8snetworkplumbingwg/multus-cni
+  - https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/v4.2.4/deployments/multus-daemonset-thick.yml
+  - cni-plugins-installer.yaml
+  - network-attachment-definition.yaml
+  - storageclass.yaml
+  # renovate: datasource=github-releases depName=kubevirt-manager/kubevirt-manager
+  - https://github.com/kubevirt-manager/kubevirt-manager/releases/download/v1.5.4/bundled-v1.5.4.yaml
+  - oauth2-proxy.yaml
+  - external-secret.yaml
+  - httproute.yaml
+  - dns.yaml
+patches:
+  - patch: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: kubevirt
+        labels:
+          pod-security.kubernetes.io/enforce: privileged
+          pod-security.kubernetes.io/audit: privileged
+          pod-security.kubernetes.io/warn: privileged
+  - patch: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: cdi
+        labels:
+          pod-security.kubernetes.io/enforce: privileged
+          pod-security.kubernetes.io/audit: privileged
+          pod-security.kubernetes.io/warn: privileged
+images:
+  - name: ghcr.io/k8snetworkplumbingwg/multus-cni
+    newTag: v4.2.4-thick

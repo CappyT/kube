@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy
+  namespace: kubevirt-manager
+  labels:
+    app: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: oauth2-proxy
+    spec:
+      containers:
+        - name: oauth2-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.15.2
+          args:
+            - --provider=oidc
+            - --oidc-issuer-url=https://auth.cappyt.sh/webman/sso
+            - --oidc-email-claim=sub
+            - --code-challenge-method=S256
+            - --scope=openid profile email
+            - --email-domain=*
+            - --upstream=http://kubevirt-manager.kubevirt-manager.svc.cluster.local:8080
+            - --http-address=0.0.0.0:4180
+            - --redirect-url=https://kubevirt.cappyt.sh/oauth2/callback
+            - --reverse-proxy=true
+            - --cookie-secure=true
+            - --skip-provider-button=true
+            - --set-xauthrequest=true
+          envFrom:
+            - secretRef:
+                name: kubevirt-manager-oidc
+          ports:
+            - name: http
+              containerPort: 4180
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65534
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy
+  namespace: kubevirt-manager
+  labels:
+    app: oauth2-proxy
+spec:
+  type: ClusterIP
+  selector:
+    app: oauth2-proxy
+  ports:
+    - name: http
+      port: 4180
+      targetPort: 4180

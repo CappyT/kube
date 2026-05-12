@@ -1,0 +1,15 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: kubevirt-block
+provisioner: linstor.csi.linbit.com
+parameters:
+  linstor.csi.linbit.com/storagePool: nvme_pool
+  linstor.csi.linbit.com/placementCount: "3"
+  property.linstor.csi.linbit.com/DrbdOptions/Net/allow-two-primaries: "yes"
+  DrbdOptions/Disk/disk-flushes: "no"
+  DrbdOptions/Disk/md-flushes: "no"
+  DrbdOptions/Net/max-buffers: "10000"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
