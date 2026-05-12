@@ -31,6 +31,11 @@ spec:
   values:
     bpf:
       masquerade: true
+    # let VLAN 96 (the KubeVirt VM bridge `br0` lives on enp89s0.96) pass through the BPF
+    # datapath on the parent native device enp89s0 — Cilium doesn't manage that sub-interface
+    # (no IP) so without this it drops the traffic ("VLAN traffic disallowed by VLAN filter").
+    vlanBPFBypass:
+      - 96
     cgroup:
       autoMount:
         enabled: false
