@@ -13,6 +13,19 @@
       "/clusters/.*/.*\\.yaml$/"
     ]
   },
+  "customManagers": [
+    {
+      "description": "Track versions pinned via '# renovate: datasource=... depName=...' comments (e.g. KubeVirt/CDI/Multus release-asset URLs)",
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/clusters/.*\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s+[\\s\\S]*?(?<currentValue>v?\\d+\\.\\d+\\.\\d+(?:-\\w+)?)"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    }
+  ],
   "packageRules": [
     {
       "description": "Lock MySQL to v8",
