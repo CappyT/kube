@@ -1,0 +1,30 @@
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+  namespace: kubevirt
+spec:
+  certificateRotateStrategy: {}
+  customizeComponents: {}
+  imagePullPolicy: IfNotPresent
+  workloadUpdateStrategy:
+    workloadUpdateMethods:
+      - LiveMigrate
+  configuration:
+    developerConfiguration:
+      featureGates:
+        - HotplugVolumes
+        - VMLiveUpdateFeatures
+    migrations:
+      completionTimeoutPerGiB: 800
+      progressTimeout: 150
+      parallelMigrationsPerCluster: 2
+      parallelOutboundMigrationsPerNode: 1
+  infra:
+    nodePlacement:
+      nodeSelector:
+        kubernetes.io/os: linux
+  workloads:
+    nodePlacement:
+      nodeSelector:
+        node-type: nvme
