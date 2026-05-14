@@ -43,6 +43,16 @@ patches:
         name: cdis.cdi.kubevirt.io
         annotations:
           kustomize.toolkit.fluxcd.io/ssa: Ignore
+  - target:
+      kind: DaemonSet
+      name: kube-multus-ds
+      namespace: kube-system
+    patch: |
+      - op: replace
+        path: /spec/template/spec/containers/0/resources
+        value:
+          requests: {cpu: 100m, memory: 256Mi}
+          limits: {cpu: 500m, memory: 768Mi}
 images:
   - name: ghcr.io/k8snetworkplumbingwg/multus-cni
     newTag: v4.2.4-thick
