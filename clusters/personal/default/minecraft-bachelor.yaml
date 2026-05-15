@@ -8,7 +8,7 @@ metadata:
     modpack: bachelor
 spec:
   updateStrategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: minecraft
