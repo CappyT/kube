@@ -49,15 +49,13 @@ spec:
             - name: MAX_MEMORY
               value: 6G
             - name: MOTD
-              value: Juje koochoolo on a boat! Watch out!
+              value: Susnautica 2 serben
             - name: SNOOPER
               value: 'false'
             - name: PVP
               value: 'false'
             - name: ENABLE_WHITELIST
-              value: 'true'
-            - name: WHITELIST
-              value: CappyT,GodMother95
+              value: 'false'
             - name: RCON_PASSWORD
               valueFrom:
                 secretKeyRef:
