@@ -22,7 +22,7 @@ spec:
             optional: false
       containers:
       - name: gmessages-bridge
-        image: dock.mau.dev/mautrix/gmessages:v26.04
+        image: dock.mau.dev/mautrix/gmessages:v26.05
         command:
           - "/usr/bin/mautrix-gmessages"
           - "-c"
