@@ -181,7 +181,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: roundcube
-          image: roundcube/roundcubemail:1.6.15-apache-nonroot
+          image: roundcube/roundcubemail:1.7.0-apache-nonroot
           ports:
             - containerPort: 8000
               name: http
