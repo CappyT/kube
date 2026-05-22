@@ -40,6 +40,12 @@
       "allowedVersions": "v1.12.x"
     },
     {
+      "description": "Lock stalwart to v0.16.x: 0.x majors are breaking, migrate deliberately (see v0_16.md)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["stalwartlabs/stalwart"],
+      "allowedVersions": "v0.16.x"
+    },
+    {
       "description": "Disable updates for gateway-api",
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["kubernetes-sigs/gateway-api"],

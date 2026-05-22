@@ -15,6 +15,10 @@ spec:
       labels:
         app: stalwart
     spec:
+      securityContext:
+        runAsUser: 2000
+        runAsGroup: 2000
+        runAsNonRoot: true
       containers:
       - name: stalwart
         image: "stalwartlabs/stalwart:v0.16.6"
@@ -51,11 +55,29 @@ spec:
         - containerPort: 4190
         volumeMounts:
         - name: stalwart-volume
-          mountPath: /opt/stalwart
+          mountPath: /var/lib/stalwart
+        - name: stalwart-config
+          mountPath: /etc/stalwart/config.json
+          subPath: config.json
       volumes:
       - name: stalwart-volume
         persistentVolumeClaim:
           claimName: stalwart-pvc
+      - name: stalwart-config
+        configMap:
+          name: stalwart-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stalwart-config
+  namespace: default
+data:
+  config.json: |
+    {
+      "@type": "RocksDb",
+      "path": "/var/lib/stalwart/data"
+    }
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
