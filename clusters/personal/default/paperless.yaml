@@ -179,7 +179,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: tika-paperless
-        image: apache/tika:3.3.0.0-full
+        image: apache/tika:3.3.1.0-full
         imagePullPolicy: IfNotPresent
         resources:
           limits:
