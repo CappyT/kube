@@ -21,7 +21,7 @@ spec:
         runAsNonRoot: true
       containers:
       - name: stalwart
-        image: "stalwartlabs/stalwart:v0.16.6"
+        image: "stalwartlabs/stalwart:v0.16.7"
         imagePullPolicy: IfNotPresent
         resources:
           requests:
