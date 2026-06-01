@@ -7,7 +7,7 @@ spec:
   imagePullPolicy: Always
   instances: 3
   storage:
-    size: 30Gi
+    size: 50Gi
     storageClass: single
   monitoring:
     disableDefaultQueries: false
