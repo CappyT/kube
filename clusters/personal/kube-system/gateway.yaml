@@ -57,6 +57,18 @@ spec:
       certificateRefs:
         - name: thestashie-one-cert
           kind: Secret
+  - name: https-nolicen-wildcard
+    protocol: HTTPS
+    port: 443
+    hostname: '*.nolicen.se'
+    allowedRoutes:
+      namespaces:
+        from: All
+    tls:
+      mode: Terminate
+      certificateRefs:
+        - name: wildcard-nolicen-se-cert
+          kind: Secret
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
