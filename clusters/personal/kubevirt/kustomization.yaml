@@ -8,7 +8,7 @@ resources:
   - https://github.com/kubevirt/containerized-data-importer/releases/download/v1.65.0/cdi-operator.yaml
   - cdi-cr.yaml
   # renovate: datasource=github-releases depName=k8snetworkplumbingwg/multus-cni
-  - https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/v4.2.4/deployments/multus-daemonset-thick.yml
+  - https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/v4.3.0/deployments/multus-daemonset-thick.yml
   - network-attachment-definition.yaml
   - storageclass.yaml
   # renovate: datasource=github-releases depName=kubevirt-manager/kubevirt-manager
