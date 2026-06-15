@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wedding-landing
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wedding-landing
+  template:
+    metadata:
+      labels:
+        app: wedding-landing
+    spec:
+      imagePullSecrets:
+        - name: cappyt
+      securityContext:
+        runAsNonRoot: true
+      containers:
+        - name: wedding-landing
+          image: git.cappyt.sh/cappyt/wedding-landing:7923d1d
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 200m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wedding-landing
+  namespace: default
+spec:
+  selector:
+    app: wedding-landing
+  ports:
+    - port: 80
+      targetPort: http
+      name: http
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: wedding-landing-route
+  namespace: default
+spec:
+  hostnames:
+    - wedding.cappyt.sh
+  parentRefs:
+    - name: public-gateway
+      namespace: kube-system
+  rules:
+    - backendRefs:
+        - name: wedding-landing
+          port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: wedding-landing-dns
+  namespace: default
+spec:
+  endpoints:
+    - dnsName: wedding.cappyt.sh
+      recordTTL: 180
+      recordType: A
+      targets:
+        - 185.242.182.145
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
