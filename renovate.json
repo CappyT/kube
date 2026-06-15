@@ -74,6 +74,12 @@
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/tensorchord/cloudnative-vectorchord"],
       "versioning": "regex:^17-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+    },
+    {
+      "description": "Parse version for gitea runner (keep -dind suffix)",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["gitea/runner"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)-dind$"
     }
   ]
 }

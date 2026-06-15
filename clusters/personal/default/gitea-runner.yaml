@@ -41,7 +41,7 @@ data:
       privileged: false
       options:
       valid_volumes: []
-      docker_host: ""
+      docker_host: "-"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -81,12 +81,12 @@ spec:
         - name: config
           configMap:
             name: gitea-runner-config
-        - name: docker-certs
-          emptyDir: {}
       containers:
         - name: runner
-          image: gitea/act_runner:0.2.13
+          image: gitea/runner:1.0.8-dind
           imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true
           env:
             - name: GITEA_INSTANCE_URL
               value: "http://gitea.default.svc.cluster.local"
@@ -99,34 +99,6 @@ spec:
               value: "k8s-runner"
             - name: CONFIG_FILE
               value: "/config/config.yaml"
-            - name: DOCKER_HOST
-              value: "tcp://localhost:2376"
-            - name: DOCKER_CERT_PATH
-              value: "/certs/client"
-            - name: DOCKER_TLS_VERIFY
-              value: "1"
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: "1"
-              memory: 512Mi
-          volumeMounts:
-            - name: data
-              mountPath: /data
-            - name: config
-              mountPath: /config
-            - name: docker-certs
-              mountPath: /certs
-        - name: dind
-          image: docker:27-dind
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            privileged: true
-          env:
-            - name: DOCKER_TLS_CERTDIR
-              value: "/certs"
           resources:
             requests:
               cpu: 250m
@@ -135,8 +107,10 @@ spec:
               cpu: "4"
               memory: 4Gi
           volumeMounts:
-            - name: docker-certs
-              mountPath: /certs
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /config
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
