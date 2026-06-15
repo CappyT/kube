@@ -19,7 +19,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: wedding-landing
-          image: git.cappyt.sh/cappyt/wedding-landing:7923d1d
+          image: git.cappyt.sh/cappyt/wedding-landing:v0.1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
