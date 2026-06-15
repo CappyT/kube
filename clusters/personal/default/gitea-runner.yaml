@@ -69,7 +69,7 @@ spec:
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  storageClassName: single
+  storageClassName: replica
 ---
 apiVersion: apps/v1
 kind: Deployment
