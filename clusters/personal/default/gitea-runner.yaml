@@ -41,7 +41,9 @@ data:
       privileged: false
       options:
       valid_volumes: []
-      docker_host: "-"
+      # "automount": trova il docker daemon e monta /var/run/docker.sock nei
+      # job-container, così `docker build`/`push` funzionano dentro i job
+      docker_host: "automount"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
