@@ -49,3 +49,24 @@ spec:
             limits:
               cpu: 1000m
               memory: 2Gi
+  patches:
+    - target:
+        kind: Deployment
+        name: linstor-csi-controller
+      patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: linstor-csi-controller
+        spec:
+          template:
+            spec:
+              containers:
+                - name: csi-snapshotter
+                  env:
+                    - name: WORKER_THREADS
+                      value: "1"
+                - name: csi-provisioner
+                  env:
+                    - name: WORKER_THREADS
+                      value: "1"

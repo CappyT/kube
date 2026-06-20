@@ -18,6 +18,9 @@ spec:
       repository: velero/velero
       tag: v1.18.1
     deployNodeAgent: true
+    nodeAgent:
+      extraArgs:
+        - --node-agent-configmap=velero-node-agent-config
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.14.1
