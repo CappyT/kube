@@ -49,4 +49,4 @@ spec:
     credentials:
       useSecret: true
       name: velero-minio-credentials
-    upgradeCRDs: false
+    upgradeCRDs: true
