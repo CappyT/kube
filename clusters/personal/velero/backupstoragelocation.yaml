@@ -8,6 +8,6 @@ spec:
   objectStorage:
     bucket: k8s-backup
   config:
-    region: brescia
+    region: us-east-1
     s3ForcePathStyle: "true"
     s3Url: https://s3.cappyt.sh

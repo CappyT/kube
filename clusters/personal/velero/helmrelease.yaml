@@ -38,14 +38,14 @@ spec:
         provider: aws
         bucket: k8s-backup
         config:
-          region: brescia
+          region: us-east-1
           s3ForcePathStyle: "true"
           s3Url: https://s3.cappyt.sh
       volumeSnapshotLocation:
         - name: default
           provider: aws
           config:
-            region: brescia
+            region: us-east-1
     credentials:
       useSecret: true
       name: velero-minio-credentials
