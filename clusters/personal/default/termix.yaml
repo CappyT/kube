@@ -40,7 +40,7 @@ spec:
         fsGroupChangePolicy: "OnRootMismatch"
       containers:
         - name: termix 
-          image: ghcr.io/lukegus/termix:release-2.4.0
+          image: ghcr.io/lukegus/termix:release-2.4.1
           imagePullPolicy: Always
           securityContext:
             runAsUser: 1000
