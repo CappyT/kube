@@ -207,8 +207,8 @@ spec:
             cpu: 100m
             memory: 300Mi
           limits:
-            cpu: 2000m
-            memory: 4Gi
+            cpu: 4000m
+            memory: 8Gi
         volumeMounts:
           - name: library
             mountPath: /usr/src/app/upload
