@@ -214,33 +214,6 @@ spec:
             mountPath: /usr/src/app/upload
           - mountPath: /dev/dri
             name: dri-device
-        livenessProbe:
-          httpGet:
-            path: /api/server/ping
-            port: http
-            scheme: HTTP
-          timeoutSeconds: 1
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /api/server/ping
-            port: http
-            scheme: HTTP
-          timeoutSeconds: 1
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
-        startupProbe:
-          httpGet:
-            path: /api/server/ping
-            port: http
-            scheme: HTTP
-          timeoutSeconds: 1
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 30
 ---
 apiVersion: v1
 kind: Service
