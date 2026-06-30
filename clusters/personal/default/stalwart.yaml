@@ -97,13 +97,8 @@ kind: Service
 metadata:
   name: stalwart
   namespace: default
-  labels:
-      type: public
-  annotations:
-    io.cilium/lb-ipam-ips: "185.242.182.146"
 spec:
-  externalTrafficPolicy: Local
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - name: https
     port: 443
