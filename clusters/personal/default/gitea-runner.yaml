@@ -100,7 +100,7 @@ spec:
             claimName: cache-gitea-runner
       containers:
         - name: runner
-          image: gitea/runner:1.0.8-dind
+          image: gitea/runner:2.0.0-dind
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
