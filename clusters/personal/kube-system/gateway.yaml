@@ -77,6 +77,38 @@ spec:
         - kind: TCPRoute
       namespaces:
         from: All
+  - name: smtp
+    protocol: TCP
+    port: 25
+    allowedRoutes:
+      kinds:
+        - kind: TCPRoute
+      namespaces:
+        from: All
+  - name: smtps
+    protocol: TCP
+    port: 465
+    allowedRoutes:
+      kinds:
+        - kind: TCPRoute
+      namespaces:
+        from: All
+  - name: imaps
+    protocol: TCP
+    port: 993
+    allowedRoutes:
+      kinds:
+        - kind: TCPRoute
+      namespaces:
+        from: All
+  - name: pop3s
+    protocol: TCP
+    port: 995
+    allowedRoutes:
+      kinds:
+        - kind: TCPRoute
+      namespaces:
+        from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
