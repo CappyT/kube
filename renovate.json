@@ -46,12 +46,6 @@
       "allowedVersions": "v0.16.x"
     },
     {
-      "description": "Disable updates for gateway-api",
-      "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["kubernetes-sigs/gateway-api"],
-      "enabled": false
-    },
-    {
       "description": "Extract version for termix (remove release- prefix)",
       "matchDatasources": ["docker"],
       "matchPackageNames": ["ghcr.io/lukegus/termix"],
