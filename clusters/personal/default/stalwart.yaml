@@ -258,7 +258,7 @@ spec:
     recordTTL: 180
     recordType: A
     targets:
-    - 185.242.182.146
+    - 185.242.182.145
     providerSpecific:
       - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
         value: "false"
