@@ -67,6 +67,14 @@ spec:
               spec:
                 template:
                   spec:
+                    affinity:
+                      podAntiAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          - labelSelector:
+                              matchLabels:
+                                app: couchdb
+                                release: couchdb-obsidian
+                            topologyKey: kubernetes.io/hostname
                     securityContext:
                       fsGroup: 5984
                       fsGroupChangePolicy: OnRootMismatch
