@@ -7,9 +7,6 @@ spec:
     - name: nvme_pool
       zfsThinPool:
         zPool: nvme
-      source:
-        hostDevices:
-          - /dev/disk/by-path/pci-0000:01:00.0-nvme-1
   nodeSelector:
     storage-backend: zfs
   podTemplate:
