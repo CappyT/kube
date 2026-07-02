@@ -37,8 +37,6 @@ spec:
       value: "61440"
     - name: DrbdOptions/PeerDevice/c-min-rate
       value: "4096"
-    - name: DrbdOptions/auto-resync-after-disable
-      value: "False"
   controller:
     podTemplate:
       spec:
