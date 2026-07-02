@@ -9,5 +9,10 @@ data:
       "loadConcurrency": {
         "globalConfig": 1,
         "perNodeConfig": []
+      },
+      "backupPVC": {
+        "replica": {
+          "storageClass": "single"
+        }
       }
     }
