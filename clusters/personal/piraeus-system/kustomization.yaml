@@ -4,6 +4,7 @@ resources:
 - piraeus.yaml
 - linstor-cluster.yaml
 - linstor-nvme-cluster.yaml
+- linstor-zfs-cluster.yaml
 - linstor-node-connection.yaml
 - storageclass.yaml
 - snapshot-controller.yaml
