@@ -45,6 +45,10 @@ spec:
   imagePullPolicy: Always
   imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17-0.4.2
   instances: 3
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
   storage:
     size: 20Gi
     storageClass: single

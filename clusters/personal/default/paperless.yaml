@@ -289,6 +289,10 @@ metadata:
 spec:
   imagePullPolicy: Always
   instances: 3
+  affinity:
+    enablePodAntiAffinity: true
+    topologyKey: kubernetes.io/hostname
+    podAntiAffinityType: required
   storage:
     size: 15Gi
     storageClass: single
