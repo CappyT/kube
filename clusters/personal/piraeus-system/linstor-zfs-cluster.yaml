@@ -3,10 +3,6 @@ kind: LinstorSatelliteConfiguration
 metadata:
   name: nvme-pool-zfs
 spec:
-  storagePools:
-    - name: nvme_pool
-      zfsThinPool:
-        zPool: nvme
   nodeSelector:
     storage-backend: zfs
   podTemplate:
