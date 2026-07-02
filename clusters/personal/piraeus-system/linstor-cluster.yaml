@@ -32,9 +32,9 @@ spec:
     - name: DrbdOptions/PeerDevice/c-plan-ahead
       value: "10"
     - name: DrbdOptions/PeerDevice/resync-rate
-      value: "15360"
+      value: "61440"
     - name: DrbdOptions/PeerDevice/c-max-rate
-      value: "15360"
+      value: "61440"
     - name: DrbdOptions/PeerDevice/c-min-rate
       value: "4096"
   controller:
