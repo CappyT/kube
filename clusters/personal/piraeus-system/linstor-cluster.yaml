@@ -32,11 +32,11 @@ spec:
     - name: DrbdOptions/PeerDevice/c-plan-ahead
       value: "10"
     - name: DrbdOptions/PeerDevice/resync-rate
-      value: "51200"
+      value: "15360"
     - name: DrbdOptions/PeerDevice/c-max-rate
-      value: "737280"
+      value: "15360"
     - name: DrbdOptions/PeerDevice/c-min-rate
-      value: "10240"
+      value: "4096"
   controller:
     podTemplate:
       spec:
